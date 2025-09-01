@@ -57,7 +57,7 @@ export default function ChatPage() {
   const fileRef = useRef<HTMLInputElement | null>(null);
 
   const socketRef = useRef<Socket | null>(null);
-  const peerRef = useRef<Peer.Instance | null>(null);
+  const peerRef = useRef<Peer | null>(null);
   const localVideoRef = useRef<HTMLVideoElement | null>(null);
   const remoteVideoRef = useRef<HTMLVideoElement | null>(null);
   const localStreamRef = useRef<MediaStream | null>(null);
