@@ -19,7 +19,11 @@
     "prettier:write": "prettier --write .",
     "prepare": "node -e \"try { require('husky').install() } catch (e) { if (e.code !== 'MODULE_NOT_FOUND') throw e }\"",
     "test": "turbo run test",
-    "clean": "turbo run clean"
+    "clean": "turbo run clean",
+    "build:api": "cd apps/api && pnpm run build",
+    "build:web": "cd apps/web && pnpm run build",
+    "start:api": "cd apps/api && pnpm run start:prod",
+    "start:web": "cd apps/web && pnpm run start"
   },
   "lint-staged": {
     "*.{js,jsx,ts,tsx,json,css,md}": [
