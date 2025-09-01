@@ -1,0 +1,82 @@
+services:
+  postgres:
+    image: postgres:16-alpine
+    environment:
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: postgres
+      POSTGRES_DB: edu_ai
+    ports:
+      - '5433:5432'
+    volumes:
+      - db_data:/var/lib/postgresql/data
+
+  redis:
+    image: redis:7-alpine
+    ports:
+      - '6379:6379'
+
+  api:
+    build:
+      context: .
+      dockerfile: apps/api/Dockerfile.dev
+    working_dir: /workspace
+    # Install only API deps to avoid workspace node_modules churn, run migrations, then start
+    command: sh -lc "cd apps/api && pnpm install --prefer-offline && npx prisma migrate deploy && pnpm start:dev"
+    environment:
+      - DATABASE_URL=postgresql://postgres:postgres@postgres:5432/edu_ai?schema=public
+      - NODE_ENV=development
+      - REDIS_URL=redis://redis:6379
+      - PORT=4000
+      - PNPM_HOME=/pnpm
+      - PNPM_STORE_DIR=/pnpm-store
+    volumes:
+      - ./:/workspace
+      - pnpm_store:/pnpm-store
+      - workspace_node_modules:/workspace/node_modules
+      - api_node_modules:/workspace/apps/api/node_modules
+    depends_on:
+      - postgres
+      - redis
+    ports:
+      - '4000:4000'
+
+  web:
+    build:
+      context: .
+      dockerfile: apps/web/Dockerfile.dev
+    working_dir: /app
+    command: sh -lc "pnpm config set prefer-frozen-lockfile false --global && pnpm install --prefer-offline --shared-workspace-lockfile --no-optional && pnpm dev"
+    environment:
+      - NEXT_PUBLIC_API_URL=/api
+      - NODE_ENV=development
+      - PNPM_HOME=/pnpm
+      - PNPM_STORE_DIR=/pnpm-store
+      - CHOKIDAR_USEPOLLING=1
+      - WATCHPACK_POLLING=true
+      - PNPM_LOCKFILE_DIR=/workspace
+    volumes:
+      - ./apps/web:/app
+      - web_node_modules:/app/node_modules
+      - pnpm_store:/pnpm-store
+      - ./pnpm-lock.yaml:/workspace/pnpm-lock.yaml:ro
+    depends_on:
+      - api
+    ports:
+      - '3000:3000'
+
+  nginx:
+    image: nginx:1.27-alpine
+    volumes:
+      - ./nginx/nginx.conf:/etc/nginx/nginx.conf:ro
+    ports:
+      - '80:80'
+    depends_on:
+      - web
+      - api
+
+volumes:
+  db_data:
+  pnpm_store:
+  web_node_modules:
+  api_node_modules:
+  workspace_node_modules:

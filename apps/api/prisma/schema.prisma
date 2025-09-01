@@ -1,0 +1,938 @@
+generator client {
+  provider = "prisma-client-js"
+  previewFeatures = ["clientExtensions"]
+  output   = "../generated/prisma"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model User {
+  id                   String       @id @default(cuid())
+  email                String       @unique
+  role                 Role         @default(student)
+  createdAt            DateTime     @default(now())
+  updatedAt            DateTime     @updatedAt
+  age                  Int?
+  emailVerified        Boolean      @default(false)
+  firstName            String?
+  lastName             String?
+  nationality          String?
+  password             String
+  passwordResetExpires DateTime?
+  passwordResetToken   String?      @unique
+  phone                String?
+  username             String?      @unique
+  
+  // Profile fields
+  bio                  String?
+  location             String?
+  dateOfBirth          DateTime?
+  avatar               String?
+  
+  // Role-specific fields
+  studyLevel           String?      // For students
+  interests            String[]     // For students
+  coursesCompleted     Int?         @default(0)
+  
+  subjects             String[]     // For teachers
+  hourlyRate           Float?       // For teachers
+  experience           Int?         // For teachers (years)
+  qualifications       String[]     // For teachers
+  
+  expertise            String[]     // For Q&A solvers
+  solvedQuestions      Int?         @default(0)
+  
+  // Stats
+  rating               Float        @default(0.0)
+  reviewCount          Int          @default(0)
+  isProfilePublic      Boolean      @default(true)
+  
+  // Settings
+  settings             UserSettings?
+  
+  enrollments          Enrollment[]
+  contributedResources Resource[]
+  resourceReviews      ResourceReview[]
+  resourceFavorites    ResourceFavorite[]
+  createdExams         Exam[]
+  examAttempts         ExamAttempt[]
+  examQuestions        ExamQuestion[]
+  // Study Together relations
+  studyGroupsCreated   StudyGroup[]
+  groupMemberships     GroupMember[]
+  groupMessages        GroupMessage[] @relation("UserGroupMessages")
+  // Courses created
+  coursesCreated       Course[]
+  // Classrooms
+  classroomsCreated    Classroom[]
+  classroomMemberships ClassroomParticipant[]
+  breakoutMemberships  BreakoutParticipant[]
+  // Direct chat relations
+  directParticipants   DirectParticipant[]
+  directMessages       DirectMessage[] @relation("UserDirectMessages")
+
+  // Forums
+  forumBoardsCreated   ForumBoard[]
+  forumTopics          ForumTopic[]
+  forumPostsAuthored   ForumPost[] @relation("ForumPostAuthor")
+  forumPostsEdited     ForumPost[] @relation("ForumPostEditor")
+  forumModerations     ForumModerator[]
+  forumSubscriptions   ForumSubscription[]
+  forumNotifications   ForumNotification[]
+  // Certificates
+  certificates         Certificate[]
+  // Notifications
+  notifications        Notification[]
+  // Jobs
+  applications         Application[]
+  resumes              Resume[]
+  companiesOwned       Company[]
+  // Mentorship
+  mentorProfiles       MentorProfile[]
+  mentorshipRequestsAsMentee MentorshipRequest[] @relation("MenteeRequests")
+  mentorshipRequestsAsMentor MentorshipRequest[] @relation("MentorRequests")
+  // Store
+  purchases            Purchase[]
+  // Wellness
+  studyLogs            StudyLog[]
+  counselorSlots       CounselorSlot[]
+  // Subscriptions
+  subscriptions        Subscription[]
+  // Scholarships
+  scholarships        Scholarship[]
+  earnEvents          EarnEvent[]
+  // Gamification
+  gamificationProfile GamificationProfile?
+  userAchievements    UserAchievement[]
+  // Goals and Skills
+  goals               Goal[]
+  goalLogs            GoalLog[]
+  skillProgress       SkillProgress[]
+}
+
+model UserSettings {
+  id                    String   @id @default(cuid())
+  userId                String   @unique
+  user                  User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  
+  // Account Settings
+  twoFactorEnabled      Boolean  @default(false)
+  emailVerified         Boolean  @default(false)
+  phoneVerified         Boolean  @default(false)
+  
+  // Notification Settings
+  emailNotifications    Boolean  @default(true)
+  pushNotifications     Boolean  @default(true)
+  smsNotifications      Boolean  @default(false)
+  marketingEmails       Boolean  @default(false)
+  courseUpdates         Boolean  @default(true)
+  messageNotifications  Boolean  @default(true)
+  
+  // Privacy Settings
+  profileVisibility     String   @default("public") // public, private, friends
+  showOnlineStatus      Boolean  @default(true)
+  allowDirectMessages   Boolean  @default(true)
+  showEmail             Boolean  @default(false)
+  showPhone             Boolean  @default(false)
+  dataCollection        Boolean  @default(true)
+  
+  // Appearance Settings
+  theme                 String   @default("system") // light, dark, system
+  language              String   @default("en")
+  timezone              String   @default("Asia/Dhaka")
+  dateFormat            String   @default("DD/MM/YYYY")
+  timeFormat            String   @default("12h") // 12h, 24h
+  
+  // Learning Settings
+  studyReminders        Boolean  @default(true)
+  studyReminderTime     String   @default("19:00")
+  difficultyLevel       String   @default("intermediate") // beginner, intermediate, advanced
+  autoplay              Boolean  @default(false)
+  subtitles             Boolean  @default(true)
+  playbackSpeed         Float    @default(1.0)
+  
+  // Communication Settings
+  allowVideoCall        Boolean  @default(true)
+  allowVoiceCall        Boolean  @default(true)
+  allowScreenShare      Boolean  @default(false)
+  defaultMeetingDuration Int     @default(30)
+  
+  createdAt             DateTime @default(now())
+  updatedAt             DateTime @updatedAt
+}
+
+model Course {
+  id          String       @id @default(cuid())
+  title       String
+  description String?
+  details     String?
+  price       Float?
+  seats       Int?
+  category    String?
+  level       String?
+  thumbnail   String?
+  isPublic    Boolean      @default(true)
+  createdById String?
+  createdBy   User?        @relation(fields: [createdById], references: [id], onDelete: SetNull)
+  createdAt   DateTime     @default(now())
+  updatedAt   DateTime     @updatedAt
+  contents    CourseContent[]
+  enrollments Enrollment[]
+}
+
+model CourseContent {
+  id          String   @id @default(cuid())
+  courseId    String
+  course      Course   @relation(fields: [courseId], references: [id], onDelete: Cascade)
+  type        String   // video, pdf, image, text
+  title       String?
+  description String?
+  fileUrl     String?
+  textContent String?
+  duration    String?
+  size        String?
+  order       Int?
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+
+  @@index([courseId])
+}
+
+model Enrollment {
+  id        String   @id @default(cuid())
+  userId    String
+  courseId  String
+  createdAt DateTime @default(now())
+  course    Course   @relation(fields: [courseId], references: [id], onDelete: Cascade)
+  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@unique([userId, courseId], name: "userId_courseId")
+}
+
+model Lead {
+  id        String   @id @default(cuid())
+  name      String
+  email     String   @unique
+  message   String?
+  createdAt DateTime @default(now())
+}
+
+model Resource {
+  id              String   @id @default(cuid())
+  title           String
+  description     String
+  type            String   // book, article, journal, notes, pdf, question-bank, video, audio, image, text
+  category        String   // academic, programming, science, mathematics, etc.
+  subject         String
+  level           String   // beginner, intermediate, advanced
+  format          String   // pdf, doc, txt, mp4, mp3, jpg, png, url
+  fileUrl         String?
+  externalUrl     String?
+  fileSize        String?
+  duration        String?
+  author          String
+  contributorId   String
+  contributor     User     @relation(fields: [contributorId], references: [id], onDelete: Cascade)
+  uploadDate      DateTime @default(now())
+  downloads       Int      @default(0)
+  views           Int      @default(0)
+  rating          Float    @default(0.0)
+  reviewCount     Int      @default(0)
+  tags            String[]
+  isVerified      Boolean  @default(false)
+  isFree          Boolean  @default(true)
+  price           Float?
+  thumbnail       String?
+  isActive        Boolean  @default(true)
+  createdAt       DateTime @default(now())
+  updatedAt       DateTime @updatedAt
+  
+  reviews         ResourceReview[]
+  favorites       ResourceFavorite[]
+  purchases       Purchase[]
+}
+
+model ResourceReview {
+  id         String   @id @default(cuid())
+  resourceId String
+  resource   Resource @relation(fields: [resourceId], references: [id], onDelete: Cascade)
+  userId     String
+  user       User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  rating     Float
+  comment    String?
+  createdAt  DateTime @default(now())
+  
+  @@unique([resourceId, userId])
+}
+
+model ResourceFavorite {
+  id         String   @id @default(cuid())
+  resourceId String
+  resource   Resource @relation(fields: [resourceId], references: [id], onDelete: Cascade)
+  userId     String
+  user       User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  createdAt  DateTime @default(now())
+  
+  @@unique([resourceId, userId])
+}
+
+model Purchase {
+  id          String   @id @default(cuid())
+  resourceId  String
+  buyerId     String
+  pricePaid   Float    @default(0)
+  createdAt   DateTime @default(now())
+  resource    Resource @relation(fields: [resourceId], references: [id], onDelete: Cascade)
+  buyer       User     @relation(fields: [buyerId], references: [id], onDelete: Cascade)
+
+  @@unique([resourceId, buyerId])
+  @@index([buyerId, createdAt])
+}
+
+// Wellness / Mental Health
+model StudyLog {
+  id        String   @id @default(cuid())
+  userId    String
+  startedAt DateTime @default(now())
+  duration  Int      @default(0) // minutes
+  subject   String?
+  mood      String?  // happy, stressed, neutral
+  notes     String?
+  createdAt DateTime @default(now())
+  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+}
+
+model CounselorSlot {
+  id        String   @id @default(cuid())
+  userId    String   // counselor user
+  startTime DateTime
+  endTime   DateTime
+  isBooked  Boolean  @default(false)
+  bookedBy  String?
+  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+}
+
+model MindfulnessContent {
+  id        String   @id @default(cuid())
+  title     String
+  kind      String   // meditation, focus, break
+  duration  Int?
+  mediaUrl  String?
+  createdAt DateTime @default(now())
+}
+
+model Plan {
+  id          String   @id @default(cuid())
+  name        String
+  interval    String   // monthly, yearly, family
+  price       Float
+  features    String[]
+  active      Boolean  @default(true)
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+  subscriptions Subscription[]
+}
+
+model Subscription {
+  id        String   @id @default(cuid())
+  userId    String
+  planId    String
+  status    String   @default("active") // active, canceled, expired
+  startAt   DateTime @default(now())
+  endAt     DateTime?
+  createdAt DateTime @default(now())
+  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  plan      Plan     @relation(fields: [planId], references: [id], onDelete: Cascade)
+}
+
+model Scholarship {
+  id           String   @id @default(cuid())
+  userId       String
+  kind         String   // merit, activity, need, help, conversion, reward, redeem
+  points       Int      @default(0)
+  amount       Float?   @default(0)
+  benefitType  String?  // subscription, course, credit, grant
+  benefitValue String?
+  status       String   @default("granted") // granted, pending, redeemed, rejected
+  reason       String?
+  createdAt    DateTime @default(now())
+  expiresAt    DateTime?
+  metadata     Json?
+  user         User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@index([userId, createdAt])
+}
+
+model EarnEvent {
+  id        String   @id @default(cuid())
+  userId    String
+  type      String   // exam_pass, high_score, consistent_learning, help_answer, need_approved
+  points    Int      @default(0)
+  data      Json?
+  createdAt DateTime @default(now())
+  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@index([userId, createdAt])
+}
+
+/// Gamification models
+model GamificationProfile {
+  id            String   @id @default(cuid())
+  userId        String   @unique
+  user          User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  xp            Int      @default(0)
+  points        Int      @default(0)
+  level         Int      @default(1)
+  rankName      String   @default("Bronze")
+  streakCurrent Int      @default(0)
+  streakBest    Int      @default(0)
+  lastEarnAt    DateTime?
+  createdAt     DateTime @default(now())
+  updatedAt     DateTime @updatedAt
+}
+
+model Achievement {
+  id          String   @id @default(cuid())
+  code        String   @unique
+  name        String
+  description String?
+  icon        String?
+  xpReward    Int      @default(0)
+  pointsReward Int     @default(0)
+  criteria    Json?
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+
+  users       UserAchievement[]
+}
+
+model UserAchievement {
+  id             String      @id @default(cuid())
+  userId         String
+  achievementId  String
+  createdAt      DateTime    @default(now())
+  user           User        @relation(fields: [userId], references: [id], onDelete: Cascade)
+  achievement    Achievement @relation(fields: [achievementId], references: [id], onDelete: Cascade)
+
+  @@unique([userId, achievementId])
+  @@index([userId, createdAt])
+}
+
+model Rank {
+  id        String @id @default(cuid())
+  name      String @unique
+  minXp     Int    @default(0)
+  order     Int    @default(0)
+  icon      String?
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
+// Certificates
+model CertificateTemplate {
+  id            String   @id @default(cuid())
+  name          String
+  description   String?
+  kind          String   // completion, verified, blockchain
+  isPaid        Boolean  @default(false)
+  price         Float?
+  bgUrl         String?
+  category      String?  // e.g., Career, Language, Programming, Cloud, Security
+  // Optional gating by exam
+  requiresExam  Boolean  @default(false)
+  examCategory  String?
+  minPercentage Float?
+  createdAt     DateTime @default(now())
+  updatedAt     DateTime @updatedAt
+  certificates  Certificate[]
+}
+
+model Certificate {
+  id               String                @id @default(cuid())
+  userId           String
+  templateId       String
+  courseId         String?
+  title            String
+  issuedAt         DateTime              @default(now())
+  issuer           String                @default("EDU AI")
+  serial           String                @unique
+  verificationCode String                @unique
+  blockchainTx     String?
+  pdfUrl           String?
+  jsonUrl          String?
+  metadata         Json?
+  user             User                  @relation(fields: [userId], references: [id], onDelete: Cascade)
+  template         CertificateTemplate   @relation(fields: [templateId], references: [id], onDelete: Cascade)
+
+  @@index([userId])
+  @@index([templateId])
+  @@index([courseId])
+}
+
+model StudyGroup {
+  id           String        @id @default(cuid())
+  name         String
+  description  String?
+  isPublic     Boolean       @default(true)
+  createdById  String
+  createdBy    User          @relation(fields: [createdById], references: [id], onDelete: Cascade)
+  createdAt    DateTime      @default(now())
+  updatedAt    DateTime      @updatedAt
+  members      GroupMember[]
+  messages     GroupMessage[]
+}
+
+model GroupMember {
+  id         String     @id @default(cuid())
+  groupId    String
+  userId     String
+  role       String     @default("member") // member, admin
+  joinedAt   DateTime   @default(now())
+  group      StudyGroup @relation(fields: [groupId], references: [id], onDelete: Cascade)
+  user       User       @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@unique([groupId, userId])
+}
+
+model GroupMessage {
+  id         String     @id @default(cuid())
+  groupId    String
+  senderId   String
+  content    String?
+  type       String     @default("text") // text, image, video, audio, pdf
+  fileUrl    String?
+  createdAt  DateTime   @default(now())
+  group      StudyGroup @relation(fields: [groupId], references: [id], onDelete: Cascade)
+  sender     User       @relation("UserGroupMessages", fields: [senderId], references: [id], onDelete: Cascade)
+
+  @@index([groupId, createdAt])
+}
+
+// Direct chat models
+model DirectConversation {
+  id           String                  @id @default(cuid())
+  createdAt    DateTime                @default(now())
+  updatedAt    DateTime                @updatedAt
+  participants DirectParticipant[]
+  messages     DirectMessage[]
+}
+
+model DirectParticipant {
+  id              String             @id @default(cuid())
+  conversationId  String
+  userId          String
+  joinedAt        DateTime           @default(now())
+  conversation    DirectConversation @relation(fields: [conversationId], references: [id], onDelete: Cascade)
+  user            User               @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@unique([conversationId, userId])
+}
+
+model DirectMessage {
+  id              String             @id @default(cuid())
+  conversationId  String
+  senderId        String
+  content         String?
+  type            String             @default("text") // text, image, video, audio, pdf
+  fileUrl         String?
+  createdAt       DateTime           @default(now())
+  conversation    DirectConversation @relation(fields: [conversationId], references: [id], onDelete: Cascade)
+  sender          User               @relation("UserDirectMessages", fields: [senderId], references: [id], onDelete: Cascade)
+
+  @@index([conversationId, createdAt])
+}
+
+enum Role {
+  admin
+  teacher
+  student
+  qa_solver
+}
+
+// Mentorship models
+model MentorProfile {
+  id           String   @id @default(cuid())
+  userId       String   @unique
+  user         User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  headline     String?
+  expertise    String[]
+  years        Int?     // years of experience
+  availability String?  // e.g., weekends, evenings
+  rate         Float?   // optional hourly rate
+  bio          String?
+  createdAt    DateTime @default(now())
+  updatedAt    DateTime @updatedAt
+}
+
+model MentorshipRequest {
+  id         String   @id @default(cuid())
+  mentorId   String
+  menteeId   String
+  topic      String?
+  message    String?
+  status     String   @default("pending") // pending, accepted, rejected, closed
+  createdAt  DateTime @default(now())
+  updatedAt  DateTime @updatedAt
+  mentor     User     @relation("MentorRequests", fields: [mentorId], references: [id], onDelete: Cascade)
+  mentee     User     @relation("MenteeRequests", fields: [menteeId], references: [id], onDelete: Cascade)
+}
+
+model Exam {
+  id              String   @id @default(cuid())
+  title           String
+  description     String?
+  category        String   // mathematics, science, language, programming, etc.
+  subject         String
+  difficulty      String   // easy, medium, hard
+  duration        Int      // duration in minutes
+  totalQuestions  Int
+  passingScore    Int      // percentage required to pass
+  isPublic        Boolean  @default(true)
+  isActive        Boolean  @default(true)
+  createdById     String
+  createdBy       User     @relation(fields: [createdById], references: [id], onDelete: Cascade)
+  createdAt       DateTime @default(now())
+  updatedAt       DateTime @updatedAt
+  
+  questions       ExamQuestion[]
+  attempts        ExamAttempt[]
+  
+  @@index([category, subject, difficulty])
+}
+
+model ExamQuestion {
+  id            String   @id @default(cuid())
+  examId        String
+  exam          Exam     @relation(fields: [examId], references: [id], onDelete: Cascade)
+  question      String
+  type          String   // mcq, true_false, short_answer, essay
+  options       Json?    // For MCQ questions: ["A", "B", "C", "D"]
+  correctAnswer String   // For MCQ: "A", for true/false: "true"/"false"
+  explanation   String?
+  points        Int      @default(1)
+  order         Int      // Question order in exam
+  createdById   String
+  createdBy     User     @relation(fields: [createdById], references: [id], onDelete: Cascade)
+  createdAt     DateTime @default(now())
+  updatedAt     DateTime @updatedAt
+  
+  answers       ExamAnswer[]
+  
+  @@index([examId, order])
+}
+
+model ExamAttempt {
+  id            String   @id @default(cuid())
+  examId        String
+  exam          Exam     @relation(fields: [examId], references: [id], onDelete: Cascade)
+  userId        String
+  user          User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  startTime     DateTime
+  endTime       DateTime?
+  duration      Int?     // actual duration taken in minutes
+  score         Int      @default(0)
+  totalScore    Int
+  percentage    Float    @default(0.0)
+  passed        Boolean  @default(false)
+  status        String   @default("in_progress") // in_progress, completed, abandoned
+  createdAt     DateTime @default(now())
+  updatedAt     DateTime @updatedAt
+  
+  answers       ExamAnswer[]
+  
+  @@index([userId, examId])
+  @@index([status])
+}
+
+model ExamAnswer {
+  id           String       @id @default(cuid())
+  attemptId    String
+  attempt      ExamAttempt  @relation(fields: [attemptId], references: [id], onDelete: Cascade)
+  questionId   String
+  question     ExamQuestion @relation(fields: [questionId], references: [id], onDelete: Cascade)
+  answer       String
+  isCorrect    Boolean      @default(false)
+  points       Int          @default(0)
+  timeSpent    Int?         // time spent on this question in seconds
+  createdAt    DateTime     @default(now())
+  
+  @@unique([attemptId, questionId])
+}
+
+model GlobalSetting {
+  key   String @id
+  value Json
+  updatedAt DateTime @updatedAt
+}
+
+model Classroom {
+  id          String   @id @default(cuid())
+  title       String
+  description String?
+  isPublic    Boolean  @default(true)
+  createdById String
+  createdBy   User     @relation(fields: [createdById], references: [id], onDelete: Cascade)
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+  participants ClassroomParticipant[]
+  breakouts    BreakoutRoom[]
+}
+
+model ClassroomParticipant {
+  id          String    @id @default(cuid())
+  classroomId String
+  userId      String
+  role        String    @default("member") // host, cohost, member
+  joinedAt    DateTime  @default(now())
+  classroom   Classroom @relation(fields: [classroomId], references: [id], onDelete: Cascade)
+  user        User      @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@unique([classroomId, userId])
+}
+
+model BreakoutRoom {
+  id          String    @id @default(cuid())
+  classroomId String
+  name        String
+  createdAt   DateTime  @default(now())
+  classroom   Classroom @relation(fields: [classroomId], references: [id], onDelete: Cascade)
+  participants BreakoutParticipant[]
+}
+
+model BreakoutParticipant {
+  id          String       @id @default(cuid())
+  breakoutId  String
+  userId      String
+  joinedAt    DateTime     @default(now())
+  breakout    BreakoutRoom @relation(fields: [breakoutId], references: [id], onDelete: Cascade)
+  user        User         @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@unique([breakoutId, userId])
+}
+
+// Forums models
+
+model ForumBoard {
+  id          String            @id @default(cuid())
+  name        String
+  description String?
+  isPublic    Boolean           @default(true)
+  createdById String
+  createdBy   User              @relation(fields: [createdById], references: [id], onDelete: Cascade)
+  createdAt   DateTime          @default(now())
+  updatedAt   DateTime          @updatedAt
+  moderators  ForumModerator[]
+  topics      ForumTopic[]
+}
+
+model ForumModerator {
+  id        String     @id @default(cuid())
+  boardId   String
+  userId    String
+  role      String     @default("moderator") // moderator, expert
+  board     ForumBoard @relation(fields: [boardId], references: [id], onDelete: Cascade)
+  user      User       @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@unique([boardId, userId])
+}
+
+model ForumTopic {
+  id        String      @id @default(cuid())
+  boardId   String
+  title     String
+  authorId  String
+  locked    Boolean     @default(false)
+  pinned    Boolean     @default(false)
+  tags      String[]
+  createdAt DateTime    @default(now())
+  updatedAt DateTime    @updatedAt
+  board     ForumBoard  @relation(fields: [boardId], references: [id], onDelete: Cascade)
+  author    User        @relation(fields: [authorId], references: [id], onDelete: Cascade)
+  posts     ForumPost[]
+
+  @@index([boardId, createdAt])
+}
+
+model ForumPost {
+  id        String     @id @default(cuid())
+  topicId   String
+  authorId  String
+  content   String
+  isExpert  Boolean    @default(false)
+  accepted  Boolean    @default(false)
+  editedAt  DateTime?
+  editedById String?
+  deletedAt DateTime?
+  createdAt DateTime   @default(now())
+  topic     ForumTopic @relation(fields: [topicId], references: [id], onDelete: Cascade)
+  author    User       @relation("ForumPostAuthor", fields: [authorId], references: [id], onDelete: Cascade)
+  editor    User?      @relation("ForumPostEditor", fields: [editedById], references: [id])
+
+  @@index([topicId, createdAt])
+}
+
+model ForumSubscription {
+  id        String   @id @default(cuid())
+  userId    String
+  boardId   String?
+  topicId   String?
+  emailDigest Boolean @default(false)
+  createdAt DateTime @default(now())
+  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@index([userId])
+}
+
+model ForumNotification {
+  id        String   @id @default(cuid())
+  userId    String
+  type      String   // reply, mention
+  topicId   String
+  postId    String
+  createdAt DateTime @default(now())
+  readAt    DateTime?
+  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@index([userId, createdAt])
+}
+
+model Notification {
+  id        String   @id @default(cuid())
+  userId    String
+  type      String   // message, mention, award, system
+  title     String
+  body      String?
+  data      Json?
+  readAt    DateTime?
+  createdAt DateTime @default(now())
+  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@index([userId, createdAt])
+}
+
+// Job portal models
+model Company {
+  id          String  @id @default(cuid())
+  name        String
+  website     String?
+  logoUrl     String?
+  description String?
+  ownerId     String?
+  owner       User?   @relation(fields: [ownerId], references: [id], onDelete: SetNull)
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+  jobs        Job[]
+}
+
+model Job {
+  id           String   @id @default(cuid())
+  title        String
+  type         String   // full-time, part-time, internship, contract
+  location     String?
+  remote       Boolean  @default(true)
+  description  String?
+  requirements String?
+  salaryMin    Int?
+  salaryMax    Int?
+  companyId    String
+  company      Company  @relation(fields: [companyId], references: [id], onDelete: Cascade)
+  isOpen       Boolean  @default(true)
+  createdAt    DateTime @default(now())
+  updatedAt    DateTime @updatedAt
+  applications Application[]
+
+  @@index([companyId])
+  @@index([type, isOpen])
+}
+
+model Application {
+  id          String   @id @default(cuid())
+  jobId       String
+  userId      String
+  resumeId    String?
+  coverLetter String?
+  status      String   @default("applied") // applied, reviewing, shortlisted, accepted, rejected
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+  job         Job      @relation(fields: [jobId], references: [id], onDelete: Cascade)
+  user        User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  resume      Resume?  @relation(fields: [resumeId], references: [id], onDelete: SetNull)
+
+  @@index([jobId])
+  @@index([userId])
+}
+
+model Resume {
+  id          String      @id @default(cuid())
+  userId      String
+  headline    String?
+  summary     String?
+  skills      String[]
+  experience  Json?
+  education   Json?
+  shareToken  String?    @unique
+  updatedAt   DateTime    @updatedAt
+  user        User        @relation(fields: [userId], references: [id], onDelete: Cascade)
+  applications Application[]
+
+  @@unique([userId])
+}
+
+// Daily Goals
+model Goal {
+  id            String    @id @default(cuid())
+  userId        String
+  title         String
+  targetMinutes Int
+  dueDate       DateTime?
+  completed     Boolean   @default(false)
+  createdAt     DateTime  @default(now())
+  updatedAt     DateTime  @updatedAt
+  user          User      @relation(fields: [userId], references: [id], onDelete: Cascade)
+  logs          GoalLog[]
+
+  @@index([userId, createdAt])
+}
+
+model GoalLog {
+  id        String   @id @default(cuid())
+  goalId    String
+  userId    String
+  date      DateTime @default(now())
+  minutes   Int
+  createdAt DateTime @default(now())
+  goal      Goal     @relation(fields: [goalId], references: [id], onDelete: Cascade)
+  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@index([userId, date])
+  @@index([goalId])
+}
+
+// Skill Trees
+model SkillNode {
+  id          String      @id @default(cuid())
+  title       String
+  description String?
+  parentId    String?
+  children    SkillNode[] @relation("SkillTree")
+  parent      SkillNode?  @relation("SkillTree", fields: [parentId], references: [id])
+  progress    SkillProgress[]
+
+  @@index([parentId])
+}
+
+model SkillProgress {
+  id          String   @id @default(cuid())
+  userId      String
+  nodeId      String
+  completed   Boolean  @default(false)
+  completedAt DateTime @default(now())
+  user        User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  node        SkillNode @relation(fields: [nodeId], references: [id], onDelete: Cascade)
+
+  @@unique([userId, nodeId])
+  @@index([userId])
+}

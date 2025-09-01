@@ -1,0 +1,19 @@
+# syntax=docker/dockerfile:1
+FROM node:20-alpine
+
+# Pin pnpm to a stable version to avoid Corepack mismatch
+RUN corepack prepare pnpm@10.15.0 --activate
+
+# Build tools for native deps (e.g., bcrypt)
+RUN apk add --no-cache python3 make g++
+
+# Use a workspace mount at /workspace during development
+WORKDIR /workspace
+
+# No dependencies copied here; compose will mount the repo and run pnpm install
+
+EXPOSE 4000
+
+CMD ["pnpm", "start:dev"]
+
+

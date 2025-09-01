@@ -1,0 +1,51 @@
+{
+  "name": "edu-ai",
+  "private": true,
+  "version": "0.1.0",
+  "description": "Edu AI monorepo",
+  "license": "MIT",
+  "packageManager": "pnpm@9.6.0",
+  "engines": {
+    "node": ">=18.17",
+    "pnpm": ">=8.6"
+  },
+  "scripts": {
+    "dev": "turbo run dev --parallel",
+    "build": "turbo run build",
+    "start": "turbo run start",
+    "lint": "turbo run lint",
+    "lint:root": "eslint . --cache --ext .js,.jsx,.ts,.tsx",
+    "prettier:check": "prettier --check .",
+    "prettier:write": "prettier --write .",
+    "prepare": "husky install",
+    "test": "turbo run test",
+    "clean": "turbo run clean"
+  },
+  "lint-staged": {
+    "*.{js,jsx,ts,tsx,json,css,md}": [
+      "prettier --write",
+      "eslint --cache --fix"
+    ]
+  },
+  "devDependencies": {
+    "@commitlint/cli": "^19.8.1",
+    "@commitlint/config-conventional": "^19.8.1",
+    "@typescript-eslint/eslint-plugin": "^8.41.0",
+    "@typescript-eslint/parser": "^8.41.0",
+    "eslint": "^9.34.0",
+    "eslint-config-prettier": "^10.1.8",
+    "eslint-plugin-import": "^2.32.0",
+    "eslint-plugin-unused-imports": "^4.2.0",
+    "globals": "^16.0.0",
+    "husky": "^9.1.7",
+    "lint-staged": "^16.1.5",
+    "prettier": "^3.6.2",
+    "turbo": "^2.5.6",
+    "typescript-eslint": "^8.20.0"
+  },
+  "dependencies": {
+    "@radix-ui/react-select": "^2.1.1",
+    "@types/jsonwebtoken": "^9.0.10",
+    "jsonwebtoken": "^9.0.2"
+  }
+}
