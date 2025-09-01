@@ -35,8 +35,9 @@ type UserRole = 'student' | 'teacher' | 'qa_solver';
 
 type Profile = {
   id: string;
-  firstName: string;
-  lastName: string;
+  firstName?: string;
+  lastName?: string;
+  name?: string; // For backward compatibility with mock data
   role: UserRole;
   avatar: string;
   bio: string;
@@ -214,7 +215,7 @@ export default function AllProfilesPage() {
 
     // Students
     {
-      id: 7,
+      id: '7',
       name: 'Nadia Islam',
       role: 'student',
       avatar:
@@ -230,7 +231,7 @@ export default function AllProfilesPage() {
       coursesCompleted: 12,
     },
     {
-      id: 8,
+      id: '8',
       name: 'Karim Rahman',
       role: 'student',
       avatar:
@@ -246,7 +247,7 @@ export default function AllProfilesPage() {
       coursesCompleted: 8,
     },
     {
-      id: 9,
+      id: '9',
       name: 'Sadia Begum',
       role: 'student',
       avatar:
@@ -262,7 +263,7 @@ export default function AllProfilesPage() {
       coursesCompleted: 15,
     },
     {
-      id: 10,
+      id: '10',
       name: 'Tanvir Hasan',
       role: 'student',
       avatar:
@@ -284,7 +285,7 @@ export default function AllProfilesPage() {
     const profilesArray = Array.isArray(profiles) ? profiles : [];
     let filtered = profilesArray.filter((profile) => {
       const matchesCategory = selectedCategory === 'all' || profile.role === selectedCategory;
-      const fullName = `${profile.firstName} ${profile.lastName}`;
+      const fullName = profile.name || `${profile.firstName || ''} ${profile.lastName || ''}`;
       const matchesSearch =
         searchQuery === '' ||
         fullName.toLowerCase().includes(searchQuery.toLowerCase()) ||
@@ -308,7 +309,7 @@ export default function AllProfilesPage() {
         filtered.sort((a, b) => b.reviewCount - a.reviewCount);
         break;
       case 'name':
-        filtered.sort((a, b) => a.name.localeCompare(b.name));
+        filtered.sort((a, b) => (a.name || '').localeCompare(b.name || ''));
         break;
       case 'online':
         filtered.sort((a, b) => (b.isOnline ? 1 : 0) - (a.isOnline ? 1 : 0));
