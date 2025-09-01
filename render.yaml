@@ -62,4 +62,5 @@ databases:
   - name: eduai-db
     plan: free
     databaseName: eduai
-    user: eduai_user
+    user: 
+    eduai_user
