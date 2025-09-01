@@ -16,6 +16,9 @@ declare module 'simple-peer' {
     interface SignalData {
       [key: string]: any;
     }
+
+    // Add Instance type for the peer instances
+    type Instance = Peer;
   }
 
   class Peer extends NodeJS.EventEmitter {
