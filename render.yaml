@@ -1,27 +1,20 @@
 services:
-  # Next.js Frontend
-  - type: web
-    name: eduai-web
-    runtime: node
-    plan: free
-    buildCommand: cd apps/web && npm install && npm run build
-    startCommand: cd apps/web && npm start
-    envVars:
-      - key: NODE_ENV
-        value: production
-      - key: NEXT_PUBLIC_API_URL
-        fromService:
-          type: web
-          name: eduai-api
-          property: host
-
-  # NestJS API
+  # NestJS API Backend
   - type: web
     name: eduai-api
     runtime: node
     plan: free
-    buildCommand: cd apps/api && npm install && npm run build
-    startCommand: cd apps/api && npm run start:prod
+    buildCommand: |
+      corepack enable
+      corepack prepare pnpm@latest --activate
+      cd apps/api
+      pnpm install --frozen-lockfile
+      pnpm prisma generate
+      pnpm run build
+    startCommand: |
+      cd apps/api
+      pnpm prisma migrate deploy
+      pnpm run start:prod
     envVars:
       - key: NODE_ENV
         value: production
@@ -33,8 +26,38 @@ services:
         generateValue: true
       - key: PORT
         value: 10000
+      - key: REDIS_URL
+        value: redis://localhost:6379
+    healthCheckPath: /health
 
-  # PostgreSQL Database
+  # Next.js Frontend
+  - type: web
+    name: eduai-web
+    runtime: node
+    plan: free
+    buildCommand: |
+      corepack enable
+      corepack prepare pnpm@latest --activate
+      cd apps/web
+      pnpm install --frozen-lockfile
+      pnpm run build
+    startCommand: cd apps/web && pnpm start
+    envVars:
+      - key: NODE_ENV
+        value: production
+      - key: NEXT_PUBLIC_API_URL
+        fromService:
+          type: web
+          name: eduai-api
+          property: host
+
+  # Redis Cache Service
+  - type: redis
+    name: eduai-redis
+    plan: free
+    maxmemoryPolicy: allkeys-lru
+
+# PostgreSQL Database
 databases:
   - name: eduai-db
     plan: free
