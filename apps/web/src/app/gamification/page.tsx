@@ -54,7 +54,9 @@ export default function GamificationPage() {
       auth: { userId: 'me' },
     });
     s.on('gamification:update', () => load());
-    return () => s.close();
+    return () => {
+      s.close();
+    };
   }, []);
 
   return (

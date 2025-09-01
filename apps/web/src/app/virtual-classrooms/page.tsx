@@ -9,6 +9,7 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { getApiBaseUrl } from '@/lib/env';
 import { io, Socket } from 'socket.io-client';
 import Peer from 'simple-peer';
+import type { Instance as PeerInstance } from 'simple-peer';
 
 type Room = { id: string; title: string; description?: string; isPublic: boolean };
 type Breakout = { id: string; name: string };
@@ -41,7 +42,7 @@ export default function VirtualClassroomsPage() {
   const startPointRef = useRef<{ x: number; y: number } | null>(null);
 
   const socketRef = useRef<Socket | null>(null);
-  const peerRef = useRef<Peer | null>(null);
+  const peerRef = useRef<PeerInstance | null>(null);
   const localVideoRef = useRef<HTMLVideoElement | null>(null);
   const remoteVideoRef = useRef<HTMLVideoElement | null>(null);
   const localStreamRef = useRef<MediaStream | null>(null);

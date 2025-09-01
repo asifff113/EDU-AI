@@ -25,6 +25,7 @@ import {
 import { getApiBaseUrl } from '@/lib/env';
 import { io, Socket } from 'socket.io-client';
 import Peer from 'simple-peer';
+import type { Instance as PeerInstance } from 'simple-peer';
 
 type Group = {
   id: string;
@@ -55,7 +56,7 @@ export default function StudyTogetherPage() {
   const [groupError, setGroupError] = useState('');
   const fileRef = useRef<HTMLInputElement | null>(null);
   const socketRef = useRef<Socket | null>(null);
-  const peerRef = useRef<Peer | null>(null);
+  const peerRef = useRef<PeerInstance | null>(null);
   const localVideoRef = useRef<HTMLVideoElement | null>(null);
   const remoteVideoRef = useRef<HTMLVideoElement | null>(null);
   const localStreamRef = useRef<MediaStream | null>(null);

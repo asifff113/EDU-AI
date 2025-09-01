@@ -347,7 +347,7 @@ export default function DiscussionForumsPage() {
                   ) : (
                     'Member'
                   )}
-                  <Button size="xs" variant="outline" onClick={() => acceptAnswer((p as any).id)}>
+                  <Button size="sm" variant="outline" onClick={() => acceptAnswer((p as any).id)}>
                     Mark Accepted
                   </Button>
                 </div>

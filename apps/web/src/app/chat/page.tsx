@@ -21,6 +21,7 @@ import { getApiBaseUrl } from '@/lib/env';
 import { io, Socket } from 'socket.io-client';
 import { useSearchParams } from 'next/navigation';
 import Peer from 'simple-peer';
+import type { Instance as PeerInstance } from 'simple-peer';
 
 type UserLite = {
   id: string;
@@ -57,7 +58,7 @@ export default function ChatPage() {
   const fileRef = useRef<HTMLInputElement | null>(null);
 
   const socketRef = useRef<Socket | null>(null);
-  const peerRef = useRef<Peer | null>(null);
+  const peerRef = useRef<PeerInstance | null>(null);
   const localVideoRef = useRef<HTMLVideoElement | null>(null);
   const remoteVideoRef = useRef<HTMLVideoElement | null>(null);
   const localStreamRef = useRef<MediaStream | null>(null);
@@ -95,7 +96,9 @@ export default function ChatPage() {
     socket.on('connect_error', (err) => {
       // noop; connection errors will retry automatically
     });
-    return () => socket.disconnect();
+    return () => {
+      socket.disconnect();
+    };
   }, []);
 
   useEffect(() => {
