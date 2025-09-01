@@ -17,11 +17,11 @@ const protectedRoutes = [
   '/admin',
 ];
 
-// Routes that should redirect to dashboard if already authenticated
-const authRoutes = ['/login', '/register', '/forgot-password'];
+// Routes that should redirect to dashboard if already authenticated (disabled)
+// const authRoutes = ['/login', '/register', '/forgot-password'];
 
-// Public routes that don't require authentication
-const publicRoutes = ['/', '/about', '/contact'];
+// Public routes that don't require authentication (reference)
+// const publicRoutes = ['/', '/about', '/contact'];
 
 export function middleware(request: NextRequest) {
   try {
@@ -31,8 +31,8 @@ export function middleware(request: NextRequest) {
 
     // Check if the current path requires authentication
     const isProtectedRoute = protectedRoutes.some((route) => pathname.startsWith(route));
-    const isAuthRoute = authRoutes.some((route) => pathname.startsWith(route));
-    const isPublicRoute = publicRoutes.includes(pathname);
+    // const isAuthRoute = authRoutes.some((route) => pathname.startsWith(route));
+    // const isPublicRoute = publicRoutes.includes(pathname);
 
     // If trying to access protected route without authentication
     if (isProtectedRoute && !isAuthenticated) {
@@ -44,9 +44,11 @@ export function middleware(request: NextRequest) {
     }
 
     // If trying to access auth routes while already authenticated
-    if (isAuthRoute && isAuthenticated) {
-      return NextResponse.redirect(new URL('/dashboard', request.url));
-    }
+    // Allow access to login/register pages even if authenticated
+    // (users might want to logout and login as different user)
+    // if (isAuthRoute && isAuthenticated) {
+    //   return NextResponse.redirect(new URL('/dashboard', request.url));
+    // }
 
     // Allow access to public routes and authenticated users to protected routes
     return NextResponse.next();

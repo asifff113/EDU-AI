@@ -146,15 +146,18 @@ export default function TutorPage() {
       const response = await fetch('/api/ai/providers');
       if (response.ok) {
         const data = await response.json();
+        console.log('Fetched providers:', data); // Debug log
         setProviders(data);
 
         // Initialize to first allowed model (Claude removed, locals kept, Gemini de-duplicated)
         const allowed = computeAllowedTextModelOptions(data);
+        console.log('Allowed model options:', allowed); // Debug log
         if (allowed.length > 0) {
           const first = allowed[0];
           setSelectedProvider(first.providerName);
           setSelectedModel(first.modelName);
           setSelectedModelKey(first.key);
+          console.log('Selected first model:', first); // Debug log
         }
       }
     } catch (error) {
@@ -219,24 +222,13 @@ export default function TutorPage() {
     return null;
   };
 
-  // Build the allowed text model list: remove Claude, keep locals, collapse Gemini to one
+  // Build the allowed text model list: remove Claude, keep locals, keep all available models
   const computeAllowedTextModelOptions = (providerList: AIProvider[]) => {
     const textProvidersLocal = providerList.filter((p) => p.type === 'text');
     const allOptions = textProvidersLocal.flatMap((p) =>
       p.models
         // Drop models without a real identifier; they cannot be called reliably
         .filter((m) => typeof m.name === 'string' && m.name.trim().length > 0)
-        // Remove Gemini Pro and Gemini 1.5 Pro models
-        .filter(
-          (m) =>
-            !(
-              m.name === 'gemini-pro' ||
-              m.name === 'gemini-1.5-pro' ||
-              (m.displayName &&
-                (m.displayName.toLowerCase().includes('gemini pro') ||
-                  m.displayName.toLowerCase().includes('1.5 pro')))
-            ),
-        )
         .map((m) => ({
           key: `${p.name}::${m.name}`,
           modelName: m.name,
@@ -575,6 +567,7 @@ export default function TutorPage() {
   };
 
   const allowedTextModelOptions = computeAllowedTextModelOptions(providers);
+  console.log('Computed allowedTextModelOptions:', allowedTextModelOptions); // Debug log
 
   // Ensure current selection is one of the allowed options
   useEffect(() => {
@@ -585,6 +578,7 @@ export default function TutorPage() {
         setSelectedModelKey(first.key);
         setSelectedProvider(first.providerName);
         setSelectedModel(first.modelName);
+        console.log('Updated selection to:', first); // Debug log
       }
     }
   }, [providers, allowedTextModelOptions, selectedModelKey]);

@@ -12,11 +12,13 @@ async function bootstrap() {
   const app = await NestFactory.create(AppModule);
 
   // Enable CORS for frontend and allow credentials for cookies
-  const allowedOrigins = process.env.ALLOWED_ORIGINS 
+  const allowedOrigins = process.env.ALLOWED_ORIGINS
     ? process.env.ALLOWED_ORIGINS.split(',')
-    : ['http://localhost:3000'];
-  
-  app.enableCors({ 
+    : process.env.NODE_ENV === 'production'
+      ? ['https://eduai-web.onrender.com']
+      : ['http://localhost:3000'];
+
+  app.enableCors({
     origin: allowedOrigins,
     credentials: true,
     methods: ['GET', 'POST', 'PUT', 'DELETE', 'PATCH', 'OPTIONS'],
@@ -42,9 +44,15 @@ async function bootstrap() {
   // Swagger API Documentation
   const swaggerConfig = new DocumentBuilder()
     .setTitle('EDU AI API')
-    .setDescription('Comprehensive API for EDU AI educational platform including courses, exams, AI tutoring, forums, and more')
+    .setDescription(
+      'Comprehensive API for EDU AI educational platform including courses, exams, AI tutoring, forums, and more',
+    )
     .setVersion('1.0.0')
-    .addServer(process.env.NODE_ENV === 'production' ? 'https://eduai-api.onrender.com' : 'http://localhost:4000')
+    .addServer(
+      process.env.NODE_ENV === 'production'
+        ? 'https://eduai-api.onrender.com'
+        : 'http://localhost:4000',
+    )
     .addBearerAuth()
     .addTag('Authentication', 'User authentication and authorization')
     .addTag('Courses', 'Course management and enrollment')
@@ -61,6 +69,12 @@ async function bootstrap() {
   // app.useWebSocketAdapter(new RedisIoAdapter(app, redisUrl));
 
   const port = Number(process.env.PORT ?? 4000);
-  await app.listen(port);
+  try {
+    await app.listen(port);
+    console.log(`🚀 Application is running on: http://localhost:${port}`);
+  } catch (error) {
+    console.error(`❌ Failed to start server on port ${port}:`, error);
+    process.exit(1);
+  }
 }
 void bootstrap();

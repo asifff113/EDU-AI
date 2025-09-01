@@ -1,6 +1,3 @@
-import { redirect } from 'next/navigation';
-import { cookies } from 'next/headers';
-import { GlobeCanvas } from '@/components/GlobeCanvas';
 import { Features } from '@/components/Features';
 import { CTA } from '@/components/CTA';
 import { Testimonials } from '@/components/Testimonials';
@@ -12,16 +9,7 @@ import { AboutSection } from '@/components/AboutSection';
 import { CoursesPreview } from '@/components/CoursesPreview';
 
 export default async function Home() {
-  // Check if user is authenticated
-  const cookieStore = await cookies();
-  const token = cookieStore.get('eduai_token')?.value;
-
-  // If authenticated, redirect to dashboard
-  if (token) {
-    redirect('/dashboard');
-  }
-
-  // Show landing page for unauthenticated users
+  // Always show landing page - users can navigate to dashboard via menu
   return (
     <div className="font-sans min-h-screen">
       <main className="flex flex-col">

@@ -103,9 +103,15 @@ export class AuthController {
 
   @Post('logout')
   logout(@Res({ passthrough: true }) res: Response) {
-    // Clear the auth cookie
-    res.clearCookie('eduai_token', { path: '/' });
-    return { message: 'Logged out' };
+    // Clear the auth cookie with all necessary options
+    res.clearCookie('eduai_token', {
+      path: '/',
+      httpOnly: true,
+      secure: process.env.NODE_ENV === 'production',
+      sameSite: 'lax',
+    });
+
+    return { message: 'Logged out successfully' };
   }
 
   @Get('me')

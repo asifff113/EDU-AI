@@ -13,6 +13,7 @@ import {
 import { FileInterceptor } from '@nestjs/platform-express';
 import { ProfileService } from './profile.service';
 import { AuthGuard } from '../auth/auth.guard';
+import { Public } from '../auth/public.decorator';
 import { UpdateProfileDto } from './dto/update-profile.dto';
 
 @Controller('profile')
@@ -57,12 +58,14 @@ export class ProfileController {
   }
 
   @Get('public')
+  @Public()
   async getPublicProfiles() {
     return this.profileService.getPublicProfiles();
   }
 
   @Get('test')
-  async testProfile() {
+  @Public()
+  testProfile() {
     // Return a test profile without authentication for debugging
     return {
       id: 'test-user',

@@ -33,6 +33,7 @@ export function Navbar() {
             <button
               onClick={() => setFeaturesOpen(!featuresOpen)}
               className="flex items-center gap-1.5 text-white/80 hover:text-white transition-colors px-3 py-2 rounded-lg hover:bg-white/10"
+              suppressHydrationWarning
             >
               Features
               <ChevronDown

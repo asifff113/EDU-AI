@@ -82,12 +82,14 @@ export default function AllProfilesPage() {
   const fetchProfiles = async () => {
     try {
       setIsLoading(true);
-      const response = await fetch('/api/profiles', {
+      const apiUrl = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:4000';
+      const response = await fetch(`${apiUrl}/profile/public`, {
         credentials: 'include',
       });
       if (response.ok) {
         const data = await response.json();
-        setProfiles(data);
+        // Ensure data is an array before setting it
+        setProfiles(Array.isArray(data) ? data : demoProfiles);
       } else {
         console.error('Failed to fetch profiles');
         // Fallback to demo data on error
@@ -278,7 +280,9 @@ export default function AllProfilesPage() {
   ];
 
   const filteredProfiles = useMemo(() => {
-    let filtered = profiles.filter((profile) => {
+    // Ensure profiles is always an array
+    const profilesArray = Array.isArray(profiles) ? profiles : [];
+    let filtered = profilesArray.filter((profile) => {
       const matchesCategory = selectedCategory === 'all' || profile.role === selectedCategory;
       const fullName = `${profile.firstName} ${profile.lastName}`;
       const matchesSearch =

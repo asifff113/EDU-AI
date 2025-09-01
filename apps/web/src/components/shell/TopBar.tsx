@@ -146,10 +146,24 @@ export function TopBar() {
         method: 'POST',
         credentials: 'include',
       });
-      // Redirect to home page which will show login
+
+      // Clear any local storage
+      localStorage.removeItem('user');
+      localStorage.removeItem('token');
+
+      // Clear session storage
+      sessionStorage.clear();
+
+      // Redirect to home page
       window.location.href = '/';
     } catch (error) {
       console.error('Logout failed:', error);
+
+      // Clear storage even if logout request fails
+      localStorage.removeItem('user');
+      localStorage.removeItem('token');
+      sessionStorage.clear();
+
       // Force redirect anyway
       window.location.href = '/';
     }

@@ -3,6 +3,7 @@ import { AppContextProvider } from '@/contexts/AppContext';
 import { AppShell } from '@/components/shell/AppShell';
 import { Navbar } from '@/components/Navbar';
 import { useEffect, useState } from 'react';
+import { usePathname } from 'next/navigation';
 
 type UserSummary = {
   id: string;
@@ -20,9 +21,25 @@ export default function ClientRoot({
   children: React.ReactNode;
 }) {
   const [user, setUser] = useState<UserSummary | null>(null);
+  const pathname = usePathname();
+
+  // Force public pages to show the public navbar regardless of auth status
+  const publicPages = ['/', '/login', '/register', '/forgot-password'];
+  const isPublicPage = publicPages.includes(pathname);
+
+  // Debug logging
+  useEffect(() => {
+    console.log('ClientRoot Debug:', {
+      pathname,
+      isAuthenticated,
+      isPublicPage,
+      willShowAppShell: isAuthenticated && !isPublicPage,
+      willShowNavbar: !isAuthenticated || isPublicPage,
+    });
+  }, [pathname, isAuthenticated, isPublicPage]);
 
   useEffect(() => {
-    if (isAuthenticated) {
+    if (isAuthenticated && !isPublicPage) {
       // Fetch user info from /api/auth/me
       fetch('/api/auth/me', { credentials: 'include' })
         .then((res) => res.json())
@@ -48,11 +65,11 @@ export default function ClientRoot({
           console.error('Error fetching user data:', error);
         });
     }
-  }, [isAuthenticated]);
+  }, [isAuthenticated, isPublicPage]);
 
   return (
     <AppContextProvider user={user || undefined}>
-      {isAuthenticated ? (
+      {isAuthenticated && !isPublicPage ? (
         <AppShell>{children}</AppShell>
       ) : (
         <>
