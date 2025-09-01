@@ -60,7 +60,9 @@ export default function SubscriptionsPage() {
       transports: ['websocket', 'polling'],
     });
     s.on('plans:update', load);
-    return () => s.disconnect();
+    return () => {
+      s.disconnect();
+    };
   }, []);
 
   const subscribe = async (planId: string) => {

@@ -124,8 +124,9 @@ export default function AllProfilesPage() {
       qualifications: ['PhD in Mathematics', 'M.Ed in Education', 'B.Sc in Mathematics'],
     },
     {
-      id: 2,
-      name: 'Prof. Michael Chen',
+      id: '2',
+      firstName: 'Prof. Michael',
+      lastName: 'Chen',
       role: 'teacher',
       avatar:
         'https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?w=150&h=150&fit=crop&auto=format',
@@ -141,8 +142,9 @@ export default function AllProfilesPage() {
       qualifications: ['PhD in Physics', 'M.Sc in Applied Physics'],
     },
     {
-      id: 3,
-      name: 'Ms. Emily Rodriguez',
+      id: '3',
+      firstName: 'Ms. Emily',
+      lastName: 'Rodriguez',
       role: 'teacher',
       avatar:
         'https://images.unsplash.com/photo-1438761681033-6461ffad8d80?w=150&h=150&fit=crop&auto=format',
@@ -160,8 +162,9 @@ export default function AllProfilesPage() {
 
     // Q&A Solvers
     {
-      id: 4,
-      name: 'Ahmed Hassan',
+      id: '4',
+      firstName: 'Ahmed',
+      lastName: 'Hassan',
       role: 'qa_solver',
       avatar:
         'https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=150&h=150&fit=crop&auto=format',
@@ -175,8 +178,9 @@ export default function AllProfilesPage() {
       solvedQuestions: 1247,
     },
     {
-      id: 5,
-      name: 'Dr. Fatima Khan',
+      id: '5',
+      firstName: 'Dr. Fatima',
+      lastName: 'Khan',
       role: 'qa_solver',
       avatar:
         'https://images.unsplash.com/photo-1544005313-94ddf0286df2?w=150&h=150&fit=crop&auto=format',
@@ -190,8 +194,9 @@ export default function AllProfilesPage() {
       solvedQuestions: 892,
     },
     {
-      id: 6,
-      name: 'Rashid Ahmed',
+      id: '6',
+      firstName: 'Rashid',
+      lastName: 'Ahmed',
       role: 'qa_solver',
       avatar:
         'https://images.unsplash.com/photo-1566492031773-4f4e44671d66?w=150&h=150&fit=crop&auto=format',

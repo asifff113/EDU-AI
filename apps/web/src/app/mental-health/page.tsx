@@ -55,7 +55,9 @@ export default function MentalHealthPage() {
     s.on('logs:update', (log: any) =>
       setLogs((prev) => [log, ...(Array.isArray(prev) ? prev : [])]),
     );
-    return () => s.disconnect();
+    return () => {
+      s.disconnect();
+    };
   }, []);
 
   const tick = () => setSeconds((x) => x + 1);

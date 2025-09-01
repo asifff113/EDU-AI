@@ -93,7 +93,9 @@ export default function JobPortalPage() {
     setSock(s);
     s.on('jobs:new', () => load());
     s.on('applications:update', () => loadApps());
-    return () => s.disconnect();
+    return () => {
+      s.disconnect();
+    };
   }, []);
 
   const apply = async (jobId: string) => {

@@ -66,7 +66,9 @@ export default function VirtualClassroomsPage() {
       transports: ['websocket', 'polling'],
     });
     socketRef.current = socket;
-    return () => socket.disconnect();
+    return () => {
+      socket.disconnect();
+    };
   }, []);
 
   useEffect(() => {

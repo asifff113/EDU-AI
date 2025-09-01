@@ -74,7 +74,9 @@ export function StudentDashboard({ userName }: StudentDashboardProps) {
     });
     s.on('connect', () => setIsLive(true));
     s.on('scholarships:update', load);
-    return () => s.disconnect();
+    return () => {
+      s.disconnect();
+    };
   }, []);
 
   useEffect(() => {
