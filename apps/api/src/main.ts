@@ -11,10 +11,17 @@ import { join } from 'path';
 async function bootstrap() {
   const app = await NestFactory.create(AppModule);
 
-  // Enable CORS for frontend during development and allow credentials so
-  // the server can set httpOnly cookies.
-  const origin = process.env.FRONTEND_ORIGIN || 'http://localhost:3000';
-  app.enableCors({ origin, credentials: true });
+  // Enable CORS for frontend and allow credentials for cookies
+  const allowedOrigins = process.env.ALLOWED_ORIGINS 
+    ? process.env.ALLOWED_ORIGINS.split(',')
+    : ['http://localhost:3000'];
+  
+  app.enableCors({ 
+    origin: allowedOrigins,
+    credentials: true,
+    methods: ['GET', 'POST', 'PUT', 'DELETE', 'PATCH', 'OPTIONS'],
+    allowedHeaders: ['Content-Type', 'Authorization', 'Cookie'],
+  });
 
   // Cookie parser required to use res.cookie in controllers
   app.use(cookieParser());
@@ -32,14 +39,22 @@ async function bootstrap() {
   // Serve static uploads (e.g., course files, avatars, resources)
   app.use('/uploads', express.static(join(process.cwd(), 'uploads')));
 
+  // Swagger API Documentation
   const swaggerConfig = new DocumentBuilder()
-    .setTitle('Edu AI API')
-    .setDescription('API documentation for Edu AI')
+    .setTitle('EDU AI API')
+    .setDescription('Comprehensive API for EDU AI educational platform including courses, exams, AI tutoring, forums, and more')
     .setVersion('1.0.0')
+    .addServer(process.env.NODE_ENV === 'production' ? 'https://eduai-api.onrender.com' : 'http://localhost:4000')
     .addBearerAuth()
+    .addTag('Authentication', 'User authentication and authorization')
+    .addTag('Courses', 'Course management and enrollment')
+    .addTag('Exams', 'Exam system and assessments')
+    .addTag('AI', 'AI tutoring and assistance')
+    .addTag('Forums', 'Discussion forums and Q&A')
+    .addTag('Profile', 'User profiles and settings')
     .build();
   const document = SwaggerModule.createDocument(app, swaggerConfig);
-  SwaggerModule.setup('docs', app, document);
+  SwaggerModule.setup('api-docs', app, document);
 
   // Socket.IO Redis adapter - temporarily disabled to allow startup without Redis
   // const redisUrl = process.env.REDIS_URL ?? 'redis://localhost:6379';

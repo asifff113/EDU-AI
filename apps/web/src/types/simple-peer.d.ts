@@ -1,24 +1,26 @@
 declare module 'simple-peer' {
-  interface SimplePeerOptions {
-    initiator?: boolean;
-    trickle?: boolean;
-    stream?: MediaStream;
-    config?: RTCConfiguration;
-    constraints?: MediaStreamConstraints;
-    channelConfig?: RTCDataChannelInit;
-    channelName?: string;
-    sdpTransform?: (sdp: string) => string;
-    objectMode?: boolean;
-    allowHalfTrickle?: boolean;
+  namespace Peer {
+    interface Options {
+      initiator?: boolean;
+      trickle?: boolean;
+      stream?: MediaStream;
+      config?: RTCConfiguration;
+      constraints?: MediaStreamConstraints;
+      channelConfig?: RTCDataChannelInit;
+      channelName?: string;
+      sdpTransform?: (sdp: string) => string;
+      objectMode?: boolean;
+      allowHalfTrickle?: boolean;
+    }
+
+    interface SignalData {
+      [key: string]: any;
+    }
   }
 
-  interface SimplePeerData {
-    [key: string]: any;
-  }
-
-  class SimplePeer extends NodeJS.EventEmitter {
-    constructor(options?: SimplePeerOptions);
-    signal(data: SimplePeerData): void;
+  class Peer extends NodeJS.EventEmitter {
+    constructor(options?: Peer.Options);
+    signal(data: Peer.SignalData): void;
     send(data: string | Buffer | Uint8Array | ArrayBufferLike): void;
     addStream(stream: MediaStream): void;
     removeStream(stream: MediaStream): void;
@@ -30,5 +32,5 @@ declare module 'simple-peer' {
     readonly connected: boolean;
   }
 
-  export = SimplePeer;
+  export = Peer;
 }
