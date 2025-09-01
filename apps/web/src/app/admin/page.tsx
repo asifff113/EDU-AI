@@ -53,7 +53,10 @@ export default function AdminPage() {
     socket.on('courses:update', load);
     socket.on('resources:update', load);
     socket.on('settings:update', load);
-    return () => socket.disconnect();
+    
+    return () => {
+      socket.disconnect();
+    };
   }, []);
 
   const load = async () => {
