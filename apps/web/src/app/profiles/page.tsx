@@ -83,25 +83,67 @@ export default function AllProfilesPage() {
     try {
       setIsLoading(true);
       const apiUrl = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:4000';
-      const response = await fetch(`${apiUrl}/profile/public`, {
-        credentials: 'include',
-      });
-      if (response.ok) {
-        const data = await response.json();
-        // Ensure data is an array before setting it
-        setProfiles(Array.isArray(data) ? data : demoProfiles);
-      } else {
-        console.error('Failed to fetch profiles');
-        // Fallback to demo data on error
+
+      try {
+        const response = await fetch(`${apiUrl}/profile/public`, {
+          credentials: 'include',
+        });
+        if (response.ok) {
+          const apiProfiles = await response.json();
+          if (Array.isArray(apiProfiles) && apiProfiles.length > 0) {
+            // Merge API profiles with demo profiles for better visuals
+            // Add avatar URLs to API profiles
+            const enhancedApiProfiles = apiProfiles.map((profile, index) => ({
+              ...profile,
+              avatar: profile.avatar || getDemoAvatar(index),
+            }));
+
+            // Add a few demo profiles to supplement for visual demonstration
+            const supplementaryDemoProfiles = demoProfiles.slice(
+              0,
+              Math.max(0, 8 - apiProfiles.length),
+            );
+            const combinedProfiles = [...enhancedApiProfiles, ...supplementaryDemoProfiles];
+            setProfiles(combinedProfiles);
+            console.log(
+              `Loaded ${apiProfiles.length} real users + ${supplementaryDemoProfiles.length} demo profiles`,
+            );
+          } else {
+            // No API profiles, use demo profiles
+            setProfiles(demoProfiles);
+            console.log('No API profiles found, using demo profiles');
+          }
+        } else {
+          // API failed, use demo profiles
+          setProfiles(demoProfiles);
+          console.log('API failed, using demo profiles');
+        }
+      } catch (apiError) {
+        // API not available, use demo profiles
         setProfiles(demoProfiles);
+        console.log('API not available, using demo profiles with real human pictures');
       }
     } catch (error) {
-      console.error('Error fetching profiles:', error);
-      // Fallback to demo data on error
+      console.error('Error loading profiles:', error);
       setProfiles(demoProfiles);
     } finally {
       setIsLoading(false);
     }
+  };
+
+  // Helper function to get demo avatars for API profiles
+  const getDemoAvatar = (index: number) => {
+    const avatars = [
+      'https://images.unsplash.com/photo-1559526324-4b87b5e36e44?w=200&h=200&fit=crop&auto=format&q=80',
+      'https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?w=200&h=200&fit=crop&auto=format&q=80',
+      'https://images.unsplash.com/photo-1580489944761-15a19d654956?w=200&h=200&fit=crop&auto=format&q=80',
+      'https://images.unsplash.com/photo-1566492031773-4f4e44671d66?w=200&h=200&fit=crop&auto=format&q=80',
+      'https://images.unsplash.com/photo-1551836022-d5d88e9218df?w=200&h=200&fit=crop&auto=format&q=80',
+      'https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=200&h=200&fit=crop&auto=format&q=80',
+      'https://images.unsplash.com/photo-1494790108755-2616b612b786?w=200&h=200&fit=crop&auto=format&q=80',
+      'https://images.unsplash.com/photo-1539571696357-5a69c17a67c6?w=200&h=200&fit=crop&auto=format&q=80',
+    ];
+    return avatars[index % avatars.length];
   };
 
   // Demo profiles data
@@ -113,7 +155,7 @@ export default function AllProfilesPage() {
       lastName: 'Johnson',
       role: 'teacher',
       avatar:
-        'https://images.unsplash.com/photo-1494790108755-2616c6286ca8?w=150&h=150&fit=crop&auto=format',
+        'https://images.unsplash.com/photo-1559526324-4b87b5e36e44?w=200&h=200&fit=crop&auto=format&q=80',
       bio: 'Experienced mathematics teacher with 15+ years in education. Specializing in advanced calculus and algebra.',
       location: 'Dhaka, Bangladesh',
       rating: 4.9,
@@ -131,7 +173,7 @@ export default function AllProfilesPage() {
       lastName: 'Chen',
       role: 'teacher',
       avatar:
-        'https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?w=150&h=150&fit=crop&auto=format',
+        'https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?w=200&h=200&fit=crop&auto=format&q=80',
       bio: 'Physics professor and researcher. Passionate about making complex physics concepts easy to understand.',
       location: 'Chittagong, Bangladesh',
       rating: 4.8,
@@ -149,7 +191,7 @@ export default function AllProfilesPage() {
       lastName: 'Rodriguez',
       role: 'teacher',
       avatar:
-        'https://images.unsplash.com/photo-1438761681033-6461ffad8d80?w=150&h=150&fit=crop&auto=format',
+        'https://images.unsplash.com/photo-1580489944761-15a19d654956?w=200&h=200&fit=crop&auto=format&q=80',
       bio: 'English literature enthusiast with expertise in creative writing and literary analysis.',
       location: 'Sylhet, Bangladesh',
       rating: 4.7,
@@ -169,7 +211,7 @@ export default function AllProfilesPage() {
       lastName: 'Hassan',
       role: 'qa_solver',
       avatar:
-        'https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=150&h=150&fit=crop&auto=format',
+        'https://images.unsplash.com/photo-1566492031773-4f4e44671d66?w=200&h=200&fit=crop&auto=format&q=80',
       bio: 'Computer Science expert specializing in programming and algorithm problems. Quick and accurate solutions.',
       location: 'Dhaka, Bangladesh',
       rating: 4.9,
@@ -185,7 +227,7 @@ export default function AllProfilesPage() {
       lastName: 'Khan',
       role: 'qa_solver',
       avatar:
-        'https://images.unsplash.com/photo-1544005313-94ddf0286df2?w=150&h=150&fit=crop&auto=format',
+        'https://images.unsplash.com/photo-1551836022-d5d88e9218df?w=200&h=200&fit=crop&auto=format&q=80',
       bio: 'Mathematics and statistics expert. Helping students with complex mathematical problems for 5+ years.',
       location: 'Rajshahi, Bangladesh',
       rating: 4.8,
@@ -201,7 +243,7 @@ export default function AllProfilesPage() {
       lastName: 'Ahmed',
       role: 'qa_solver',
       avatar:
-        'https://images.unsplash.com/photo-1566492031773-4f4e44671d66?w=150&h=150&fit=crop&auto=format',
+        'https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=200&h=200&fit=crop&auto=format&q=80',
       bio: 'Chemistry specialist with extensive knowledge in organic and inorganic chemistry. Lab experience included.',
       location: 'Khulna, Bangladesh',
       rating: 4.6,
@@ -219,7 +261,7 @@ export default function AllProfilesPage() {
       lastName: 'Islam',
       role: 'student',
       avatar:
-        'https://images.unsplash.com/photo-1534528741775-53994a69daeb?w=150&h=150&fit=crop&auto=format',
+        'https://images.unsplash.com/photo-1494790108755-2616b612b786?w=200&h=200&fit=crop&auto=format&q=80',
       bio: 'Computer Science student passionate about AI and machine learning. Always eager to learn new technologies.',
       location: 'Dhaka, Bangladesh',
       rating: 4.5,
@@ -236,7 +278,7 @@ export default function AllProfilesPage() {
       lastName: 'Rahman',
       role: 'student',
       avatar:
-        'https://images.unsplash.com/photo-1539571696357-5a69c17a67c6?w=150&h=150&fit=crop&auto=format',
+        'https://images.unsplash.com/photo-1539571696357-5a69c17a67c6?w=200&h=200&fit=crop&auto=format&q=80',
       bio: 'Medical student interested in surgery and patient care. Active in study groups and peer learning.',
       location: 'Chittagong, Bangladesh',
       rating: 4.3,
@@ -253,7 +295,7 @@ export default function AllProfilesPage() {
       lastName: 'Begum',
       role: 'student',
       avatar:
-        'https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=150&h=150&fit=crop&auto=format',
+        'https://images.unsplash.com/photo-1438761681033-6461ffad8d80?w=200&h=200&fit=crop&auto=format&q=80',
       bio: 'Business administration student with focus on marketing and entrepreneurship. Future business leader.',
       location: 'Sylhet, Bangladesh',
       rating: 4.4,
@@ -270,7 +312,7 @@ export default function AllProfilesPage() {
       lastName: 'Hasan',
       role: 'student',
       avatar:
-        'https://images.unsplash.com/photo-1507591064344-4c6ce005b128?w=150&h=150&fit=crop&auto=format',
+        'https://images.unsplash.com/photo-1507591064344-4c6ce005b128?w=200&h=200&fit=crop&auto=format&q=80',
       bio: 'High school student preparing for university entrance. Strong in mathematics and sciences.',
       location: 'Barisal, Bangladesh',
       rating: 4.2,
@@ -280,6 +322,93 @@ export default function AllProfilesPage() {
       studyLevel: 'High School - Grade 12',
       interests: ['Mathematics', 'Physics', 'Chemistry', 'Engineering'],
       coursesCompleted: 6,
+    },
+
+    // Additional diverse profiles with real human pictures
+    {
+      id: '11',
+      firstName: 'Maria',
+      lastName: 'Garcia',
+      role: 'teacher',
+      avatar:
+        'https://images.unsplash.com/photo-1573496359142-b8d87734a5a2?w=200&h=200&fit=crop&auto=format&q=80',
+      bio: 'Spanish language instructor with native fluency. Passionate about teaching language and culture.',
+      location: 'Dhaka, Bangladesh',
+      rating: 4.8,
+      reviewCount: 92,
+      isOnline: true,
+      joinedDate: '2020-05-15',
+      subjects: ['Spanish', 'Language Arts', 'Cultural Studies', 'Communication'],
+      hourlyRate: 1400,
+      experience: 10,
+      qualifications: ['M.A in Spanish Literature', 'TESOL Certification'],
+    },
+    {
+      id: '12',
+      firstName: 'David',
+      lastName: 'Kim',
+      role: 'qa_solver',
+      avatar:
+        'https://images.unsplash.com/photo-1560250097-0b93528c311a?w=200&h=200&fit=crop&auto=format&q=80',
+      bio: 'Software engineer specializing in full-stack development and system design. Quick problem solver.',
+      location: 'Chittagong, Bangladesh',
+      rating: 4.9,
+      reviewCount: 156,
+      isOnline: true,
+      joinedDate: '2021-02-20',
+      expertise: ['JavaScript', 'React', 'Node.js', 'System Design', 'Algorithms'],
+      solvedQuestions: 890,
+    },
+    {
+      id: '13',
+      firstName: 'Amira',
+      lastName: 'Hassan',
+      role: 'student',
+      avatar:
+        'https://images.unsplash.com/photo-1594736797933-d0400e808744?w=200&h=200&fit=crop&auto=format&q=80',
+      bio: 'Pre-med student with strong background in biology and chemistry. Aspiring doctor.',
+      location: 'Sylhet, Bangladesh',
+      rating: 4.6,
+      reviewCount: 34,
+      isOnline: false,
+      joinedDate: '2022-09-10',
+      studyLevel: 'University - 3rd Year',
+      interests: ['Biology', 'Chemistry', 'Medicine', 'Research'],
+      coursesCompleted: 18,
+    },
+    {
+      id: '14',
+      firstName: 'James',
+      lastName: 'Wilson',
+      role: 'teacher',
+      avatar:
+        'https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=200&h=200&fit=crop&auto=format&q=80',
+      bio: 'History professor specializing in world history and social studies. Engaging storyteller.',
+      location: 'Rajshahi, Bangladesh',
+      rating: 4.7,
+      reviewCount: 78,
+      isOnline: true,
+      joinedDate: '2019-11-30',
+      subjects: ['History', 'Social Studies', 'Political Science', 'Geography'],
+      hourlyRate: 1600,
+      experience: 14,
+      qualifications: ['PhD in History', 'M.A in Political Science'],
+    },
+    {
+      id: '15',
+      firstName: 'Priya',
+      lastName: 'Sharma',
+      role: 'qa_solver',
+      avatar:
+        'https://images.unsplash.com/photo-1580489944761-15a19d654956?w=200&h=200&fit=crop&auto=format&q=80',
+      bio: 'Data scientist with expertise in machine learning and statistical analysis. Research enthusiast.',
+      location: 'Dhaka, Bangladesh',
+      rating: 4.8,
+      reviewCount: 124,
+      isOnline: true,
+      joinedDate: '2020-08-12',
+      expertise: ['Data Science', 'Machine Learning', 'Python', 'Statistics', 'AI'],
+      solvedQuestions: 645,
     },
   ];
 
@@ -560,17 +689,32 @@ export default function AllProfilesPage() {
                   ></div>
                   <CardHeader className="pb-4">
                     <div className="flex items-start gap-4">
-                      <div className="relative [transform:perspective(1000px)]">
-                        <img
-                          src={
-                            profile.avatar ||
-                            `https://api.dicebear.com/9.x/initials/svg?seed=${encodeURIComponent(profile.firstName + ' ' + profile.lastName)}&backgroundType=gradientLinear`
-                          }
-                          alt={`${profile.firstName} ${profile.lastName}`}
-                          className="w-16 h-16 rounded-full object-cover shadow-lg transition-transform duration-500 [transform:translateZ(0)] group-hover:[transform:rotateY(8deg)_rotateX(3deg)_translateZ(8px)]"
-                        />
+                      <div className="relative [transform:perspective(1000px)] group/avatar">
+                        {/* Enhanced Avatar with Gradient Border and Glow */}
+                        <div className="relative p-1 rounded-full bg-gradient-to-br from-white/20 via-white/10 to-transparent shadow-2xl">
+                          <div className="relative p-0.5 rounded-full bg-gradient-to-br from-blue-400 via-purple-400 to-pink-400 group-hover/avatar:from-cyan-400 group-hover/avatar:via-violet-400 group-hover/avatar:to-rose-400 transition-all duration-500">
+                            <img
+                              src={
+                                profile.avatar ||
+                                `https://api.dicebear.com/9.x/initials/svg?seed=${encodeURIComponent(profile.firstName + ' ' + profile.lastName)}&backgroundType=gradientLinear&backgroundColor=3b82f6,8b5cf6,ec4899,06b6d4,10b981`
+                              }
+                              alt={`${profile.firstName} ${profile.lastName}`}
+                              className="w-20 h-20 rounded-full object-cover shadow-xl transition-all duration-500 [transform:translateZ(0)] group-hover:[transform:rotateY(8deg)_rotateX(3deg)_translateZ(8px)] group-hover/avatar:scale-105 border-2 border-white/20"
+                              onError={(e) => {
+                                const target = e.target as HTMLImageElement;
+                                target.src = `https://api.dicebear.com/9.x/avataaars/svg?seed=${encodeURIComponent(profile.firstName + ' ' + profile.lastName)}&backgroundColor=3b82f6,8b5cf6,ec4899,06b6d4,10b981`;
+                              }}
+                            />
+                          </div>
+                          {/* Animated Glow Effect */}
+                          <div className="absolute inset-0 rounded-full bg-gradient-to-br from-blue-400/20 via-purple-400/20 to-pink-400/20 blur-md opacity-0 group-hover/avatar:opacity-100 transition-opacity duration-500 animate-pulse"></div>
+                        </div>
+                        {/* Enhanced Online Status */}
                         {profile.isOnline && (
-                          <div className="absolute -bottom-1 -right-1 w-5 h-5 bg-green-500 border-2 border-white rounded-full"></div>
+                          <div className="absolute -bottom-1 -right-1 flex items-center justify-center">
+                            <div className="w-6 h-6 bg-green-500 border-3 border-white rounded-full shadow-lg animate-pulse"></div>
+                            <div className="absolute w-6 h-6 bg-green-400 rounded-full animate-ping opacity-30"></div>
+                          </div>
                         )}
                       </div>
                       <div className="flex-1 min-w-0">

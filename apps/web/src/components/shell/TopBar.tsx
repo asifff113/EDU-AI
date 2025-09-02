@@ -568,58 +568,68 @@ export function TopBar() {
                   </Link>
                 </Button>
 
-                {/* Navigation Links - Moved from top bar */}
-                <div className="flex flex-col gap-2">
-                  <Button
-                    asChild
-                    className="w-full justify-start rounded-2xl px-5 py-4 text-white shadow-lg shadow-indigo-500/20 ring-1 ring-white/10 bg-gradient-to-r from-indigo-500 to-cyan-500 hover:from-indigo-600 hover:to-cyan-600 transition-transform hover:scale-[1.01]"
-                    onClick={() => setMobileMenuOpen(false)}
-                  >
-                    <Link href="/certificates" className="flex items-center">
-                      <Triangle className="h-4 w-4 mr-3 text-white" />
-                      {t('nav.certificates')}
-                    </Link>
-                  </Button>
-                  <Button
-                    asChild
-                    className="w-full justify-start rounded-2xl px-5 py-4 text-white shadow-lg shadow-violet-500/20 ring-1 ring-white/10 bg-gradient-to-r from-violet-500 to-fuchsia-600 hover:from-violet-600 hover:to-fuchsia-700 transition-transform hover:scale-[1.01]"
-                    onClick={() => setMobileMenuOpen(false)}
-                  >
-                    <Link href="/resume" className="flex items-center">
-                      <Triangle className="h-4 w-4 mr-3 text-white" />
-                      {t('nav.resume')}
-                    </Link>
-                  </Button>
-                  <Button
-                    asChild
-                    className="w-full justify-start rounded-2xl px-5 py-4 text-white shadow-lg shadow-emerald-500/20 ring-1 ring-white/10 bg-gradient-to-r from-emerald-500 to-teal-600 hover:from-emerald-600 hover:to-teal-700 transition-transform hover:scale-[1.01]"
-                    onClick={() => setMobileMenuOpen(false)}
-                  >
-                    <Link href="/job-portal" className="flex items-center">
-                      <LayoutDashboard className="h-4 w-4 mr-3 text-white" />
-                      {t('nav.jobPortal')}
-                    </Link>
-                  </Button>
-                  <Button
-                    asChild
-                    className="w-full justify-start rounded-2xl px-5 py-4 text-white shadow-lg shadow-fuchsia-500/20 ring-1 ring-white/10 bg-gradient-to-r from-fuchsia-500 to-violet-500 hover:from-fuchsia-600 hover:to-violet-600 transition-transform hover:scale-[1.01]"
-                    onClick={() => setMobileMenuOpen(false)}
-                  >
-                    <Link href="/discussion-forums" className="flex items-center">
-                      <MessageSquare className="h-4 w-4 mr-3 text-white" />
-                      {t('nav.discussionForums')}
-                    </Link>
-                  </Button>
-                  <Button
-                    asChild
-                    className="w-full justify-start rounded-2xl px-5 py-4 text-white shadow-lg shadow-blue-500/20 ring-1 ring-white/10 bg-gradient-to-r from-blue-500 to-cyan-500 hover:from-blue-600 hover:to-cyan-600 transition-transform hover:scale-[1.01]"
-                    onClick={() => setMobileMenuOpen(false)}
-                  >
-                    <Link href="/chat" className="flex items-center">
-                      <MessageSquare className="h-4 w-4 mr-3 text-white" />
-                      {t('nav.chat')}
-                    </Link>
-                  </Button>
+                {/* Enhanced Navigation Links with 3D Effects */}
+                <div className="flex flex-col gap-3 perspective-1000">
+                  <div className="group perspective-1000 transform-gpu">
+                    <Button
+                      asChild
+                      className="w-full justify-start rounded-2xl px-5 py-4 text-white shadow-2xl shadow-indigo-500/30 ring-1 ring-white/20 bg-gradient-to-br from-indigo-500 via-blue-500 to-cyan-500 hover:from-indigo-400 hover:via-blue-400 hover:to-cyan-400 transition-all duration-500 hover:scale-105 hover:-translate-y-1 hover:rotate-1 transform-gpu backdrop-blur-sm border border-white/10 hover:shadow-3xl hover:shadow-indigo-500/40 hover:ring-2 hover:ring-indigo-400/50"
+                      onClick={() => setMobileMenuOpen(false)}
+                    >
+                      <Link href="/certificates" className="flex items-center">
+                        <Triangle className="h-4 w-4 mr-3 text-white group-hover:rotate-12 transition-transform duration-300" />
+                        {t('nav.certificates')}
+                      </Link>
+                    </Button>
+                  </div>
+                  <div className="group perspective-1000 transform-gpu">
+                    <Button
+                      asChild
+                      className="w-full justify-start rounded-2xl px-5 py-4 text-white shadow-2xl shadow-violet-500/30 ring-1 ring-white/20 bg-gradient-to-br from-violet-500 via-purple-500 to-fuchsia-600 hover:from-violet-400 hover:via-purple-400 hover:to-fuchsia-500 transition-all duration-500 hover:scale-105 hover:-translate-y-1 hover:-rotate-1 transform-gpu backdrop-blur-sm border border-white/10 hover:shadow-3xl hover:shadow-violet-500/40 hover:ring-2 hover:ring-violet-400/50"
+                      onClick={() => setMobileMenuOpen(false)}
+                    >
+                      <Link href="/resume" className="flex items-center">
+                        <Triangle className="h-4 w-4 mr-3 text-white group-hover:rotate-12 transition-transform duration-300" />
+                        {t('nav.resume')}
+                      </Link>
+                    </Button>
+                  </div>
+                  <div className="group perspective-1000 transform-gpu">
+                    <Button
+                      asChild
+                      className="w-full justify-start rounded-2xl px-5 py-4 text-white shadow-2xl shadow-emerald-500/30 ring-1 ring-white/20 bg-gradient-to-br from-emerald-500 via-green-500 to-teal-600 hover:from-emerald-400 hover:via-green-400 hover:to-teal-500 transition-all duration-500 hover:scale-105 hover:-translate-y-1 hover:rotate-1 transform-gpu backdrop-blur-sm border border-white/10 hover:shadow-3xl hover:shadow-emerald-500/40 hover:ring-2 hover:ring-emerald-400/50"
+                      onClick={() => setMobileMenuOpen(false)}
+                    >
+                      <Link href="/job-portal" className="flex items-center">
+                        <LayoutDashboard className="h-4 w-4 mr-3 text-white group-hover:rotate-12 transition-transform duration-300" />
+                        {t('nav.jobPortal')}
+                      </Link>
+                    </Button>
+                  </div>
+                  <div className="group perspective-1000 transform-gpu">
+                    <Button
+                      asChild
+                      className="w-full justify-start rounded-2xl px-5 py-4 text-white shadow-2xl shadow-fuchsia-500/30 ring-1 ring-white/20 bg-gradient-to-br from-fuchsia-500 via-pink-500 to-violet-500 hover:from-fuchsia-400 hover:via-pink-400 hover:to-violet-400 transition-all duration-500 hover:scale-105 hover:-translate-y-1 hover:-rotate-1 transform-gpu backdrop-blur-sm border border-white/10 hover:shadow-3xl hover:shadow-fuchsia-500/40 hover:ring-2 hover:ring-fuchsia-400/50"
+                      onClick={() => setMobileMenuOpen(false)}
+                    >
+                      <Link href="/discussion-forums" className="flex items-center">
+                        <MessageSquare className="h-4 w-4 mr-3 text-white group-hover:rotate-12 transition-transform duration-300" />
+                        {t('nav.discussionForums')}
+                      </Link>
+                    </Button>
+                  </div>
+                  <div className="group perspective-1000 transform-gpu">
+                    <Button
+                      asChild
+                      className="w-full justify-start rounded-2xl px-5 py-4 text-white shadow-2xl shadow-blue-500/30 ring-1 ring-white/20 bg-gradient-to-br from-blue-500 via-sky-500 to-cyan-500 hover:from-blue-400 hover:via-sky-400 hover:to-cyan-400 transition-all duration-500 hover:scale-105 hover:-translate-y-1 hover:rotate-1 transform-gpu backdrop-blur-sm border border-white/10 hover:shadow-3xl hover:shadow-blue-500/40 hover:ring-2 hover:ring-blue-400/50"
+                      onClick={() => setMobileMenuOpen(false)}
+                    >
+                      <Link href="/chat" className="flex items-center">
+                        <MessageSquare className="h-4 w-4 mr-3 text-white group-hover:rotate-12 transition-transform duration-300" />
+                        {t('nav.chat')}
+                      </Link>
+                    </Button>
+                  </div>
                   <Button
                     asChild
                     className="w-full justify-start rounded-2xl px-5 py-4 text-white shadow-lg shadow-sky-500/20 ring-1 ring-white/10 bg-gradient-to-r from-sky-500 to-fuchsia-500 hover:from-sky-600 hover:to-fuchsia-600 transition-transform hover:scale-[1.01]"
@@ -672,16 +682,18 @@ export function TopBar() {
                     </Link>
                   </Button>
 
-                  <Button
-                    asChild
-                    className="w-full justify-start rounded-2xl px-5 py-4 text-white shadow-lg shadow-amber-500/20 ring-1 ring-white/10 bg-gradient-to-r from-amber-500 to-rose-500 hover:from-amber-600 hover:to-rose-600 transition-transform hover:scale-[1.01]"
-                    onClick={() => setMobileMenuOpen(false)}
-                  >
-                    <Link href="/store" className="flex items-center">
-                      <FileText className="h-4 w-4 mr-3 text-white" />
-                      Store
-                    </Link>
-                  </Button>
+                  <div className="group perspective-1000 transform-gpu">
+                    <Button
+                      asChild
+                      className="w-full justify-start rounded-2xl px-5 py-4 text-white shadow-2xl shadow-amber-500/30 ring-1 ring-white/20 bg-gradient-to-br from-amber-500 via-orange-500 to-rose-500 hover:from-amber-400 hover:via-orange-400 hover:to-rose-400 transition-all duration-500 hover:scale-105 hover:-translate-y-1 hover:rotate-1 transform-gpu backdrop-blur-sm border border-white/10 hover:shadow-3xl hover:shadow-amber-500/40 hover:ring-2 hover:ring-amber-400/50"
+                      onClick={() => setMobileMenuOpen(false)}
+                    >
+                      <Link href="/store" className="flex items-center">
+                        <FileText className="h-4 w-4 mr-3 text-white group-hover:rotate-12 transition-transform duration-300" />
+                        Store
+                      </Link>
+                    </Button>
+                  </div>
 
                   <Button
                     asChild
@@ -727,16 +739,18 @@ export function TopBar() {
                     </Link>
                   </Button>
                   {user.role === 'admin' && (
-                    <Button
-                      asChild
-                      className="w-full justify-start rounded-2xl px-5 py-4 text-white shadow-[0_18px_44px_-18px_rgba(239,68,68,0.55)] ring-1 ring-white/15 bg-gradient-to-br from-red-600 to-rose-600 hover:from-red-500 hover:to-rose-500 transition-transform hover:scale-[1.02]"
-                      onClick={() => setMobileMenuOpen(false)}
-                    >
-                      <Link href="/admin" className="flex items-center">
-                        <Shield className="h-4 w-4 mr-3 text-white" />
-                        {t('nav.admin')}
-                      </Link>
-                    </Button>
+                    <div className="group perspective-1000 transform-gpu">
+                      <Button
+                        asChild
+                        className="w-full justify-start rounded-2xl px-5 py-4 text-white shadow-2xl shadow-red-500/40 ring-1 ring-white/20 bg-gradient-to-br from-red-600 via-rose-500 to-pink-600 hover:from-red-500 hover:via-rose-400 hover:to-pink-500 transition-all duration-500 hover:scale-105 hover:-translate-y-1 hover:rotate-1 transform-gpu backdrop-blur-sm border border-white/10 hover:shadow-3xl hover:shadow-red-500/50 hover:ring-2 hover:ring-red-400/50"
+                        onClick={() => setMobileMenuOpen(false)}
+                      >
+                        <Link href="/admin" className="flex items-center">
+                          <Shield className="h-4 w-4 mr-3 text-white group-hover:rotate-12 transition-transform duration-300" />
+                          {t('nav.admin')}
+                        </Link>
+                      </Button>
+                    </div>
                   )}
                 </div>
 

@@ -111,8 +111,14 @@ export default function ChatPage() {
       setMessages(Array.isArray(data) ? data : []);
     };
     load();
-    const onMsg = (payload: any) => setMessages((m) => [...m, payload]);
-    const onSignal = (payload: any) => peerRef.current?.signal(payload.data);
+    const onMsg = (payload: Message) => {
+      setMessages((m) => {
+        // Prevent duplicates by checking if message already exists
+        const exists = m.some((existing) => existing.id === payload.id);
+        return exists ? m : [...m, payload];
+      });
+    };
+    const onSignal = (payload: { data: string | object }) => peerRef.current?.signal(payload.data);
     socketRef.current?.on('message', onMsg);
     socketRef.current?.on('signal', onSignal);
     return () => {
@@ -219,7 +225,12 @@ export default function ChatPage() {
     });
     if (res.ok) {
       const msg = await res.json();
-      setMessages((m) => [...m, msg]);
+      // Add message locally immediately for better UX
+      setMessages((m) => {
+        // Check if this message already exists to prevent duplicates
+        const exists = m.some((existing) => existing.id === msg.id);
+        return exists ? m : [...m, msg];
+      });
       socketRef.current?.emit('message', { conversationId: activeId, message: msg });
       setText('');
       if (fileRef.current) fileRef.current.value = '';
@@ -261,7 +272,9 @@ export default function ChatPage() {
         remoteVideoRef.current.play().catch(() => {});
       }
     });
-    socketRef.current?.on('signal', (payload: any) => peer.signal(payload.data));
+    socketRef.current?.on('signal', (payload: { data: string | object }) =>
+      peer.signal(payload.data),
+    );
   };
 
   return (
@@ -496,9 +509,9 @@ export default function ChatPage() {
 
                 {/* Enhanced Messages Area */}
                 <div className="h-[45vh] overflow-auto rounded-xl bg-white/10 backdrop-blur-sm border border-white/20 p-4 space-y-3">
-                  {messages.map((m) => (
+                  {messages.map((m, index) => (
                     <div
-                      key={m.id}
+                      key={`${m.id}-${index}`}
                       className="p-3 rounded-lg bg-white/10 backdrop-blur-sm border border-white/20"
                     >
                       {m.type !== 'text' && m.fileUrl ? (
