@@ -118,89 +118,283 @@ export default function JobPortalPage() {
   };
 
   return (
-    <div className="space-y-6" suppressHydrationWarning>
-      <div className="bg-gradient-to-r from-emerald-500/10 via-blue-500/10 to-cyan-500/10 rounded-xl p-6 border border-white/10">
-        <h1 className="text-3xl font-bold mb-2">{t('pages.jobPortalTitle')}</h1>
-        <p className="text-muted-foreground">{t('pages.jobPortalDesc')}</p>
+    <div className="space-y-8" suppressHydrationWarning>
+      {/* Enhanced Professional Header */}
+      <div
+        className="relative group bg-gradient-to-r from-slate-600/20 via-blue-700/15 to-indigo-600/20 
+        rounded-2xl p-8 border border-slate-500/20 backdrop-blur-xl shadow-2xl shadow-slate-500/10
+        hover:shadow-3xl hover:shadow-blue-500/20 transition-all duration-700 transform-gpu
+        before:absolute before:inset-0 before:bg-gradient-to-r before:from-slate-600/5 before:to-blue-700/5 
+        before:rounded-2xl before:opacity-0 before:transition-opacity before:duration-500 hover:before:opacity-100"
+      >
+        <div className="absolute inset-0 bg-gradient-to-br from-white/5 to-transparent rounded-2xl"></div>
+        <div className="relative z-10 flex items-center gap-4">
+          <div className="p-4 rounded-2xl bg-slate-600/20 group-hover:bg-slate-500/30 transition-all duration-300 group-hover:rotate-6 group-hover:scale-110 transform-gpu">
+            <Briefcase className="h-8 w-8 text-slate-300 group-hover:text-slate-200" />
+          </div>
+          <div>
+            <h1 className="text-4xl font-bold mb-2 text-white group-hover:text-slate-100 transition-colors duration-300">
+              {t('pages.jobPortalTitle')}
+            </h1>
+            <p className="text-slate-300 group-hover:text-slate-200 transition-colors duration-300 text-lg">
+              {t('pages.jobPortalDesc')}
+            </p>
+          </div>
+        </div>
       </div>
 
-      <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
-        {/* Listings */}
-        <Card className="lg:col-span-2">
-          <CardHeader>
-            <CardTitle>Opportunities</CardTitle>
+      <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
+        {/* Enhanced Job Listings - Professional Blue Theme */}
+        <Card
+          className="lg:col-span-2 group relative border-0 bg-gradient-to-br from-blue-600/20 via-indigo-700/15 to-slate-700/20 
+          backdrop-blur-xl shadow-xl shadow-blue-600/20 hover:shadow-2xl hover:shadow-blue-600/30 
+          transition-all duration-500 hover:scale-[1.01] transform-gpu perspective-1000 
+          before:absolute before:inset-0 before:bg-gradient-to-r before:from-blue-600/10 before:to-indigo-600/10 
+          before:rounded-xl before:opacity-0 before:transition-opacity before:duration-300 hover:before:opacity-100"
+        >
+          <div className="absolute inset-0 bg-gradient-to-br from-white/5 to-transparent rounded-xl"></div>
+          <CardHeader className="relative z-10">
+            <CardTitle
+              className="text-2xl font-bold text-white group-hover:text-blue-200 transition-colors duration-300 
+              flex items-center gap-3"
+            >
+              <div className="p-2 rounded-lg bg-blue-600/20 group-hover:bg-blue-500/30 transition-all duration-300 group-hover:rotate-6">
+                <div className="text-2xl">💼</div>
+              </div>
+              Career Opportunities
+            </CardTitle>
           </CardHeader>
-          <CardContent className="space-y-4">
-            <div className="flex gap-2">
-              <Input
-                placeholder="Search title, company..."
-                value={q}
-                onChange={(e) => setQ(e.target.value)}
-              />
-              <Input
-                placeholder="Type (full-time, internship)"
-                value={type}
-                onChange={(e) => setType(e.target.value)}
-              />
-              <Button onClick={load}>Search</Button>
+          <CardContent className="space-y-6 relative z-10">
+            {/* Enhanced Search Section */}
+            <div className="p-4 rounded-xl bg-white/10 backdrop-blur-sm border border-blue-500/30">
+              <div className="flex flex-col sm:flex-row gap-3">
+                <Input
+                  placeholder="Search title, company..."
+                  value={q}
+                  onChange={(e) => setQ(e.target.value)}
+                  className="flex-1 bg-white/10 border border-blue-500/30 text-white placeholder:text-blue-300/60 
+                    focus:border-blue-400 focus:ring-2 focus:ring-blue-500/20 transition-all duration-300 backdrop-blur-sm"
+                />
+                <Input
+                  placeholder="Type (full-time, internship)"
+                  value={type}
+                  onChange={(e) => setType(e.target.value)}
+                  className="bg-white/10 border border-blue-500/30 text-white placeholder:text-blue-300/60 
+                    focus:border-blue-400 focus:ring-2 focus:ring-blue-500/20 transition-all duration-300 backdrop-blur-sm"
+                />
+                <Button
+                  onClick={load}
+                  className="bg-gradient-to-r from-blue-600 to-indigo-600 hover:from-blue-700 hover:to-indigo-700 
+                    text-white shadow-lg shadow-blue-500/25 hover:shadow-blue-500/40 transition-all duration-300 
+                    hover:scale-110 transform-gpu"
+                >
+                  Search
+                </Button>
+              </div>
             </div>
-            <div className="grid grid-cols-1 gap-3">
-              {jobs.map((j) => (
-                <div key={j.id} className="p-4 rounded border bg-background/50">
-                  <div className="flex items-center justify-between">
-                    <div className="font-medium">
-                      {j.title} — <span className="opacity-80">{j.company?.name}</span>
-                    </div>
-                    <div className="flex items-center gap-2">
-                      <Badge variant="secondary">{j.type}</Badge>
-                      {j.remote && <Badge variant="outline">Remote</Badge>}
+            {/* Enhanced Job Cards */}
+            <div className="space-y-4">
+              {jobs.map((j, index) => {
+                const jobColors = [
+                  'from-emerald-500/20 to-green-600/20 shadow-emerald-500/15 hover:shadow-emerald-500/25 border-emerald-400/30',
+                  'from-blue-500/20 to-indigo-600/20 shadow-blue-500/15 hover:shadow-blue-500/25 border-blue-400/30',
+                  'from-purple-500/20 to-violet-600/20 shadow-purple-500/15 hover:shadow-purple-500/25 border-purple-400/30',
+                  'from-orange-500/20 to-amber-600/20 shadow-orange-500/15 hover:shadow-orange-500/25 border-orange-400/30',
+                  'from-pink-500/20 to-rose-600/20 shadow-pink-500/15 hover:shadow-pink-500/25 border-pink-400/30',
+                ];
+                const color = jobColors[index % jobColors.length];
+                return (
+                  <div
+                    key={j.id}
+                    className={`group relative p-6 rounded-xl bg-gradient-to-br backdrop-blur-sm border 
+                    hover:scale-105 hover:-translate-y-1 transition-all duration-300 transform-gpu cursor-pointer ${color}`}
+                  >
+                    <div className="absolute inset-0 bg-gradient-to-br from-white/5 to-transparent rounded-xl"></div>
+                    <div className="relative z-10">
+                      {/* Job Header */}
+                      <div className="flex items-start justify-between mb-4">
+                        <div>
+                          <h3 className="text-xl font-bold text-white group-hover:scale-105 transition-transform duration-300">
+                            {j.title}
+                          </h3>
+                          <p className="text-lg text-white/80 group-hover:text-white transition-colors duration-300 mt-1">
+                            {j.company?.name}
+                          </p>
+                        </div>
+                        <div className="flex flex-col gap-2">
+                          <Badge
+                            className={`${
+                              j.type === 'full-time'
+                                ? 'bg-green-500/30 text-green-200 border-green-400/30'
+                                : 'bg-blue-500/30 text-blue-200 border-blue-400/30'
+                            } transition-all duration-300 hover:scale-110`}
+                          >
+                            {j.type}
+                          </Badge>
+                          {j.remote && (
+                            <Badge
+                              className="bg-purple-500/30 text-purple-200 border-purple-400/30 
+                            transition-all duration-300 hover:scale-110"
+                            >
+                              Remote
+                            </Badge>
+                          )}
+                        </div>
+                      </div>
+
+                      {/* Job Details */}
+                      <div className="mb-4">
+                        <div className="text-white/70 mb-2 flex items-center gap-2">
+                          📍 {j.location || 'Anywhere'}
+                        </div>
+                        {j.description && (
+                          <p className="text-white/80 group-hover:text-white transition-colors duration-300">
+                            {j.description}
+                          </p>
+                        )}
+                        {j.salaryMin && j.salaryMax && (
+                          <div className="mt-2 text-green-300 font-semibold">
+                            ৳{j.salaryMin.toLocaleString()} - ৳{j.salaryMax.toLocaleString()}
+                          </div>
+                        )}
+                      </div>
+
+                      {/* Application Section */}
+                      <div className="space-y-3 p-4 rounded-lg bg-white/10 backdrop-blur-sm border border-white/20">
+                        <Input
+                          placeholder="Short cover letter (optional)"
+                          value={activeJobId === j.id ? cover : ''}
+                          onChange={(e) => setCover(e.target.value)}
+                          className="bg-white/10 border border-white/30 text-white placeholder:text-white/60 
+                          focus:border-white/50 focus:ring-2 focus:ring-white/20 transition-all duration-300 backdrop-blur-sm"
+                        />
+                        <Button
+                          onClick={() => apply(j.id)}
+                          disabled={activeJobId === j.id}
+                          className="w-full bg-gradient-to-r from-green-500 to-emerald-500 hover:from-green-600 hover:to-emerald-600 
+                          text-white shadow-lg shadow-green-500/25 hover:shadow-green-500/40 transition-all duration-300 
+                          hover:scale-105 transform-gpu disabled:opacity-50"
+                        >
+                          <Send className="h-4 w-4 mr-2" />
+                          {activeJobId === j.id ? 'Applying...' : 'Apply Now'}
+                        </Button>
+                      </div>
                     </div>
                   </div>
-                  <div className="text-sm opacity-80">{j.location || 'Anywhere'}</div>
-                  {j.description && <div className="mt-1 text-sm">{j.description}</div>}
-                  <div className="mt-2 flex items-center gap-2">
-                    <Input
-                      placeholder="Short cover letter (optional)"
-                      value={activeJobId === j.id ? cover : ''}
-                      onChange={(e) => setCover(e.target.value)}
-                    />
-                    <Button onClick={() => apply(j.id)} disabled={activeJobId === j.id}>
-                      <Send className="h-4 w-4 mr-2" />
-                      Apply
-                    </Button>
+                );
+              })}
+              {jobs.length === 0 && (
+                <div className="p-12 text-center">
+                  <div className="text-6xl mb-4">🔍</div>
+                  <div className="text-xl font-semibold text-white mb-2">
+                    No opportunities found
+                  </div>
+                  <div className="text-blue-300">
+                    Try adjusting your search criteria or check back later for new postings
                   </div>
                 </div>
-              ))}
-              {jobs.length === 0 && (
-                <div className="text-sm text-muted-foreground">No jobs yet.</div>
               )}
             </div>
           </CardContent>
         </Card>
 
-        {/* Applications & Resume quick status */}
-        <Card>
-          <CardHeader>
-            <CardTitle>My Applications</CardTitle>
+        {/* Enhanced My Applications - Success Green Theme */}
+        <Card
+          className="group relative border-0 bg-gradient-to-br from-green-500/20 via-emerald-600/15 to-teal-600/20 
+          backdrop-blur-xl shadow-xl shadow-green-500/20 hover:shadow-2xl hover:shadow-green-500/30 
+          transition-all duration-500 hover:scale-105 hover:-translate-y-2 transform-gpu perspective-1000 
+          before:absolute before:inset-0 before:bg-gradient-to-r before:from-green-500/10 before:to-emerald-500/10 
+          before:rounded-xl before:opacity-0 before:transition-opacity before:duration-300 hover:before:opacity-100"
+        >
+          <div className="absolute inset-0 bg-gradient-to-br from-white/5 to-transparent rounded-xl"></div>
+          <CardHeader className="relative z-10">
+            <CardTitle
+              className="text-xl font-bold text-white group-hover:text-green-200 transition-colors duration-300 
+              flex items-center gap-3"
+            >
+              <div className="p-2 rounded-lg bg-green-500/20 group-hover:bg-green-400/30 transition-all duration-300 group-hover:rotate-6">
+                <div className="text-2xl">📊</div>
+              </div>
+              My Applications
+            </CardTitle>
           </CardHeader>
-          <CardContent className="space-y-3">
-            <Button variant="secondary" onClick={loadApps}>
+          <CardContent className="space-y-6 relative z-10">
+            {/* Enhanced Refresh Button */}
+            <Button
+              onClick={loadApps}
+              className="w-full bg-gradient-to-r from-green-500 to-emerald-500 hover:from-green-600 hover:to-emerald-600 
+                text-white shadow-lg shadow-green-500/25 hover:shadow-green-500/40 transition-all duration-300 
+                hover:scale-105 transform-gpu"
+            >
               <Users className="h-4 w-4 mr-2" />
               Refresh Applications
             </Button>
-            <div className="space-y-2">
-              {apps.map((a) => (
-                <div key={a.id} className="p-3 rounded border bg-background/50">
-                  <div className="font-medium">{a.job.title}</div>
-                  <div className="text-xs opacity-80">
-                    {a.job.company?.name} — {a.status}
+
+            {/* Enhanced Applications List */}
+            <div className="space-y-3">
+              {apps.map((a, index) => {
+                const statusColors = {
+                  pending:
+                    'from-yellow-500/20 to-amber-500/20 border-yellow-400/30 text-yellow-200',
+                  reviewing: 'from-blue-500/20 to-cyan-500/20 border-blue-400/30 text-blue-200',
+                  accepted:
+                    'from-green-500/20 to-emerald-500/20 border-green-400/30 text-green-200',
+                  rejected: 'from-red-500/20 to-pink-500/20 border-red-400/30 text-red-200',
+                };
+                const statusColor =
+                  statusColors[a.status as keyof typeof statusColors] || statusColors.pending;
+                return (
+                  <div
+                    key={a.id}
+                    className={`group relative p-4 rounded-xl bg-gradient-to-br backdrop-blur-sm border 
+                    hover:scale-105 hover:-translate-y-1 transition-all duration-300 transform-gpu cursor-pointer ${statusColor}`}
+                  >
+                    <div className="absolute inset-0 bg-gradient-to-br from-white/5 to-transparent rounded-xl"></div>
+                    <div className="relative z-10">
+                      <div className="font-bold text-white group-hover:scale-105 transition-transform duration-300 mb-2">
+                        {a.job.title}
+                      </div>
+                      <div className="text-sm text-white/80 mb-2">{a.job.company?.name}</div>
+                      <Badge
+                        className={`bg-white/20 text-white border-white/30 hover:bg-white/30 transition-all duration-300 capitalize`}
+                      >
+                        {a.status}
+                      </Badge>
+                    </div>
+                  </div>
+                );
+              })}
+              {apps.length === 0 && (
+                <div className="p-8 text-center">
+                  <div className="text-4xl mb-4">🎯</div>
+                  <div className="text-lg font-semibold text-white mb-2">No applications yet</div>
+                  <div className="text-green-300 text-sm">
+                    Start applying to track your career progress here!
                   </div>
                 </div>
-              ))}
-              {apps.length === 0 && (
-                <div className="text-sm text-muted-foreground">No applications yet.</div>
               )}
             </div>
+
+            {/* Career Progress Summary */}
+            {apps.length > 0 && (
+              <div className="p-4 rounded-xl bg-white/10 backdrop-blur-sm border border-green-500/30">
+                <h4 className="font-bold text-white mb-3 flex items-center gap-2">
+                  📈 Application Summary
+                </h4>
+                <div className="grid grid-cols-2 gap-3 text-sm">
+                  <div className="text-center p-2 rounded-lg bg-white/10">
+                    <div className="font-bold text-white text-lg">{apps.length}</div>
+                    <div className="text-green-300">Total Applied</div>
+                  </div>
+                  <div className="text-center p-2 rounded-lg bg-white/10">
+                    <div className="font-bold text-white text-lg">
+                      {apps.filter((a) => a.status === 'accepted').length}
+                    </div>
+                    <div className="text-green-300">Accepted</div>
+                  </div>
+                </div>
+              </div>
+            )}
           </CardContent>
         </Card>
       </div>

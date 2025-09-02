@@ -410,226 +410,309 @@ export default function VirtualClassroomsPage() {
   }, [whiteboardOps]);
 
   return (
-    <div className="space-y-6">
-      <div className="bg-gradient-to-r from-indigo-500/10 via-cyan-500/10 to-fuchsia-500/10 rounded-xl p-6 border border-white/10">
-        <h1 className="text-3xl font-bold mb-2">{t('nav.virtualClassrooms')}</h1>
-        <p className="text-muted-foreground">{t('pages.virtualClassroomsDesc')}</p>
+    <div className="space-y-6 relative">
+      {/* Header - Indigo/Cyan Card */}
+      <div className="group perspective-1000">
+        <div className="relative overflow-hidden bg-gradient-to-br from-indigo-600/20 via-cyan-500/15 to-fuchsia-400/20 rounded-xl p-6 border border-indigo-400/30 shadow-xl backdrop-blur-sm transition-all duration-500 hover:scale-[1.02] hover:rotate-1 hover:shadow-2xl hover:shadow-indigo-500/25 transform-gpu">
+          <div className="absolute inset-0 bg-gradient-to-br from-indigo-500/10 to-cyan-500/5 opacity-0 group-hover:opacity-100 transition-opacity duration-500"></div>
+          <div className="absolute inset-x-0 top-0 h-1 bg-gradient-to-r from-indigo-500 via-cyan-500 to-fuchsia-500"></div>
+          <div className="relative">
+            <h1 className="text-3xl font-bold mb-2 bg-gradient-to-r from-indigo-400 via-cyan-400 to-fuchsia-400 bg-clip-text text-transparent">
+              {t('nav.virtualClassrooms')}
+            </h1>
+            <p className="text-indigo-200/80">{t('pages.virtualClassroomsDesc')}</p>
+          </div>
+        </div>
       </div>
 
-      <Tabs defaultValue="lobby" className="space-y-4">
-        <TabsList>
-          <TabsTrigger value="lobby">Lobby</TabsTrigger>
-          <TabsTrigger value="classroom" disabled={!activeRoomId}>
-            Classroom
-          </TabsTrigger>
-        </TabsList>
+      {/* Tabs Section - Orange Card */}
+      <div className="group perspective-1000">
+        <Tabs defaultValue="lobby" className="space-y-4">
+          <TabsList className="grid w-full grid-cols-2 bg-gradient-to-r from-orange-600/30 via-amber-500/20 to-yellow-600/30 backdrop-blur-xl border border-orange-400/30 p-1 transition-all duration-500 hover:scale-[1.01] hover:shadow-lg hover:shadow-orange-500/20 transform-gpu">
+            <TabsTrigger
+              value="lobby"
+              className="data-[state=active]:bg-gradient-to-r data-[state=active]:from-orange-500 data-[state=active]:to-amber-500 data-[state=active]:text-white transition-all duration-300"
+            >
+              Lobby
+            </TabsTrigger>
+            <TabsTrigger
+              value="classroom"
+              disabled={!activeRoomId}
+              className="data-[state=active]:bg-gradient-to-r data-[state=active]:from-orange-500 data-[state=active]:to-amber-500 data-[state=active]:text-white transition-all duration-300"
+            >
+              Classroom
+            </TabsTrigger>
+          </TabsList>
 
-        <TabsContent value="lobby" className="space-y-4">
-          <Card>
-            <CardHeader>
-              <CardTitle>Create Classroom</CardTitle>
-            </CardHeader>
-            <CardContent className="flex gap-2">
-              <Input placeholder="Title" value={title} onChange={(e) => setTitle(e.target.value)} />
-              <Input
-                placeholder="Description"
-                value={desc}
-                onChange={(e) => setDesc(e.target.value)}
-              />
-              <Button onClick={createRoom}>Create</Button>
-            </CardContent>
-          </Card>
-
-          <Card>
-            <CardHeader>
-              <CardTitle>Available Classrooms</CardTitle>
-            </CardHeader>
-            <CardContent className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-3">
-              {rooms.map((r) => (
-                <div key={r.id} className="p-3 border rounded">
-                  <div className="font-semibold">{r.title}</div>
-                  <div className="text-sm text-muted-foreground">{r.description}</div>
-                  <div className="mt-2 flex gap-2">
-                    <Button size="sm" onClick={() => join(r.id)}>
-                      Join
-                    </Button>
-                  </div>
-                </div>
-              ))}
-            </CardContent>
-          </Card>
-        </TabsContent>
-
-        <TabsContent value="classroom" className="space-y-4">
-          <div className="flex gap-4 flex-wrap">
-            <div className="space-y-2">
-              <div className="flex gap-2">
-                <Button size="sm" onClick={() => startAV(true)}>
-                  Start Video
-                </Button>
-                <Button size="sm" onClick={() => startAV(false)}>
-                  Start Audio
-                </Button>
-                <Button size="sm" variant="outline" onClick={startScreenShare}>
-                  Share Screen
-                </Button>
-                {!recording ? (
-                  <Button size="sm" variant="outline" onClick={startRecording}>
-                    Start Rec
-                  </Button>
-                ) : (
-                  <Button size="sm" variant="destructive" onClick={stopRecording}>
-                    Stop Rec
-                  </Button>
-                )}
-              </div>
-              <div className="grid grid-cols-2 gap-2">
-                <video ref={localVideoRef} className="w-64 h-40 bg-black/40 rounded" playsInline />
-                <video ref={remoteVideoRef} className="w-64 h-40 bg-black/40 rounded" playsInline />
-              </div>
-            </div>
-
-            <div className="flex-1 min-w-[300px]">
-              <Card>
+          <TabsContent value="lobby" className="space-y-4">
+            {/* Create Classroom Card - Purple */}
+            <div className="group perspective-1000">
+              <Card className="relative overflow-hidden bg-gradient-to-br from-purple-500/20 via-violet-400/15 to-fuchsia-500/20 backdrop-blur-xl border border-purple-400/30 shadow-xl transition-all duration-500 hover:scale-[1.01] hover:-rotate-0.5 hover:shadow-2xl hover:shadow-purple-500/25 transform-gpu">
+                <div className="absolute inset-0 bg-gradient-to-br from-purple-500/10 to-violet-500/5 opacity-0 group-hover:opacity-100 transition-opacity duration-500"></div>
+                <div className="absolute inset-x-0 top-0 h-1 bg-gradient-to-r from-purple-500 via-violet-500 to-fuchsia-500"></div>
                 <CardHeader>
-                  <CardTitle>Whiteboard</CardTitle>
+                  <CardTitle className="bg-gradient-to-r from-purple-400 to-violet-400 bg-clip-text text-transparent">
+                    Create Classroom
+                  </CardTitle>
                 </CardHeader>
-                <CardContent>
-                  <div className="flex items-center gap-2 mb-2">
-                    <select
-                      value={tool}
-                      onChange={(e) => setTool(e.target.value as any)}
-                      className="border rounded px-2 py-1"
-                    >
-                      <option value="pen">Pen</option>
-                      <option value="line">Line</option>
-                      <option value="rect">Rect</option>
-                    </select>
-                    <input
-                      type="color"
-                      value={strokeColor}
-                      onChange={(e) => setStrokeColor(e.target.value)}
-                    />
-                    <input
-                      type="range"
-                      min={1}
-                      max={12}
-                      value={strokeWidth}
-                      onChange={(e) => setStrokeWidth(parseInt(e.target.value))}
-                    />
-                    <Button size="sm" variant="outline" onClick={undo}>
-                      Undo
-                    </Button>
-                    <Button size="sm" variant="outline" onClick={redo}>
-                      Redo
-                    </Button>
-                  </div>
-                  <canvas
-                    ref={canvasRef}
-                    width={640}
-                    height={300}
-                    className="border rounded bg-white touch-none"
-                    onPointerDown={canvasPointer}
-                    onPointerMove={canvasPointer}
-                    onPointerUp={canvasPointer}
+                <CardContent className="flex gap-2">
+                  <Input
+                    placeholder="Title"
+                    value={title}
+                    onChange={(e) => setTitle(e.target.value)}
+                    className="bg-purple-500/10 border-purple-400/30 focus:border-purple-400 text-purple-100 placeholder:text-purple-300/60"
                   />
+                  <Input
+                    placeholder="Description"
+                    value={desc}
+                    onChange={(e) => setDesc(e.target.value)}
+                    className="bg-purple-500/10 border-purple-400/30 focus:border-purple-400 text-purple-100 placeholder:text-purple-300/60"
+                  />
+                  <Button
+                    onClick={createRoom}
+                    className="bg-gradient-to-r from-purple-500 to-violet-500 hover:from-purple-600 hover:to-violet-600 shadow-lg hover:shadow-xl transition-all duration-300 hover:scale-105 transform-gpu"
+                  >
+                    Create
+                  </Button>
                 </CardContent>
               </Card>
             </div>
 
-            <div className="min-w-[260px] space-y-3">
-              <Card>
+            {/* Available Classrooms Card - Teal */}
+            <div className="group perspective-1000">
+              <Card className="relative overflow-hidden bg-gradient-to-br from-teal-500/20 via-cyan-400/15 to-blue-500/20 backdrop-blur-xl border border-teal-400/30 shadow-xl transition-all duration-500 hover:scale-[1.01] hover:rotate-0.5 hover:shadow-2xl hover:shadow-teal-500/25 transform-gpu">
+                <div className="absolute inset-0 bg-gradient-to-br from-teal-500/10 to-cyan-500/5 opacity-0 group-hover:opacity-100 transition-opacity duration-500"></div>
+                <div className="absolute inset-x-0 top-0 h-1 bg-gradient-to-r from-teal-500 via-cyan-500 to-blue-500"></div>
                 <CardHeader>
-                  <CardTitle>Participants</CardTitle>
+                  <CardTitle className="bg-gradient-to-r from-teal-400 to-cyan-400 bg-clip-text text-transparent">
+                    Available Classrooms
+                  </CardTitle>
                 </CardHeader>
-                <CardContent className="space-y-2">
-                  {participants.map((p) => (
-                    <div
-                      key={p.userId || p.id}
-                      className="flex items-center justify-between text-sm"
-                    >
-                      <span>
-                        {p.user?.firstName || p.userId || 'User'} {p.hand && '✋'}{' '}
-                        {p.reaction || ''}
-                      </span>
-                      {/* Host actions (assumes client knows if host) */}
-                      <div className="flex gap-1">
-                        <Button
-                          size="xs"
-                          variant="outline"
-                          onClick={() => hostKick(p.userId || p.id)}
+                <CardContent className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-3">
+                  {rooms.map((r, index) => {
+                    const colorThemes = [
+                      {
+                        bg: 'from-green-500/15 via-emerald-400/10 to-teal-500/15',
+                        border: 'border-green-400/30',
+                        shadow: 'hover:shadow-green-500/25',
+                      },
+                      {
+                        bg: 'from-blue-500/15 via-indigo-400/10 to-purple-500/15',
+                        border: 'border-blue-400/30',
+                        shadow: 'hover:shadow-blue-500/25',
+                      },
+                      {
+                        bg: 'from-rose-500/15 via-pink-400/10 to-red-500/15',
+                        border: 'border-rose-400/30',
+                        shadow: 'hover:shadow-rose-500/25',
+                      },
+                    ];
+                    const theme = colorThemes[index % colorThemes.length];
+
+                    return (
+                      <div key={r.id} className="group/item perspective-1000">
+                        <div
+                          className={`relative overflow-hidden p-3 rounded transition-all duration-500 hover:-translate-y-1 hover:rotate-0.5 hover:shadow-xl ring-1 ring-white/10 hover:ring-2 bg-gradient-to-br ${theme.bg} ${theme.border} ${theme.shadow} backdrop-blur-sm transform-gpu`}
                         >
-                          Kick
-                        </Button>
-                        <Button
-                          size="xs"
-                          variant="outline"
-                          onClick={() => hostPromote(p.userId || p.id)}
-                        >
-                          Promote
-                        </Button>
+                          <div className="font-semibold">{r.title}</div>
+                          <div className="text-sm text-muted-foreground">{r.description}</div>
+                          <div className="mt-2 flex gap-2">
+                            <Button
+                              size="sm"
+                              onClick={() => join(r.id)}
+                              className="bg-gradient-to-r from-teal-500 to-cyan-500 hover:from-teal-600 hover:to-cyan-600 shadow-md hover:shadow-lg transition-all duration-300 hover:scale-105 transform-gpu text-white"
+                            >
+                              Join
+                            </Button>
+                          </div>
+                        </div>
                       </div>
-                    </div>
-                  ))}
-                  <div className="flex gap-2 pt-2">
-                    <Button size="sm" variant="outline" onClick={hostMuteAll}>
-                      Mute all
-                    </Button>
-                    <Button size="sm" variant="outline" onClick={hostUnmuteAll}>
-                      Unmute all
-                    </Button>
-                  </div>
+                    );
+                  })}
                 </CardContent>
               </Card>
+            </div>
+          </TabsContent>
 
-              <Card>
-                <CardHeader>
-                  <CardTitle>Chat</CardTitle>
-                </CardHeader>
-                <CardContent className="space-y-2">
-                  <div className="h-40 overflow-auto border rounded p-2 text-sm">
-                    {chat.map((m, i) => (
-                      <div key={i}>
-                        <strong>{m.from}:</strong> {m.text}
+          <TabsContent value="classroom" className="space-y-4">
+            <div className="flex gap-4 flex-wrap">
+              <div className="space-y-2">
+                <div className="flex gap-2">
+                  <Button size="sm" onClick={() => startAV(true)}>
+                    Start Video
+                  </Button>
+                  <Button size="sm" onClick={() => startAV(false)}>
+                    Start Audio
+                  </Button>
+                  <Button size="sm" variant="outline" onClick={startScreenShare}>
+                    Share Screen
+                  </Button>
+                  {!recording ? (
+                    <Button size="sm" variant="outline" onClick={startRecording}>
+                      Start Rec
+                    </Button>
+                  ) : (
+                    <Button size="sm" variant="destructive" onClick={stopRecording}>
+                      Stop Rec
+                    </Button>
+                  )}
+                </div>
+                <div className="grid grid-cols-2 gap-2">
+                  <video
+                    ref={localVideoRef}
+                    className="w-64 h-40 bg-black/40 rounded"
+                    playsInline
+                  />
+                  <video
+                    ref={remoteVideoRef}
+                    className="w-64 h-40 bg-black/40 rounded"
+                    playsInline
+                  />
+                </div>
+              </div>
+
+              <div className="flex-1 min-w-[300px]">
+                <Card>
+                  <CardHeader>
+                    <CardTitle>Whiteboard</CardTitle>
+                  </CardHeader>
+                  <CardContent>
+                    <div className="flex items-center gap-2 mb-2">
+                      <select
+                        value={tool}
+                        onChange={(e) => setTool(e.target.value as any)}
+                        className="border rounded px-2 py-1"
+                      >
+                        <option value="pen">Pen</option>
+                        <option value="line">Line</option>
+                        <option value="rect">Rect</option>
+                      </select>
+                      <input
+                        type="color"
+                        value={strokeColor}
+                        onChange={(e) => setStrokeColor(e.target.value)}
+                      />
+                      <input
+                        type="range"
+                        min={1}
+                        max={12}
+                        value={strokeWidth}
+                        onChange={(e) => setStrokeWidth(parseInt(e.target.value))}
+                      />
+                      <Button size="sm" variant="outline" onClick={undo}>
+                        Undo
+                      </Button>
+                      <Button size="sm" variant="outline" onClick={redo}>
+                        Redo
+                      </Button>
+                    </div>
+                    <canvas
+                      ref={canvasRef}
+                      width={640}
+                      height={300}
+                      className="border rounded bg-white touch-none"
+                      onPointerDown={canvasPointer}
+                      onPointerMove={canvasPointer}
+                      onPointerUp={canvasPointer}
+                    />
+                  </CardContent>
+                </Card>
+              </div>
+
+              <div className="min-w-[260px] space-y-3">
+                <Card>
+                  <CardHeader>
+                    <CardTitle>Participants</CardTitle>
+                  </CardHeader>
+                  <CardContent className="space-y-2">
+                    {participants.map((p) => (
+                      <div
+                        key={p.userId || p.id}
+                        className="flex items-center justify-between text-sm"
+                      >
+                        <span>
+                          {p.user?.firstName || p.userId || 'User'} {p.hand && '✋'}{' '}
+                          {p.reaction || ''}
+                        </span>
+                        {/* Host actions (assumes client knows if host) */}
+                        <div className="flex gap-1">
+                          <Button
+                            size="sm"
+                            variant="outline"
+                            onClick={() => hostKick(p.userId || p.id)}
+                          >
+                            Kick
+                          </Button>
+                          <Button
+                            size="sm"
+                            variant="outline"
+                            onClick={() => hostPromote(p.userId || p.id)}
+                          >
+                            Promote
+                          </Button>
+                        </div>
                       </div>
                     ))}
-                  </div>
-                  <div className="flex gap-2">
-                    <Input
-                      placeholder="Type a message"
-                      value={chatInput}
-                      onChange={(e) => setChatInput(e.target.value)}
-                      onKeyDown={(e) => {
-                        if (e.key === 'Enter') sendChat();
-                      }}
-                    />
-                    <Button onClick={sendChat}>Send</Button>
-                  </div>
-                  <div className="flex items-center gap-2">
-                    <select
-                      value={emoji}
-                      onChange={(e) => setEmoji(e.target.value)}
-                      className="border rounded px-2 py-1"
-                    >
-                      <option>👍</option>
-                      <option>👏</option>
-                      <option>🎉</option>
-                      <option>❤️</option>
-                      <option>😂</option>
-                    </select>
-                    <Button variant="outline" size="sm" onClick={sendReaction}>
-                      React
-                    </Button>
-                    <Button variant="outline" size="sm" onClick={toggleHand}>
-                      {handRaised ? 'Lower Hand' : 'Raise Hand'}
-                    </Button>
-                  </div>
-                </CardContent>
-              </Card>
+                    <div className="flex gap-2 pt-2">
+                      <Button size="sm" variant="outline" onClick={hostMuteAll}>
+                        Mute all
+                      </Button>
+                      <Button size="sm" variant="outline" onClick={hostUnmuteAll}>
+                        Unmute all
+                      </Button>
+                    </div>
+                  </CardContent>
+                </Card>
+
+                <Card>
+                  <CardHeader>
+                    <CardTitle>Chat</CardTitle>
+                  </CardHeader>
+                  <CardContent className="space-y-2">
+                    <div className="h-40 overflow-auto border rounded p-2 text-sm">
+                      {chat.map((m, i) => (
+                        <div key={i}>
+                          <strong>{m.from}:</strong> {m.text}
+                        </div>
+                      ))}
+                    </div>
+                    <div className="flex gap-2">
+                      <Input
+                        placeholder="Type a message"
+                        value={chatInput}
+                        onChange={(e) => setChatInput(e.target.value)}
+                        onKeyDown={(e) => {
+                          if (e.key === 'Enter') sendChat();
+                        }}
+                      />
+                      <Button onClick={sendChat}>Send</Button>
+                    </div>
+                    <div className="flex items-center gap-2">
+                      <select
+                        value={emoji}
+                        onChange={(e) => setEmoji(e.target.value)}
+                        className="border rounded px-2 py-1"
+                      >
+                        <option>👍</option>
+                        <option>👏</option>
+                        <option>🎉</option>
+                        <option>❤️</option>
+                        <option>😂</option>
+                      </select>
+                      <Button variant="outline" size="sm" onClick={sendReaction}>
+                        React
+                      </Button>
+                      <Button variant="outline" size="sm" onClick={toggleHand}>
+                        {handRaised ? 'Lower Hand' : 'Raise Hand'}
+                      </Button>
+                    </div>
+                  </CardContent>
+                </Card>
+              </div>
             </div>
-          </div>
-        </TabsContent>
-      </Tabs>
+          </TabsContent>
+        </Tabs>
+      </div>
     </div>
   );
 }

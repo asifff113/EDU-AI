@@ -348,209 +348,244 @@ export default function StudyTogetherPage() {
   );
 
   return (
-    <div className="space-y-6">
-      <div className="bg-gradient-to-r from-sky-500/10 via-violet-500/10 to-fuchsia-500/10 rounded-xl p-6 border border-white/10">
-        <h1 className="text-3xl font-bold mb-2">{t('nav.studyTogether')}</h1>
-        <p className="text-muted-foreground">{t('pages.studyTogetherDesc')}</p>
+    <div className="space-y-6 relative">
+      {/* Header - Sky/Violet Card */}
+      <div className="group perspective-1000">
+        <div className="relative overflow-hidden bg-gradient-to-br from-sky-600/20 via-violet-500/15 to-fuchsia-400/20 rounded-xl p-6 border border-sky-400/30 shadow-xl backdrop-blur-sm transition-all duration-500 hover:scale-[1.02] hover:rotate-1 hover:shadow-2xl hover:shadow-sky-500/25 transform-gpu">
+          <div className="absolute inset-0 bg-gradient-to-br from-sky-500/10 to-violet-500/5 opacity-0 group-hover:opacity-100 transition-opacity duration-500"></div>
+          <div className="absolute inset-x-0 top-0 h-1 bg-gradient-to-r from-sky-500 via-violet-500 to-fuchsia-500"></div>
+          <div className="relative">
+            <h1 className="text-3xl font-bold mb-2 bg-gradient-to-r from-sky-400 via-violet-400 to-fuchsia-400 bg-clip-text text-transparent">
+              {t('nav.studyTogether')}
+            </h1>
+            <p className="text-sky-200/80">{t('pages.studyTogetherDesc')}</p>
+          </div>
+        </div>
       </div>
 
       <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
-        {/* Groups List */}
-        <Card className="lg:col-span-1">
-          <CardHeader>
-            <CardTitle className="flex items-center gap-2">
-              <Users className="h-5 w-5" /> Groups
-            </CardTitle>
-          </CardHeader>
-          <CardContent className="space-y-4">
-            <div className="flex gap-2">
-              <Input placeholder="Search groups..." />
-              <Button variant="secondary">
-                <Search className="h-4 w-4" />
-              </Button>
-            </div>
-
-            <div className="space-y-2 max-h-[50vh] overflow-auto">
-              {groups.map((g) => (
-                <button
-                  key={g.id}
-                  onClick={() => setActiveGroupId(g.id)}
-                  className={`w-full text-left p-3 rounded-md border hover:bg-accent ${activeGroupId === g.id ? 'bg-accent' : ''}`}
+        {/* Groups List - Emerald Card */}
+        <div className="group perspective-1000 lg:col-span-1">
+          <Card className="relative overflow-hidden bg-gradient-to-br from-emerald-500/20 via-green-400/15 to-teal-500/20 backdrop-blur-xl border border-emerald-400/30 shadow-xl transition-all duration-500 hover:scale-[1.01] hover:-rotate-0.5 hover:shadow-2xl hover:shadow-emerald-500/25 transform-gpu">
+            <div className="absolute inset-0 bg-gradient-to-br from-emerald-500/10 to-green-500/5 opacity-0 group-hover:opacity-100 transition-opacity duration-500"></div>
+            <div className="absolute inset-x-0 top-0 h-1 bg-gradient-to-r from-emerald-500 via-green-500 to-teal-500"></div>
+            <CardHeader>
+              <CardTitle className="flex items-center gap-2 bg-gradient-to-r from-emerald-400 to-green-400 bg-clip-text text-transparent">
+                <Users className="h-5 w-5" /> Groups
+              </CardTitle>
+            </CardHeader>
+            <CardContent className="space-y-4 relative">
+              <div className="flex gap-2">
+                <Input
+                  placeholder="Search groups..."
+                  className="bg-emerald-500/10 border-emerald-400/30 focus:border-emerald-400 text-emerald-100 placeholder:text-emerald-300/60"
+                />
+                <Button
+                  variant="secondary"
+                  className="bg-gradient-to-r from-emerald-500 to-green-500 hover:from-emerald-600 hover:to-green-600 shadow-lg hover:shadow-xl transition-all duration-300 hover:scale-105 transform-gpu text-white"
                 >
-                  <div className="flex items-center justify-between">
-                    <div>
-                      <div className="font-medium">{g.name}</div>
-                      {g.description && (
-                        <div className="text-sm text-muted-foreground line-clamp-1">
-                          {g.description}
-                        </div>
-                      )}
-                    </div>
-                    <Badge variant="outline" className="flex items-center gap-1">
-                      {g.isPublic ? <Globe className="h-3 w-3" /> : <Lock className="h-3 w-3" />}
-                      {g.isPublic ? 'Public' : 'Private'}
-                    </Badge>
-                  </div>
-                  {g._count && (
-                    <div className="mt-2 text-xs text-muted-foreground">
-                      {g._count.members} members • {g._count.messages} messages
-                    </div>
-                  )}
-                </button>
-              ))}
-              {groups.length === 0 && (
-                <div className="text-sm text-muted-foreground">No groups yet. Create one!</div>
-              )}
-            </div>
-
-            <form onSubmit={handleCreate} className="space-y-2 pt-2 border-t">
-              <div className="font-semibold">Create Group</div>
-              <Input
-                placeholder="Group name"
-                value={newGroup.name}
-                onChange={(e) => setNewGroup((s) => ({ ...s, name: e.target.value }))}
-                required
-              />
-              <Textarea
-                placeholder="Description (optional)"
-                value={newGroup.description}
-                onChange={(e) => setNewGroup((s) => ({ ...s, description: e.target.value }))}
-                rows={2}
-              />
-              <div className="flex items-center gap-2 text-sm">
-                <label className="flex items-center gap-2">
-                  <input
-                    type="checkbox"
-                    checked={newGroup.isPublic}
-                    onChange={(e) => setNewGroup((s) => ({ ...s, isPublic: e.target.checked }))}
-                  />
-                  Public group
-                </label>
+                  <Search className="h-4 w-4" />
+                </Button>
               </div>
-              <Button type="submit" disabled={creating}>
-                <Plus className="h-4 w-4 mr-2" />
-                Create
-              </Button>
-            </form>
-          </CardContent>
-        </Card>
 
-        {/* Chat & Calls */}
-        <Card className="lg:col-span-2">
-          <CardHeader>
-            <CardTitle className="flex items-center gap-2">
-              <MessageSquare className="h-5 w-5" /> {activeGroup?.name || 'Select a group'}
-            </CardTitle>
-          </CardHeader>
-          <CardContent className="space-y-4">
-            {activeGroupId ? (
-              <>
-                <div className="flex flex-wrap gap-2 items-center">
-                  <Button variant="secondary" size="sm" onClick={() => startCall('video')}>
-                    <Video className="h-4 w-4 mr-2" /> Start Video
-                  </Button>
-                  <Button variant="secondary" size="sm" onClick={() => startCall('audio')}>
-                    <Mic className="h-4 w-4 mr-2" /> Start Audio
-                  </Button>
-                  <Button variant="outline" size="sm" onClick={stopMedia}>
-                    <PhoneOff className="h-4 w-4 mr-2" /> End
-                  </Button>
-                  <Button variant="outline" size="sm" onClick={toggleAudio}>
-                    {audioMuted ? 'Unmute' : 'Mute'}
-                  </Button>
-                  <Button variant="outline" size="sm" onClick={toggleVideo}>
-                    {videoMuted ? 'Video On' : 'Video Off'}
-                  </Button>
-                  {!screenSharing ? (
-                    <Button variant="outline" size="sm" onClick={startScreenShare}>
-                      Share Screen
-                    </Button>
-                  ) : (
-                    <Button variant="outline" size="sm" onClick={revertToCamera}>
-                      Stop Share
-                    </Button>
-                  )}
-                  <div className="flex items-center gap-2 text-xs">
-                    <label>
-                      Mic:
-                      <select
-                        className="ml-1 border rounded px-1 py-0.5 bg-background"
-                        value={selectedMic}
-                        onChange={(e) => setSelectedMic(e.target.value)}
-                      >
-                        {mics.map((m) => (
-                          <option key={m.deviceId} value={m.deviceId}>
-                            {m.label || 'Microphone'}
-                          </option>
-                        ))}
-                      </select>
-                    </label>
-                    <label>
-                      Cam:
-                      <select
-                        className="ml-1 border rounded px-1 py-0.5 bg-background"
-                        value={selectedCam}
-                        onChange={(e) => setSelectedCam(e.target.value)}
-                      >
-                        {cams.map((c) => (
-                          <option key={c.deviceId} value={c.deviceId}>
-                            {c.label || 'Camera'}
-                          </option>
-                        ))}
-                      </select>
-                    </label>
-                  </div>
-                </div>
-                {groupError && <div className="text-sm text-red-500">{groupError}</div>}
-                <div className="grid grid-cols-2 gap-2">
-                  <video ref={localVideoRef} className="w-full rounded bg-black/40" playsInline />
-                  <video ref={remoteVideoRef} className="w-full rounded bg-black/40" playsInline />
-                </div>
-                <div className="h-[45vh] overflow-auto border rounded-md p-3 space-y-2">
-                  {messages.map((m) => (
-                    <div key={m.id} className="text-sm">
-                      {m.type !== 'text' && m.fileUrl ? (
-                        <div className="flex items-center gap-2">
-                          <Badge variant="secondary">{m.type.toUpperCase()}</Badge>
-                          <a href={m.fileUrl} target="_blank" className="underline">
-                            Open file
-                          </a>
-                        </div>
-                      ) : (
-                        <div>{m.content}</div>
-                      )}
-                      <div className="text-xs text-muted-foreground">
-                        {new Date(m.createdAt).toLocaleString()}
+              <div className="space-y-2 max-h-[50vh] overflow-auto">
+                {groups.map((g) => (
+                  <button
+                    key={g.id}
+                    onClick={() => setActiveGroupId(g.id)}
+                    className={`w-full text-left p-3 rounded-md border hover:bg-accent ${activeGroupId === g.id ? 'bg-accent' : ''}`}
+                  >
+                    <div className="flex items-center justify-between">
+                      <div>
+                        <div className="font-medium">{g.name}</div>
+                        {g.description && (
+                          <div className="text-sm text-muted-foreground line-clamp-1">
+                            {g.description}
+                          </div>
+                        )}
                       </div>
+                      <Badge variant="outline" className="flex items-center gap-1">
+                        {g.isPublic ? <Globe className="h-3 w-3" /> : <Lock className="h-3 w-3" />}
+                        {g.isPublic ? 'Public' : 'Private'}
+                      </Badge>
                     </div>
-                  ))}
+                    {g._count && (
+                      <div className="mt-2 text-xs text-muted-foreground">
+                        {g._count.members} members • {g._count.messages} messages
+                      </div>
+                    )}
+                  </button>
+                ))}
+                {groups.length === 0 && (
+                  <div className="text-sm text-muted-foreground">No groups yet. Create one!</div>
+                )}
+              </div>
+
+              <form onSubmit={handleCreate} className="space-y-2 pt-2 border-t">
+                <div className="font-semibold">Create Group</div>
+                <Input
+                  placeholder="Group name"
+                  value={newGroup.name}
+                  onChange={(e) => setNewGroup((s) => ({ ...s, name: e.target.value }))}
+                  required
+                />
+                <Textarea
+                  placeholder="Description (optional)"
+                  value={newGroup.description}
+                  onChange={(e) => setNewGroup((s) => ({ ...s, description: e.target.value }))}
+                  rows={2}
+                />
+                <div className="flex items-center gap-2 text-sm">
+                  <label className="flex items-center gap-2">
+                    <input
+                      type="checkbox"
+                      checked={newGroup.isPublic}
+                      onChange={(e) => setNewGroup((s) => ({ ...s, isPublic: e.target.checked }))}
+                    />
+                    Public group
+                  </label>
                 </div>
-                <div className="flex items-center gap-2">
-                  <Input
-                    placeholder="Write a message..."
-                    value={chatInput}
-                    onChange={(e) => setChatInput(e.target.value)}
-                    onKeyDown={(e) => {
-                      if (e.key === 'Enter' && !e.shiftKey) {
-                        e.preventDefault();
-                        handleSend();
-                      }
-                    }}
-                  />
-                  <input ref={fileRef} type="file" className="hidden" />
-                  <Button variant="outline" onClick={() => fileRef.current?.click()}>
-                    <Paperclip className="h-4 w-4" />
-                  </Button>
-                  <Button onClick={handleSend} disabled={sending}>
-                    <Send className="h-4 w-4" />
-                  </Button>
-                </div>
-              </>
-            ) : (
-              <div className="text-muted-foreground">Select a group to start chatting.</div>
-            )}
-          </CardContent>
-        </Card>
+                <Button
+                  type="submit"
+                  disabled={creating}
+                  className="bg-gradient-to-r from-emerald-500 to-green-500 hover:from-emerald-600 hover:to-green-600 shadow-lg hover:shadow-xl transition-all duration-300 hover:scale-105 transform-gpu"
+                >
+                  <Plus className="h-4 w-4 mr-2" />
+                  Create
+                </Button>
+              </form>
+            </CardContent>
+          </Card>
+        </div>
+
+        {/* Chat & Calls - Rose/Pink Card */}
+        <div className="group perspective-1000 lg:col-span-2">
+          <Card className="relative overflow-hidden bg-gradient-to-br from-rose-500/20 via-pink-400/15 to-red-500/20 backdrop-blur-xl border border-rose-400/30 shadow-xl transition-all duration-500 hover:scale-[1.01] hover:rotate-0.5 hover:shadow-2xl hover:shadow-rose-500/25 transform-gpu">
+            <div className="absolute inset-0 bg-gradient-to-br from-rose-500/10 to-pink-500/5 opacity-0 group-hover:opacity-100 transition-opacity duration-500"></div>
+            <div className="absolute inset-x-0 top-0 h-1 bg-gradient-to-r from-rose-500 via-pink-500 to-red-500"></div>
+            <CardHeader>
+              <CardTitle className="flex items-center gap-2 bg-gradient-to-r from-rose-400 to-pink-400 bg-clip-text text-transparent">
+                <MessageSquare className="h-5 w-5" /> {activeGroup?.name || 'Select a group'}
+              </CardTitle>
+            </CardHeader>
+            <CardContent className="space-y-4 relative">
+              {activeGroupId ? (
+                <>
+                  <div className="flex flex-wrap gap-2 items-center">
+                    <Button variant="secondary" size="sm" onClick={() => startCall('video')}>
+                      <Video className="h-4 w-4 mr-2" /> Start Video
+                    </Button>
+                    <Button variant="secondary" size="sm" onClick={() => startCall('audio')}>
+                      <Mic className="h-4 w-4 mr-2" /> Start Audio
+                    </Button>
+                    <Button variant="outline" size="sm" onClick={stopMedia}>
+                      <PhoneOff className="h-4 w-4 mr-2" /> End
+                    </Button>
+                    <Button variant="outline" size="sm" onClick={toggleAudio}>
+                      {audioMuted ? 'Unmute' : 'Mute'}
+                    </Button>
+                    <Button variant="outline" size="sm" onClick={toggleVideo}>
+                      {videoMuted ? 'Video On' : 'Video Off'}
+                    </Button>
+                    {!screenSharing ? (
+                      <Button variant="outline" size="sm" onClick={startScreenShare}>
+                        Share Screen
+                      </Button>
+                    ) : (
+                      <Button variant="outline" size="sm" onClick={revertToCamera}>
+                        Stop Share
+                      </Button>
+                    )}
+                    <div className="flex items-center gap-2 text-xs">
+                      <label>
+                        Mic:
+                        <select
+                          className="ml-1 border rounded px-1 py-0.5 bg-background"
+                          value={selectedMic}
+                          onChange={(e) => setSelectedMic(e.target.value)}
+                        >
+                          {mics.map((m) => (
+                            <option key={m.deviceId} value={m.deviceId}>
+                              {m.label || 'Microphone'}
+                            </option>
+                          ))}
+                        </select>
+                      </label>
+                      <label>
+                        Cam:
+                        <select
+                          className="ml-1 border rounded px-1 py-0.5 bg-background"
+                          value={selectedCam}
+                          onChange={(e) => setSelectedCam(e.target.value)}
+                        >
+                          {cams.map((c) => (
+                            <option key={c.deviceId} value={c.deviceId}>
+                              {c.label || 'Camera'}
+                            </option>
+                          ))}
+                        </select>
+                      </label>
+                    </div>
+                  </div>
+                  {groupError && <div className="text-sm text-red-500">{groupError}</div>}
+                  <div className="grid grid-cols-2 gap-2">
+                    <video ref={localVideoRef} className="w-full rounded bg-black/40" playsInline />
+                    <video
+                      ref={remoteVideoRef}
+                      className="w-full rounded bg-black/40"
+                      playsInline
+                    />
+                  </div>
+                  <div className="h-[45vh] overflow-auto border rounded-md p-3 space-y-2">
+                    {messages.map((m) => (
+                      <div key={m.id} className="text-sm">
+                        {m.type !== 'text' && m.fileUrl ? (
+                          <div className="flex items-center gap-2">
+                            <Badge variant="secondary">{m.type.toUpperCase()}</Badge>
+                            <a href={m.fileUrl} target="_blank" className="underline">
+                              Open file
+                            </a>
+                          </div>
+                        ) : (
+                          <div>{m.content}</div>
+                        )}
+                        <div className="text-xs text-muted-foreground">
+                          {new Date(m.createdAt).toLocaleString()}
+                        </div>
+                      </div>
+                    ))}
+                  </div>
+                  <div className="flex items-center gap-2">
+                    <Input
+                      placeholder="Write a message..."
+                      value={chatInput}
+                      onChange={(e) => setChatInput(e.target.value)}
+                      onKeyDown={(e) => {
+                        if (e.key === 'Enter' && !e.shiftKey) {
+                          e.preventDefault();
+                          handleSend();
+                        }
+                      }}
+                    />
+                    <input ref={fileRef} type="file" className="hidden" />
+                    <Button variant="outline" onClick={() => fileRef.current?.click()}>
+                      <Paperclip className="h-4 w-4" />
+                    </Button>
+                    <Button
+                      onClick={handleSend}
+                      disabled={sending}
+                      className="bg-gradient-to-r from-rose-500 to-pink-500 hover:from-rose-600 hover:to-pink-600 shadow-lg hover:shadow-xl transition-all duration-300 hover:scale-105 transform-gpu"
+                    >
+                      <Send className="h-4 w-4" />
+                    </Button>
+                  </div>
+                </>
+              ) : (
+                <div className="text-muted-foreground">Select a group to start chatting.</div>
+              )}
+            </CardContent>
+          </Card>
+        </div>
       </div>
     </div>
   );

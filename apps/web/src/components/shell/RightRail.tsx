@@ -20,7 +20,7 @@ type RightRailProps = {
   variant?: 'inline' | 'sheet';
 };
 
-export function RightRail({ variant = 'inline' }: RightRailProps) {
+export function RightRail({ variant = 'sheet' }: RightRailProps) {
   const { isRightRailCollapsed, setRightRailCollapsed } = useAppContext();
   const [openKeys, setOpenKeys] = useState<Record<ModuleKey, boolean>>({
     dueSoon: true,
@@ -30,11 +30,11 @@ export function RightRail({ variant = 'inline' }: RightRailProps) {
     extra2: false,
   });
 
-  const modules = useMemo(() => [], []);
+  const modules = useMemo(() => ALL_MODULES, []);
 
   if (variant === 'inline') return null;
 
-  const Content = (
+  return (
     <div className="h-[calc(100vh-4rem)] sticky top-16 overflow-y-auto px-4 py-4 space-y-4">
       {modules.map((m) => (
         <section key={m.key} aria-labelledby={`rr-${m.key}`} className="contents">
@@ -68,7 +68,7 @@ export function RightRail({ variant = 'inline' }: RightRailProps) {
         </section>
       ))}
 
-      {variant === 'inline' && (
+      {variant === 'sheet' && (
         <div className="pt-2">
           <Button variant="outline" className="w-full" onClick={() => setRightRailCollapsed(true)}>
             Collapse rail
@@ -77,8 +77,4 @@ export function RightRail({ variant = 'inline' }: RightRailProps) {
       )}
     </div>
   );
-
-  if (variant === 'inline') return null;
-
-  return null;
 }

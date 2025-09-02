@@ -214,8 +214,9 @@ export default function AllProfilesPage() {
 
     // Students
     {
-      id: 7,
-      name: 'Nadia Islam',
+      id: '7',
+      firstName: 'Nadia',
+      lastName: 'Islam',
       role: 'student',
       avatar:
         'https://images.unsplash.com/photo-1534528741775-53994a69daeb?w=150&h=150&fit=crop&auto=format',
@@ -230,8 +231,9 @@ export default function AllProfilesPage() {
       coursesCompleted: 12,
     },
     {
-      id: 8,
-      name: 'Karim Rahman',
+      id: '8',
+      firstName: 'Karim',
+      lastName: 'Rahman',
       role: 'student',
       avatar:
         'https://images.unsplash.com/photo-1539571696357-5a69c17a67c6?w=150&h=150&fit=crop&auto=format',
@@ -246,8 +248,9 @@ export default function AllProfilesPage() {
       coursesCompleted: 8,
     },
     {
-      id: 9,
-      name: 'Sadia Begum',
+      id: '9',
+      firstName: 'Sadia',
+      lastName: 'Begum',
       role: 'student',
       avatar:
         'https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=150&h=150&fit=crop&auto=format',
@@ -262,8 +265,9 @@ export default function AllProfilesPage() {
       coursesCompleted: 15,
     },
     {
-      id: 10,
-      name: 'Tanvir Hasan',
+      id: '10',
+      firstName: 'Tanvir',
+      lastName: 'Hasan',
       role: 'student',
       avatar:
         'https://images.unsplash.com/photo-1507591064344-4c6ce005b128?w=150&h=150&fit=crop&auto=format',
@@ -282,7 +286,7 @@ export default function AllProfilesPage() {
   const filteredProfiles = useMemo(() => {
     // Ensure profiles is always an array
     const profilesArray = Array.isArray(profiles) ? profiles : [];
-    let filtered = profilesArray.filter((profile) => {
+    const filtered = profilesArray.filter((profile) => {
       const matchesCategory = selectedCategory === 'all' || profile.role === selectedCategory;
       const fullName = `${profile.firstName} ${profile.lastName}`;
       const matchesSearch =
@@ -308,7 +312,9 @@ export default function AllProfilesPage() {
         filtered.sort((a, b) => b.reviewCount - a.reviewCount);
         break;
       case 'name':
-        filtered.sort((a, b) => a.name.localeCompare(b.name));
+        filtered.sort((a, b) =>
+          `${a.firstName} ${a.lastName}`.localeCompare(`${b.firstName} ${b.lastName}`),
+        );
         break;
       case 'online':
         filtered.sort((a, b) => (b.isOnline ? 1 : 0) - (a.isOnline ? 1 : 0));
@@ -360,92 +366,112 @@ export default function AllProfilesPage() {
   };
 
   return (
-    <div className="space-y-6">
-      {/* Header */}
-      <div className="bg-gradient-to-r from-fuchsia-500/10 via-violet-500/10 to-cyan-500/10 rounded-xl p-6 border border-white/10">
-        <h1 className="text-3xl font-bold mb-2">{t('pages.profilesTitle')}</h1>
-        <p className="text-muted-foreground">{t('pages.profilesDesc')}</p>
+    <div className="space-y-6 relative">
+      {/* Ambient gradient glows */}
+      <div aria-hidden className="pointer-events-none absolute inset-0 -z-10 overflow-hidden">
+        <div className="absolute -top-24 -left-24 h-72 w-72 rounded-full bg-fuchsia-500/20 blur-3xl"></div>
+        <div className="absolute -bottom-24 -right-24 h-72 w-72 rounded-full bg-cyan-500/20 blur-3xl"></div>
+      </div>
+      {/* Header - Vibrant Purple/Pink Card */}
+      <div className="group perspective-1000">
+        <div className="relative overflow-hidden bg-gradient-to-br from-purple-600/20 via-pink-500/15 to-rose-400/20 rounded-xl p-6 border border-purple-400/30 shadow-xl backdrop-blur-sm transition-all duration-500 hover:scale-[1.02] hover:rotate-1 hover:shadow-2xl hover:shadow-purple-500/25 transform-gpu">
+          <div className="absolute inset-0 bg-gradient-to-br from-purple-500/10 to-pink-500/5 opacity-0 group-hover:opacity-100 transition-opacity duration-500"></div>
+          <div className="absolute inset-x-0 top-0 h-1 bg-gradient-to-r from-purple-500 via-pink-500 to-rose-500"></div>
+          <div className="relative">
+            <h1 className="text-3xl font-bold mb-2 bg-gradient-to-r from-purple-400 via-pink-400 to-rose-400 bg-clip-text text-transparent">
+              {t('pages.profilesTitle')}
+            </h1>
+            <p className="text-purple-200/80">{t('pages.profilesDesc')}</p>
+          </div>
+        </div>
       </div>
 
-      {/* Search and Filters */}
-      <Card>
-        <CardHeader>
-          <CardTitle className="flex items-center gap-2">
-            <Filter className="w-5 h-5" />
-            Find People
-          </CardTitle>
-        </CardHeader>
-        <CardContent className="space-y-4">
-          {/* Search */}
-          <div className="relative">
-            <Search className="absolute left-3 top-3 h-4 w-4 text-muted-foreground" />
-            <Input
-              placeholder="Search by name, bio, subjects, or location..."
-              value={searchQuery}
-              onChange={(e) => setSearchQuery(e.target.value)}
-              className="pl-10"
-            />
+      {/* Search and Filters - Cyan/Teal Card */}
+      <div className="group perspective-1000">
+        <Card className="relative overflow-hidden bg-gradient-to-br from-cyan-500/20 via-teal-400/15 to-emerald-500/20 backdrop-blur-xl border border-cyan-400/30 shadow-xl transition-all duration-500 hover:scale-[1.01] hover:-rotate-1 hover:shadow-2xl hover:shadow-cyan-500/25 transform-gpu">
+          <div className="absolute inset-0 bg-gradient-to-br from-cyan-500/10 to-teal-500/5 opacity-0 group-hover:opacity-100 transition-opacity duration-500"></div>
+          <div className="absolute inset-x-0 top-0 h-1 bg-gradient-to-r from-cyan-500 via-teal-400 to-emerald-500"></div>
+          <CardHeader>
+            <CardTitle className="flex items-center gap-2 bg-gradient-to-r from-cyan-400 to-teal-400 bg-clip-text text-transparent">
+              <Filter className="w-5 h-5 text-cyan-400" />
+              Find People
+            </CardTitle>
+          </CardHeader>
+          <CardContent className="space-y-4">
+            {/* Search */}
+            <div className="relative">
+              <Search className="absolute left-3 top-3 h-4 w-4 text-cyan-400" />
+              <Input
+                placeholder="Search by name, bio, subjects, or location..."
+                value={searchQuery}
+                onChange={(e) => setSearchQuery(e.target.value)}
+                className="pl-10 bg-cyan-500/10 border-cyan-400/30 focus:border-cyan-400 text-cyan-100 placeholder:text-cyan-300/60"
+              />
+            </div>
+
+            {/* Filters */}
+            <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+              <div>
+                <label className="text-sm font-medium mb-2 block">Category</label>
+                <Select value={selectedCategory} onValueChange={setSelectedCategory}>
+                  <SelectTrigger>
+                    <SelectValue />
+                  </SelectTrigger>
+                  <SelectContent>
+                    {profileCategories.map((category) => (
+                      <SelectItem key={category.id} value={category.id}>
+                        {category.name}
+                      </SelectItem>
+                    ))}
+                  </SelectContent>
+                </Select>
+              </div>
+
+              <div>
+                <label className="text-sm font-medium mb-2 block">Sort By</label>
+                <Select value={sortBy} onValueChange={setSortBy}>
+                  <SelectTrigger>
+                    <SelectValue />
+                  </SelectTrigger>
+                  <SelectContent>
+                    <SelectItem value="rating">Highest Rating</SelectItem>
+                    <SelectItem value="reviews">Most Reviews</SelectItem>
+                    <SelectItem value="name">Name (A-Z)</SelectItem>
+                    <SelectItem value="online">Online First</SelectItem>
+                  </SelectContent>
+                </Select>
+              </div>
+
+              <div className="flex items-end">
+                <Button
+                  variant="outline"
+                  onClick={() => {
+                    setSelectedCategory('all');
+                    setSearchQuery('');
+                    setSortBy('rating');
+                  }}
+                  className="w-full"
+                >
+                  Clear Filters
+                </Button>
+              </div>
+            </div>
+          </CardContent>
+        </Card>
+      </div>
+
+      {/* Results Summary - Orange/Yellow Card */}
+      <div className="group perspective-1000">
+        <div className="flex items-center justify-between p-4 rounded-xl bg-gradient-to-br from-orange-500/20 via-amber-400/15 to-yellow-500/20 border border-orange-400/30 shadow-lg backdrop-blur-sm transition-all duration-500 hover:scale-[1.01] hover:rotate-0.5 hover:shadow-xl hover:shadow-orange-500/20 transform-gpu">
+          <div className="absolute inset-0 bg-gradient-to-br from-orange-500/10 to-yellow-500/5 opacity-0 group-hover:opacity-100 transition-opacity duration-500 rounded-xl"></div>
+          <div className="flex items-center gap-2 relative">
+            <CategoryIcon className="w-5 h-5 text-orange-400" />
+            <span className="font-medium bg-gradient-to-r from-orange-400 via-amber-400 to-yellow-400 bg-clip-text text-transparent">
+              {filteredProfiles.length} profiles found
+              {selectedCategory !== 'all' &&
+                ` in ${profileCategories.find((cat) => cat.id === selectedCategory)?.name}`}
+            </span>
           </div>
-
-          {/* Filters */}
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-            <div>
-              <label className="text-sm font-medium mb-2 block">Category</label>
-              <Select value={selectedCategory} onValueChange={setSelectedCategory}>
-                <SelectTrigger>
-                  <SelectValue />
-                </SelectTrigger>
-                <SelectContent>
-                  {profileCategories.map((category) => (
-                    <SelectItem key={category.id} value={category.id}>
-                      {category.name}
-                    </SelectItem>
-                  ))}
-                </SelectContent>
-              </Select>
-            </div>
-
-            <div>
-              <label className="text-sm font-medium mb-2 block">Sort By</label>
-              <Select value={sortBy} onValueChange={setSortBy}>
-                <SelectTrigger>
-                  <SelectValue />
-                </SelectTrigger>
-                <SelectContent>
-                  <SelectItem value="rating">Highest Rating</SelectItem>
-                  <SelectItem value="reviews">Most Reviews</SelectItem>
-                  <SelectItem value="name">Name (A-Z)</SelectItem>
-                  <SelectItem value="online">Online First</SelectItem>
-                </SelectContent>
-              </Select>
-            </div>
-
-            <div className="flex items-end">
-              <Button
-                variant="outline"
-                onClick={() => {
-                  setSelectedCategory('all');
-                  setSearchQuery('');
-                  setSortBy('rating');
-                }}
-                className="w-full"
-              >
-                Clear Filters
-              </Button>
-            </div>
-          </div>
-        </CardContent>
-      </Card>
-
-      {/* Results Summary */}
-      <div className="flex items-center justify-between">
-        <div className="flex items-center gap-2">
-          <CategoryIcon className="w-5 h-5" />
-          <span className="font-medium">
-            {filteredProfiles.length} profiles found
-            {selectedCategory !== 'all' &&
-              ` in ${profileCategories.find((cat) => cat.id === selectedCategory)?.name}`}
-          </span>
         </div>
       </div>
 
@@ -476,173 +502,226 @@ export default function AllProfilesPage() {
         </div>
       ) : (
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-          {filteredProfiles.map((profile) => {
+          {filteredProfiles.map((profile, index) => {
             const RoleIcon = getRoleIcon(profile.role);
+            // Cycle through different color themes for each profile card
+            const colorThemes = [
+              {
+                bg: 'from-blue-500/15 via-indigo-400/10 to-purple-500/15',
+                border: 'border-blue-400/30',
+                shadow: 'hover:shadow-blue-500/25',
+                ring: 'hover:ring-blue-400/40',
+                top: 'from-blue-500 via-indigo-500 to-purple-500',
+              },
+              {
+                bg: 'from-emerald-500/15 via-green-400/10 to-teal-500/15',
+                border: 'border-emerald-400/30',
+                shadow: 'hover:shadow-emerald-500/25',
+                ring: 'hover:ring-emerald-400/40',
+                top: 'from-emerald-500 via-green-500 to-teal-500',
+              },
+              {
+                bg: 'from-rose-500/15 via-pink-400/10 to-red-500/15',
+                border: 'border-rose-400/30',
+                shadow: 'hover:shadow-rose-500/25',
+                ring: 'hover:ring-rose-400/40',
+                top: 'from-rose-500 via-pink-500 to-red-500',
+              },
+              {
+                bg: 'from-violet-500/15 via-purple-400/10 to-fuchsia-500/15',
+                border: 'border-violet-400/30',
+                shadow: 'hover:shadow-violet-500/25',
+                ring: 'hover:ring-violet-400/40',
+                top: 'from-violet-500 via-purple-500 to-fuchsia-500',
+              },
+              {
+                bg: 'from-cyan-500/15 via-sky-400/10 to-blue-500/15',
+                border: 'border-cyan-400/30',
+                shadow: 'hover:shadow-cyan-500/25',
+                ring: 'hover:ring-cyan-400/40',
+                top: 'from-cyan-500 via-sky-500 to-blue-500',
+              },
+              {
+                bg: 'from-orange-500/15 via-amber-400/10 to-yellow-500/15',
+                border: 'border-orange-400/30',
+                shadow: 'hover:shadow-orange-500/25',
+                ring: 'hover:ring-orange-400/40',
+                top: 'from-orange-500 via-amber-500 to-yellow-500',
+              },
+            ];
+            const theme = colorThemes[index % colorThemes.length];
             return (
-              <Card key={profile.id} className="overflow-hidden hover:shadow-lg transition-shadow">
-                <CardHeader className="pb-4">
-                  <div className="flex items-start gap-4">
-                    <div className="relative">
-                      <img
-                        src={
-                          profile.avatar ||
-                          `https://api.dicebear.com/9.x/initials/svg?seed=${encodeURIComponent(profile.firstName + ' ' + profile.lastName)}&backgroundType=gradientLinear`
-                        }
-                        alt={`${profile.firstName} ${profile.lastName}`}
-                        className="w-16 h-16 rounded-full object-cover"
-                      />
-                      {profile.isOnline && (
-                        <div className="absolute -bottom-1 -right-1 w-5 h-5 bg-green-500 border-2 border-white rounded-full"></div>
-                      )}
-                    </div>
-                    <div className="flex-1 min-w-0">
-                      <div className="flex items-center gap-2 mb-1">
-                        <h3 className="font-semibold truncate">
-                          {profile.firstName} {profile.lastName}
-                        </h3>
-                      </div>
-                      <div className="flex items-center gap-2 mb-2">
-                        <Badge className={getRoleColor(profile.role)}>
-                          <RoleIcon className="w-3 h-3 mr-1" />
-                          {getRoleName(profile.role)}
-                        </Badge>
+              <div key={profile.id} className="group perspective-1000">
+                <Card
+                  className={`relative overflow-hidden transition-all duration-500 hover:-translate-y-2 hover:rotate-1 hover:shadow-2xl ring-1 ring-white/10 hover:ring-2 ${theme.ring} bg-gradient-to-br ${theme.bg} ${theme.border} ${theme.shadow} backdrop-blur-xl transform-gpu`}
+                >
+                  <div
+                    className={`absolute inset-x-0 top-0 h-1 bg-gradient-to-r ${theme.top} opacity-70 group-hover:opacity-100 transition-opacity`}
+                  ></div>
+                  <CardHeader className="pb-4">
+                    <div className="flex items-start gap-4">
+                      <div className="relative [transform:perspective(1000px)]">
+                        <img
+                          src={
+                            profile.avatar ||
+                            `https://api.dicebear.com/9.x/initials/svg?seed=${encodeURIComponent(profile.firstName + ' ' + profile.lastName)}&backgroundType=gradientLinear`
+                          }
+                          alt={`${profile.firstName} ${profile.lastName}`}
+                          className="w-16 h-16 rounded-full object-cover shadow-lg transition-transform duration-500 [transform:translateZ(0)] group-hover:[transform:rotateY(8deg)_rotateX(3deg)_translateZ(8px)]"
+                        />
                         {profile.isOnline && (
-                          <Badge variant="secondary" className="bg-green-100 text-green-800">
-                            Online
-                          </Badge>
+                          <div className="absolute -bottom-1 -right-1 w-5 h-5 bg-green-500 border-2 border-white rounded-full"></div>
                         )}
                       </div>
-                      <div className="flex items-center gap-1 text-sm text-muted-foreground mb-1">
-                        <MapPin className="w-3 h-3" />
-                        <span className="truncate">{profile.location}</span>
-                      </div>
-                      <div className="flex items-center gap-1">
-                        <Star className="w-4 h-4 fill-yellow-400 text-yellow-400" />
-                        <span className="text-sm font-medium">{profile.rating}</span>
-                        <span className="text-sm text-muted-foreground">
-                          ({profile.reviewCount} reviews)
-                        </span>
-                      </div>
-                    </div>
-                  </div>
-                </CardHeader>
-
-                <CardContent className="space-y-4">
-                  {/* Bio */}
-                  <p className="text-sm text-muted-foreground line-clamp-3">{profile.bio}</p>
-
-                  {/* Role-specific information */}
-                  {profile.role === 'teacher' && (
-                    <div className="space-y-3">
-                      <div className="flex items-center justify-between text-sm">
-                        <span className="text-muted-foreground">Rate:</span>
-                        <span className="font-medium">৳{profile.hourlyRate}/hour</span>
-                      </div>
-                      <div className="flex items-center justify-between text-sm">
-                        <span className="text-muted-foreground">Experience:</span>
-                        <span className="font-medium">{profile.experience} years</span>
-                      </div>
-                      <div>
-                        <p className="text-sm text-muted-foreground mb-2">Subjects:</p>
-                        <div className="flex flex-wrap gap-1">
-                          {profile.subjects?.slice(0, 3).map((subject) => (
-                            <Badge key={subject} variant="outline" className="text-xs">
-                              {subject}
-                            </Badge>
-                          ))}
-                          {profile.subjects && profile.subjects.length > 3 && (
-                            <Badge variant="outline" className="text-xs">
-                              +{profile.subjects.length - 3} more
+                      <div className="flex-1 min-w-0">
+                        <div className="flex items-center gap-2 mb-1">
+                          <h3 className="font-semibold truncate">
+                            {profile.firstName} {profile.lastName}
+                          </h3>
+                        </div>
+                        <div className="flex items-center gap-2 mb-2">
+                          <Badge className={getRoleColor(profile.role)}>
+                            <RoleIcon className="w-3 h-3 mr-1" />
+                            {getRoleName(profile.role)}
+                          </Badge>
+                          {profile.isOnline && (
+                            <Badge variant="secondary" className="bg-green-100 text-green-800">
+                              Online
                             </Badge>
                           )}
                         </div>
-                      </div>
-                    </div>
-                  )}
-
-                  {profile.role === 'qa_solver' && (
-                    <div className="space-y-3">
-                      <div className="flex items-center justify-between text-sm">
-                        <span className="text-muted-foreground">Questions Solved:</span>
-                        <span className="font-medium">{profile.solvedQuestions}</span>
-                      </div>
-                      <div>
-                        <p className="text-sm text-muted-foreground mb-2">Expertise:</p>
-                        <div className="flex flex-wrap gap-1">
-                          {profile.expertise?.slice(0, 3).map((exp) => (
-                            <Badge key={exp} variant="outline" className="text-xs">
-                              {exp}
-                            </Badge>
-                          ))}
-                          {profile.expertise && profile.expertise.length > 3 && (
-                            <Badge variant="outline" className="text-xs">
-                              +{profile.expertise.length - 3} more
-                            </Badge>
-                          )}
+                        <div className="flex items-center gap-1 text-sm text-muted-foreground mb-1">
+                          <MapPin className="w-3 h-3" />
+                          <span className="truncate">{profile.location}</span>
+                        </div>
+                        <div className="flex items-center gap-1">
+                          <Star className="w-4 h-4 fill-yellow-400 text-yellow-400" />
+                          <span className="text-sm font-medium">{profile.rating}</span>
+                          <span className="text-sm text-muted-foreground">
+                            ({profile.reviewCount} reviews)
+                          </span>
                         </div>
                       </div>
                     </div>
-                  )}
+                  </CardHeader>
 
-                  {profile.role === 'student' && (
-                    <div className="space-y-3">
-                      <div className="flex items-center justify-between text-sm">
-                        <span className="text-muted-foreground">Study Level:</span>
-                        <span className="font-medium text-xs">{profile.studyLevel}</span>
-                      </div>
-                      <div className="flex items-center justify-between text-sm">
-                        <span className="text-muted-foreground">Courses Completed:</span>
-                        <span className="font-medium">{profile.coursesCompleted}</span>
-                      </div>
-                      <div>
-                        <p className="text-sm text-muted-foreground mb-2">Interests:</p>
-                        <div className="flex flex-wrap gap-1">
-                          {profile.interests?.slice(0, 3).map((interest) => (
-                            <Badge key={interest} variant="outline" className="text-xs">
-                              {interest}
-                            </Badge>
-                          ))}
-                          {profile.interests && profile.interests.length > 3 && (
-                            <Badge variant="outline" className="text-xs">
-                              +{profile.interests.length - 3} more
-                            </Badge>
-                          )}
+                  <CardContent className="space-y-4">
+                    {/* Bio */}
+                    <p className="text-sm text-muted-foreground line-clamp-3">{profile.bio}</p>
+
+                    {/* Role-specific information */}
+                    {profile.role === 'teacher' && (
+                      <div className="space-y-3">
+                        <div className="flex items-center justify-between text-sm">
+                          <span className="text-muted-foreground">Rate:</span>
+                          <span className="font-medium">৳{profile.hourlyRate}/hour</span>
+                        </div>
+                        <div className="flex items-center justify-between text-sm">
+                          <span className="text-muted-foreground">Experience:</span>
+                          <span className="font-medium">{profile.experience} years</span>
+                        </div>
+                        <div>
+                          <p className="text-sm text-muted-foreground mb-2">Subjects:</p>
+                          <div className="flex flex-wrap gap-1">
+                            {profile.subjects?.slice(0, 3).map((subject) => (
+                              <Badge key={subject} variant="outline" className="text-xs">
+                                {subject}
+                              </Badge>
+                            ))}
+                            {profile.subjects && profile.subjects.length > 3 && (
+                              <Badge variant="outline" className="text-xs">
+                                +{profile.subjects.length - 3} more
+                              </Badge>
+                            )}
+                          </div>
                         </div>
                       </div>
-                    </div>
-                  )}
+                    )}
 
-                  {/* Action Buttons */}
-                  <div className="flex gap-2 pt-2">
-                    <Button
-                      size="sm"
-                      className="flex-1 bg-gradient-to-r from-fuchsia-500 to-violet-500"
-                      onClick={() => router.push(`/chat?u=${profile.id}`)}
-                    >
-                      <MessageCircle className="w-4 h-4 mr-1" />
-                      Chat
-                    </Button>
-                    <Button
-                      size="sm"
-                      variant="outline"
-                      className="flex-1"
-                      onClick={() => router.push(`/chat?u=${profile.id}&call=audio`)}
-                    >
-                      <Phone className="w-4 h-4 mr-1" />
-                      Call
-                    </Button>
-                    <Button
-                      size="sm"
-                      variant="outline"
-                      className="flex-1"
-                      onClick={() => router.push(`/chat?u=${profile.id}&call=video`)}
-                    >
-                      <Video className="w-4 h-4 mr-1" />
-                      Video
-                    </Button>
-                  </div>
-                </CardContent>
-              </Card>
+                    {profile.role === 'qa_solver' && (
+                      <div className="space-y-3">
+                        <div className="flex items-center justify-between text-sm">
+                          <span className="text-muted-foreground">Questions Solved:</span>
+                          <span className="font-medium">{profile.solvedQuestions}</span>
+                        </div>
+                        <div>
+                          <p className="text-sm text-muted-foreground mb-2">Expertise:</p>
+                          <div className="flex flex-wrap gap-1">
+                            {profile.expertise?.slice(0, 3).map((exp) => (
+                              <Badge key={exp} variant="outline" className="text-xs">
+                                {exp}
+                              </Badge>
+                            ))}
+                            {profile.expertise && profile.expertise.length > 3 && (
+                              <Badge variant="outline" className="text-xs">
+                                +{profile.expertise.length - 3} more
+                              </Badge>
+                            )}
+                          </div>
+                        </div>
+                      </div>
+                    )}
+
+                    {profile.role === 'student' && (
+                      <div className="space-y-3">
+                        <div className="flex items-center justify-between text-sm">
+                          <span className="text-muted-foreground">Study Level:</span>
+                          <span className="font-medium text-xs">{profile.studyLevel}</span>
+                        </div>
+                        <div className="flex items-center justify-between text-sm">
+                          <span className="text-muted-foreground">Courses Completed:</span>
+                          <span className="font-medium">{profile.coursesCompleted}</span>
+                        </div>
+                        <div>
+                          <p className="text-sm text-muted-foreground mb-2">Interests:</p>
+                          <div className="flex flex-wrap gap-1">
+                            {profile.interests?.slice(0, 3).map((interest) => (
+                              <Badge key={interest} variant="outline" className="text-xs">
+                                {interest}
+                              </Badge>
+                            ))}
+                            {profile.interests && profile.interests.length > 3 && (
+                              <Badge variant="outline" className="text-xs">
+                                +{profile.interests.length - 3} more
+                              </Badge>
+                            )}
+                          </div>
+                        </div>
+                      </div>
+                    )}
+
+                    {/* Action Buttons */}
+                    <div className="flex gap-2 pt-2">
+                      <Button
+                        size="sm"
+                        className="flex-1 bg-gradient-to-r from-fuchsia-500 to-violet-500"
+                        onClick={() => router.push(`/chat?u=${profile.id}`)}
+                      >
+                        <MessageCircle className="w-4 h-4 mr-1" />
+                        Chat
+                      </Button>
+                      <Button
+                        size="sm"
+                        variant="outline"
+                        className="flex-1"
+                        onClick={() => router.push(`/chat?u=${profile.id}&call=audio`)}
+                      >
+                        <Phone className="w-4 h-4 mr-1" />
+                        Call
+                      </Button>
+                      <Button
+                        size="sm"
+                        variant="outline"
+                        className="flex-1"
+                        onClick={() => router.push(`/chat?u=${profile.id}&call=video`)}
+                      >
+                        <Video className="w-4 h-4 mr-1" />
+                        Video
+                      </Button>
+                    </div>
+                  </CardContent>
+                </Card>
+              </div>
             );
           })}
         </div>

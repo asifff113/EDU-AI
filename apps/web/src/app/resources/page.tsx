@@ -426,213 +426,328 @@ export default function ResourcesPage() {
   const formatDuration = (duration: string) => duration;
 
   return (
-    <div className="container mx-auto p-6 max-w-7xl">
-      {/* Header */}
-      <div className="mb-8">
-        <h1 className="text-3xl font-bold bg-gradient-to-r from-purple-600 to-blue-600 bg-clip-text text-transparent">
-          {t('pages.resourcesTitle')}
-        </h1>
-        <p className="text-gray-600 mt-2">{t('pages.resourcesDesc')}</p>
-      </div>
-
-      {/* Search and Filters */}
-      <div className="mb-6 space-y-4">
-        <div className="flex flex-col lg:flex-row gap-4">
-          {/* Search */}
-          <div className="flex-1">
-            <div className="relative">
-              <Search className="absolute left-3 top-3 h-4 w-4 text-gray-400" />
-              <Input
-                placeholder="Search resources, authors, tags..."
-                value={searchQuery}
-                onChange={(e) => setSearchQuery(e.target.value)}
-                className="pl-10"
-              />
-            </div>
+    <div className="container mx-auto p-6 max-w-7xl space-y-8">
+      {/* Learning Treasure Vault Header */}
+      <div
+        className="relative group bg-gradient-to-r from-purple-600/20 via-violet-700/15 to-indigo-600/20 
+         rounded-2xl p-8 border border-purple-600/20 backdrop-blur-xl shadow-2xl shadow-purple-600/10
+         hover:shadow-3xl hover:shadow-purple-600/20 transition-all duration-700 transform-gpu
+         before:absolute before:inset-0 before:bg-gradient-to-r before:from-purple-600/5 before:to-violet-700/5 
+         before:rounded-2xl before:opacity-0 before:transition-opacity before:duration-500 hover:before:opacity-100"
+      >
+        <div className="absolute inset-0 bg-gradient-to-br from-white/5 to-transparent rounded-2xl"></div>
+        <div className="relative z-10 flex items-center gap-4">
+          <div className="p-4 rounded-2xl bg-purple-600/20 group-hover:bg-purple-500/30 transition-all duration-300 group-hover:rotate-6 group-hover:scale-110 transform-gpu">
+            <div className="text-3xl">📚</div>
           </div>
-
-          {/* Filters */}
-          <div className="flex flex-wrap gap-2">
-            <Select value={selectedCategory} onValueChange={setSelectedCategory}>
-              <SelectTrigger className="w-[180px]">
-                <SelectValue placeholder="Category" />
-              </SelectTrigger>
-              <SelectContent>
-                {resourceCategories.map((category) => (
-                  <SelectItem key={category.id} value={category.id}>
-                    {category.name}
-                  </SelectItem>
-                ))}
-              </SelectContent>
-            </Select>
-
-            <Select value={selectedType} onValueChange={setSelectedType}>
-              <SelectTrigger className="w-[140px]">
-                <SelectValue placeholder="Type" />
-              </SelectTrigger>
-              <SelectContent>
-                {resourceTypes.map((type) => (
-                  <SelectItem key={type.id} value={type.id}>
-                    <div className="flex items-center gap-2">
-                      <type.icon className="h-4 w-4" />
-                      {type.name}
-                    </div>
-                  </SelectItem>
-                ))}
-              </SelectContent>
-            </Select>
-
-            <Select value={selectedLevel} onValueChange={setSelectedLevel}>
-              <SelectTrigger className="w-[140px]">
-                <SelectValue placeholder="Level" />
-              </SelectTrigger>
-              <SelectContent>
-                <SelectItem value="all">All Levels</SelectItem>
-                <SelectItem value="beginner">Beginner</SelectItem>
-                <SelectItem value="intermediate">Intermediate</SelectItem>
-                <SelectItem value="advanced">Advanced</SelectItem>
-              </SelectContent>
-            </Select>
-
-            <Select value={sortBy} onValueChange={setSortBy}>
-              <SelectTrigger className="w-[140px]">
-                <SelectValue placeholder="Sort by" />
-              </SelectTrigger>
-              <SelectContent>
-                <SelectItem value="popular">Most Popular</SelectItem>
-                <SelectItem value="rating">Highest Rated</SelectItem>
-                <SelectItem value="recent">Most Recent</SelectItem>
-                <SelectItem value="views">Most Viewed</SelectItem>
-              </SelectContent>
-            </Select>
+          <div>
+            <h1 className="text-4xl font-bold mb-2 text-white group-hover:text-purple-100 transition-colors duration-300">
+              Learning Treasure Vault
+            </h1>
+            <p className="text-purple-300 group-hover:text-purple-200 transition-colors duration-300 text-lg">
+              Discover a vast collection of educational resources to fuel your knowledge journey
+            </p>
           </div>
-
-          {/* Upload Button */}
-          <Button
-            onClick={() => setShowUploadDialog(true)}
-            className="bg-gradient-to-r from-purple-600 to-blue-600"
-          >
-            <Upload className="h-4 w-4 mr-2" />
-            Contribute
-          </Button>
-        </div>
-
-        {/* Results count */}
-        <div className="text-sm text-gray-600">
-          Showing {filteredResources.length} of {resources.length} resources
         </div>
       </div>
 
-      {/* Resources Grid */}
-      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
-        {filteredResources.map((resource) => (
-          <Card key={resource.id} className="hover:shadow-lg transition-shadow duration-200">
-            <CardHeader className="pb-3">
-              {/* Thumbnail */}
-              <div className="relative mb-3">
-                <img
-                  src={resource.thumbnail}
-                  alt={resource.title}
-                  className="w-full h-40 object-cover rounded-lg"
+      {/* Enhanced Search and Filters - Discovery Theme */}
+      <div className="relative group bg-gradient-to-br from-emerald-500/20 via-green-600/15 to-teal-500/20 
+        backdrop-blur-xl shadow-xl shadow-emerald-500/20 hover:shadow-2xl hover:shadow-emerald-500/30
+        transition-all duration-500 hover:scale-[1.01] hover:-translate-y-1 transform-gpu perspective-1000
+        before:absolute before:inset-0 before:bg-gradient-to-r before:from-emerald-500/10 before:to-green-600/10 
+        before:rounded-xl before:opacity-0 before:transition-opacity before:duration-300 hover:before:opacity-100
+        rounded-2xl p-6 border border-emerald-500/20">
+        <div className="absolute inset-0 bg-gradient-to-br from-white/5 to-transparent rounded-2xl"></div>
+        <div className="relative z-10 space-y-6">
+          <div className="text-xl font-semibold text-emerald-200 flex items-center gap-2">
+            <div className="text-2xl">🔍</div>
+            Discover Knowledge
+          </div>
+          
+          <div className="flex flex-col lg:flex-row gap-4">
+            {/* Enhanced Search */}
+            <div className="flex-1">
+              <div className="relative group/search">
+                <Search className="absolute left-3 top-3 h-5 w-5 text-emerald-400 group-hover/search:text-emerald-300 transition-colors duration-300 z-10" />
+                <Input
+                  placeholder="🌟 Search resources, authors, tags, subjects..."
+                  value={searchQuery}
+                  onChange={(e) => setSearchQuery(e.target.value)}
+                  className="pl-12 bg-emerald-500/10 border-emerald-400/30 text-white placeholder:text-emerald-300 
+                    focus:border-emerald-300 focus:ring-emerald-400/20 transition-all duration-300
+                    hover:bg-emerald-500/20 group-hover/search:scale-105 transform-gpu"
                 />
-                <div className="absolute top-2 left-2">
-                  <Badge variant="secondary" className="flex items-center gap-1">
-                    {getTypeIcon(resource.type)}
-                    {resource.type}
-                  </Badge>
-                </div>
-                {resource.isVerified && (
-                  <div className="absolute top-2 right-2">
-                    <Badge variant="default" className="bg-green-500">
-                      ✓ Verified
+                <div className="absolute inset-0 bg-gradient-to-r from-emerald-500/5 to-green-500/5 rounded-lg opacity-0 
+                  group-hover/search:opacity-100 transition-opacity duration-300 -z-10"></div>
+              </div>
+            </div>
+
+            {/* Smart Filters */}
+            <div className="flex flex-wrap gap-3">
+              <Select value={selectedCategory} onValueChange={setSelectedCategory}>
+                <SelectTrigger className="w-[180px] bg-green-500/10 border-green-400/30 text-white 
+                  hover:bg-green-500/20 transition-all duration-300 hover:scale-105 transform-gpu">
+                  <SelectValue placeholder="📚 Category" />
+                </SelectTrigger>
+                <SelectContent>
+                  {resourceCategories.map((category) => (
+                    <SelectItem key={category.id} value={category.id}>
+                      {category.name}
+                    </SelectItem>
+                  ))}
+                </SelectContent>
+              </Select>
+
+              <Select value={selectedType} onValueChange={setSelectedType}>
+                <SelectTrigger className="w-[140px] bg-green-500/10 border-green-400/30 text-white 
+                  hover:bg-green-500/20 transition-all duration-300 hover:scale-105 transform-gpu">
+                  <SelectValue placeholder="🎯 Type" />
+                </SelectTrigger>
+                <SelectContent>
+                  {resourceTypes.map((type) => (
+                    <SelectItem key={type.id} value={type.id}>
+                      <div className="flex items-center gap-2">
+                        <type.icon className="h-4 w-4" />
+                        {type.name}
+                      </div>
+                    </SelectItem>
+                  ))}
+                </SelectContent>
+              </Select>
+
+              <Select value={selectedLevel} onValueChange={setSelectedLevel}>
+                <SelectTrigger className="w-[140px] bg-green-500/10 border-green-400/30 text-white 
+                  hover:bg-green-500/20 transition-all duration-300 hover:scale-105 transform-gpu">
+                  <SelectValue placeholder="📈 Level" />
+                </SelectTrigger>
+                <SelectContent>
+                  <SelectItem value="all">All Levels</SelectItem>
+                  <SelectItem value="beginner">Beginner</SelectItem>
+                  <SelectItem value="intermediate">Intermediate</SelectItem>
+                  <SelectItem value="advanced">Advanced</SelectItem>
+                </SelectContent>
+              </Select>
+
+              <Select value={sortBy} onValueChange={setSortBy}>
+                <SelectTrigger className="w-[140px] bg-green-500/10 border-green-400/30 text-white 
+                  hover:bg-green-500/20 transition-all duration-300 hover:scale-105 transform-gpu">
+                  <SelectValue placeholder="⚡ Sort" />
+                </SelectTrigger>
+                <SelectContent>
+                  <SelectItem value="popular">Most Popular</SelectItem>
+                  <SelectItem value="rating">Highest Rated</SelectItem>
+                  <SelectItem value="recent">Most Recent</SelectItem>
+                  <SelectItem value="views">Most Viewed</SelectItem>
+                </SelectContent>
+              </Select>
+            </div>
+
+            {/* Contribute Button */}
+            <Button
+              onClick={() => setShowUploadDialog(true)}
+              className="bg-gradient-to-r from-yellow-500 to-amber-500 hover:from-yellow-600 hover:to-amber-600 
+                text-white shadow-lg shadow-yellow-500/25 hover:shadow-yellow-500/40 transition-all duration-300 
+                hover:scale-110 hover:-translate-y-1 transform-gpu border-0"
+            >
+              <Upload className="h-4 w-4 mr-2" />
+              🎁 Contribute
+            </Button>
+          </div>
+
+          {/* Enhanced Results Count */}
+          <div className="flex items-center gap-3 text-emerald-200">
+            <div className="text-lg">📊</div>
+            <span className="font-semibold">
+              Showing <span className="text-yellow-300 text-lg">{filteredResources.length}</span> of{' '}
+              <span className="text-yellow-300 text-lg">{resources.length}</span> learning treasures
+            </span>
+          </div>
+        </div>
+      </div>
+
+      {/* Enhanced Learning Resources Grid */}
+      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
+        {filteredResources.map((resource, index) => {
+          // Dynamic color themes based on category
+          const getCategoryTheme = (category: string) => {
+            switch (category) {
+              case 'programming':
+                return 'from-green-500/20 to-emerald-600/20 shadow-green-500/15 hover:shadow-green-500/25 border-green-400/30';
+              case 'mathematics':
+                return 'from-orange-500/20 to-amber-600/20 shadow-orange-500/15 hover:shadow-orange-500/25 border-orange-400/30';
+              case 'science':
+                return 'from-blue-500/20 to-cyan-600/20 shadow-blue-500/15 hover:shadow-blue-500/25 border-blue-400/30';
+              case 'academic':
+                return 'from-purple-500/20 to-violet-600/20 shadow-purple-500/15 hover:shadow-purple-500/25 border-purple-400/30';
+              case 'medical':
+                return 'from-red-500/20 to-pink-600/20 shadow-red-500/15 hover:shadow-red-500/25 border-red-400/30';
+              case 'business':
+                return 'from-yellow-500/20 to-amber-600/20 shadow-yellow-500/15 hover:shadow-yellow-500/25 border-yellow-400/30';
+              case 'engineering':
+                return 'from-slate-500/20 to-gray-600/20 shadow-slate-500/15 hover:shadow-slate-500/25 border-slate-400/30';
+              case 'literature':
+                return 'from-pink-500/20 to-rose-600/20 shadow-pink-500/15 hover:shadow-pink-500/25 border-pink-400/30';
+              case 'arts':
+                return 'from-indigo-500/20 to-purple-600/20 shadow-indigo-500/15 hover:shadow-indigo-500/25 border-indigo-400/30';
+              case 'history':
+                return 'from-teal-500/20 to-cyan-600/20 shadow-teal-500/15 hover:shadow-teal-500/25 border-teal-400/30';
+              default:
+                return 'from-gray-500/20 to-slate-600/20 shadow-gray-500/15 hover:shadow-gray-500/25 border-gray-400/30';
+            }
+          };
+
+          const theme = getCategoryTheme(resource.category);
+
+          return (
+            <Card key={resource.id} className={`group relative border-0 bg-gradient-to-br backdrop-blur-xl 
+              hover:scale-105 hover:-translate-y-2 transition-all duration-300 transform-gpu perspective-1000 
+              cursor-pointer ${theme}
+              before:absolute before:inset-0 before:bg-gradient-to-r before:from-white/5 before:to-transparent 
+              before:rounded-xl before:opacity-0 before:transition-opacity before:duration-300 hover:before:opacity-100`}>
+              <div className="absolute inset-0 bg-gradient-to-br from-white/5 to-transparent rounded-xl"></div>
+              <CardHeader className="pb-3 relative z-10">
+                {/* Enhanced Thumbnail */}
+                <div className="relative mb-4 group/thumbnail">
+                  <img
+                    src={resource.thumbnail}
+                    alt={resource.title}
+                    className="w-full h-40 object-cover rounded-xl group-hover/thumbnail:scale-110 transition-transform duration-300"
+                  />
+                  <div className="absolute inset-0 bg-gradient-to-t from-black/20 via-transparent to-transparent rounded-xl"></div>
+                  <div className="absolute top-3 left-3">
+                    <Badge className="bg-gradient-to-r from-slate-700 to-gray-800 text-white shadow-lg shadow-black/25 
+                      group-hover:shadow-black/40 transition-all duration-300 group-hover:scale-105 transform-gpu border-0
+                      flex items-center gap-1">
+                      {getTypeIcon(resource.type)}
+                      <span className="capitalize">{resource.type}</span>
                     </Badge>
                   </div>
-                )}
-              </div>
-
-              <CardTitle className="text-lg line-clamp-2">{resource.title}</CardTitle>
-              <CardDescription className="line-clamp-2">{resource.description}</CardDescription>
-            </CardHeader>
-
-            <CardContent className="space-y-3">
-              {/* Author and Date */}
-              <div className="flex items-center gap-2 text-sm text-gray-600">
-                <User className="h-3 w-3" />
-                <span>{resource.author}</span>
-                <span>•</span>
-                <Calendar className="h-3 w-3" />
-                <span>{new Date(resource.uploadDate).toLocaleDateString()}</span>
-              </div>
-
-              {/* Stats */}
-              <div className="flex items-center justify-between text-sm">
-                <div className="flex items-center gap-4">
-                  <div className="flex items-center gap-1">
-                    <Download className="h-3 w-3" />
-                    <span>{resource.downloads.toLocaleString()}</span>
-                  </div>
-                  <div className="flex items-center gap-1">
-                    <Eye className="h-3 w-3" />
-                    <span>{resource.views.toLocaleString()}</span>
-                  </div>
-                  <div className="flex items-center gap-1">
-                    <Star className="h-3 w-3 fill-yellow-400 text-yellow-400" />
-                    <span>{resource.rating}</span>
-                  </div>
-                </div>
-              </div>
-
-              {/* File Info */}
-              {resource.fileSize && (
-                <div className="text-xs text-gray-500">
-                  Size: {formatFileSize(resource.fileSize)}
-                  {resource.duration && ` • Duration: ${formatDuration(resource.duration)}`}
-                </div>
-              )}
-
-              {/* Tags */}
-              <div className="flex flex-wrap gap-1">
-                {resource.tags.slice(0, 3).map((tag) => (
-                  <Badge key={tag} variant="outline" className="text-xs">
-                    {tag}
-                  </Badge>
-                ))}
-                {resource.tags.length > 3 && (
-                  <Badge variant="outline" className="text-xs">
-                    +{resource.tags.length - 3}
-                  </Badge>
-                )}
-              </div>
-
-              {/* Actions */}
-              <div className="flex gap-2 pt-2">
-                <Button
-                  onClick={() => handleDownload(resource)}
-                  className="flex-1"
-                  variant={resource.isFree ? 'default' : 'outline'}
-                >
-                  {resource.externalUrl ? (
-                    <>
-                      <ExternalLink className="h-4 w-4 mr-2" />
-                      Visit
-                    </>
-                  ) : (
-                    <>
-                      <Download className="h-4 w-4 mr-2" />
-                      {resource.isFree ? 'Download' : `৳${resource.price}`}
-                    </>
+                  {resource.isVerified && (
+                    <div className="absolute top-3 right-3">
+                      <Badge className="bg-gradient-to-r from-green-500 to-emerald-600 text-white shadow-lg shadow-green-500/25 
+                        group-hover:shadow-green-500/40 transition-all duration-300 group-hover:scale-105 transform-gpu border-0">
+                        ✓ Verified
+                      </Badge>
+                    </div>
                   )}
-                </Button>
-                <Button variant="ghost" size="sm">
-                  <Heart className="h-4 w-4" />
-                </Button>
-                <Button variant="ghost" size="sm">
-                  <Share2 className="h-4 w-4" />
-                </Button>
-              </div>
-            </CardContent>
-          </Card>
-        ))}
+                  {!resource.isFree && resource.price && (
+                    <div className="absolute bottom-3 right-3">
+                      <Badge className="bg-gradient-to-r from-yellow-500 to-amber-600 text-yellow-900 shadow-lg shadow-yellow-500/25 
+                        group-hover:shadow-yellow-500/40 transition-all duration-300 group-hover:scale-105 transform-gpu border-0">
+                        ৳{resource.price}
+                      </Badge>
+                    </div>
+                  )}
+                </div>
+
+                <CardTitle className="text-lg line-clamp-2 text-white group-hover:text-gray-100 transition-colors duration-300 mb-2">
+                  {resource.title}
+                </CardTitle>
+                <CardDescription className="line-clamp-2 text-gray-300 group-hover:text-gray-200 transition-colors duration-300">
+                  {resource.description}
+                </CardDescription>
+              </CardHeader>
+
+              <CardContent className="space-y-4 relative z-10">
+                {/* Enhanced Author and Date */}
+                <div className="flex items-center gap-2 text-sm p-2 rounded-lg bg-white/5 group-hover:bg-white/10 transition-all duration-300">
+                  <User className="h-4 w-4 text-blue-300" />
+                  <span className="text-white font-medium">{resource.author}</span>
+                  <span className="text-gray-400">•</span>
+                  <Calendar className="h-4 w-4 text-green-300" />
+                  <span className="text-gray-300">{new Date(resource.uploadDate).toLocaleDateString()}</span>
+                </div>
+
+                {/* Enhanced Stats */}
+                <div className="grid grid-cols-3 gap-2 text-xs">
+                  <div className="flex items-center gap-1 text-cyan-300 group-hover:text-cyan-200 transition-colors duration-300 
+                    p-2 rounded-lg bg-cyan-500/10">
+                    <Download className="h-3 w-3" />
+                    <span className="font-medium">{resource.downloads.toLocaleString()}</span>
+                  </div>
+                  <div className="flex items-center gap-1 text-blue-300 group-hover:text-blue-200 transition-colors duration-300 
+                    p-2 rounded-lg bg-blue-500/10">
+                    <Eye className="h-3 w-3" />
+                    <span className="font-medium">{resource.views.toLocaleString()}</span>
+                  </div>
+                  <div className="flex items-center gap-1 text-yellow-300 group-hover:text-yellow-200 transition-colors duration-300 
+                    p-2 rounded-lg bg-yellow-500/10">
+                    <Star className="h-3 w-3 fill-current" />
+                    <span className="font-medium">{resource.rating}</span>
+                  </div>
+                </div>
+
+                {/* Enhanced File Info */}
+                {resource.fileSize && (
+                  <div className="text-xs text-gray-300 p-2 rounded-lg bg-white/5 font-medium">
+                    📁 {formatFileSize(resource.fileSize)}
+                    {resource.duration && (
+                      <>
+                        <span className="mx-2 text-gray-400">•</span>
+                        <span>⏱️ {formatDuration(resource.duration)}</span>
+                      </>
+                    )}
+                  </div>
+                )}
+
+                {/* Enhanced Tags */}
+                <div className="flex flex-wrap gap-1">
+                  {resource.tags.slice(0, 3).map((tag, i) => (
+                    <Badge key={tag} className="text-xs bg-white/10 text-gray-300 border-white/20 hover:bg-white/20 
+                      transition-all duration-300 cursor-pointer group-hover:scale-105 transform-gpu">
+                      #{tag}
+                    </Badge>
+                  ))}
+                  {resource.tags.length > 3 && (
+                    <Badge className="text-xs bg-white/10 text-gray-300 border-white/20 hover:bg-white/20 
+                      transition-all duration-300 cursor-pointer group-hover:scale-105 transform-gpu">
+                      +{resource.tags.length - 3}
+                    </Badge>
+                  )}
+                </div>
+
+                {/* Enhanced Actions */}
+                <div className="flex gap-2 pt-2">
+                  <Button
+                    onClick={() => handleDownload(resource)}
+                    className={`flex-1 transition-all duration-300 hover:scale-105 transform-gpu ${
+                      resource.isFree 
+                        ? 'bg-gradient-to-r from-blue-500 to-indigo-600 hover:from-blue-600 hover:to-indigo-700 text-white shadow-lg shadow-blue-500/25 hover:shadow-blue-500/40 border-0' 
+                        : 'bg-gradient-to-r from-yellow-500 to-amber-600 hover:from-yellow-600 hover:to-amber-700 text-white shadow-lg shadow-yellow-500/25 hover:shadow-yellow-500/40 border-0'
+                    }`}
+                  >
+                    {resource.externalUrl ? (
+                      <>
+                        <ExternalLink className="h-4 w-4 mr-2" />
+                        🌐 Visit
+                      </>
+                    ) : (
+                      <>
+                        <Download className="h-4 w-4 mr-2" />
+                        {resource.isFree ? '📥 Download' : `💰 ৳${resource.price}`}
+                      </>
+                    )}
+                  </Button>
+                  <Button 
+                    size="sm" 
+                    className="bg-pink-500/20 hover:bg-pink-400/30 text-pink-300 hover:text-pink-200 
+                      transition-all duration-300 hover:scale-110 transform-gpu"
+                  >
+                    <Heart className="h-4 w-4" />
+                  </Button>
+                  <Button 
+                    size="sm" 
+                    className="bg-green-500/20 hover:bg-green-400/30 text-green-300 hover:text-green-200 
+                      transition-all duration-300 hover:scale-110 transform-gpu"
+                  >
+                    <Share2 className="h-4 w-4" />
+                  </Button>
+                </div>
+              </CardContent>
+            </Card>
+          );
+        })}
       </div>
 
       {/* No results */}

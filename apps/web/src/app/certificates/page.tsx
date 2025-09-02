@@ -243,17 +243,51 @@ export default function CertificatesPage() {
   };
 
   return (
-    <div className="space-y-6" suppressHydrationWarning>
-      <div className="bg-gradient-to-r from-indigo-500/10 via-purple-500/10 to-cyan-500/10 rounded-xl p-6 border border-white/10">
-        <h1 className="text-3xl font-bold mb-2">{t('pages.certificatesTitle')}</h1>
-        <p className="text-muted-foreground">{t('pages.certificatesDesc')}</p>
+    <div className="space-y-8" suppressHydrationWarning>
+      {/* Enhanced Header with Achievement Theme */}
+      <div
+        className="relative group bg-gradient-to-r from-yellow-500/20 via-amber-600/15 to-orange-500/20 
+        rounded-2xl p-8 border border-yellow-500/20 backdrop-blur-xl shadow-2xl shadow-yellow-500/10
+        hover:shadow-3xl hover:shadow-yellow-500/20 transition-all duration-700 transform-gpu
+        before:absolute before:inset-0 before:bg-gradient-to-r before:from-yellow-500/5 before:to-orange-500/5 
+        before:rounded-2xl before:opacity-0 before:transition-opacity before:duration-500 hover:before:opacity-100"
+      >
+        <div className="absolute inset-0 bg-gradient-to-br from-white/5 to-transparent rounded-2xl"></div>
+        <div className="relative z-10 flex items-center gap-4">
+          <div className="p-4 rounded-2xl bg-yellow-500/20 group-hover:bg-yellow-400/30 transition-all duration-300 group-hover:rotate-6 group-hover:scale-110 transform-gpu">
+            <Award className="h-8 w-8 text-yellow-300 group-hover:text-yellow-200" />
+          </div>
+          <div>
+            <h1 className="text-4xl font-bold mb-2 text-white group-hover:text-yellow-100 transition-colors duration-300">
+              {t('pages.certificatesTitle')}
+            </h1>
+            <p className="text-yellow-300 group-hover:text-yellow-200 transition-colors duration-300 text-lg">
+              {t('pages.certificatesDesc')}
+            </p>
+          </div>
+        </div>
       </div>
 
-      <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
-        {/* Templates / Issue */}
-        <Card className="lg:col-span-2">
-          <CardHeader>
-            <CardTitle>Available Certificates</CardTitle>
+      <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
+        {/* Templates / Issue - Enhanced with Purple/Violet Theme */}
+        <Card
+          className="lg:col-span-2 group relative border-0 bg-gradient-to-br from-purple-500/20 via-violet-600/15 to-fuchsia-600/20 
+          backdrop-blur-xl shadow-xl shadow-purple-500/20 hover:shadow-2xl hover:shadow-purple-500/30 
+          transition-all duration-500 hover:scale-[1.02] transform-gpu perspective-1000 
+          before:absolute before:inset-0 before:bg-gradient-to-r before:from-purple-500/10 before:to-violet-500/10 
+          before:rounded-xl before:opacity-0 before:transition-opacity before:duration-300 hover:before:opacity-100"
+        >
+          <div className="absolute inset-0 bg-gradient-to-br from-white/5 to-transparent rounded-xl"></div>
+          <CardHeader className="relative z-10">
+            <CardTitle
+              className="text-2xl font-bold text-white group-hover:text-purple-200 transition-colors duration-300 
+              flex items-center gap-3"
+            >
+              <div className="p-2 rounded-lg bg-purple-500/20 group-hover:bg-purple-400/30 transition-all duration-300 group-hover:rotate-6">
+                <Award className="h-6 w-6 text-purple-300 group-hover:text-purple-200" />
+              </div>
+              Available Certificates
+            </CardTitle>
           </CardHeader>
           <CardContent className="grid grid-cols-1 gap-6">
             {templates.length > 0 &&
@@ -264,73 +298,158 @@ export default function CertificatesPage() {
                   return acc;
                 }, {}),
               ).map(([cat, list]) => (
-                <div key={cat} className="space-y-3">
-                  <div className="text-sm font-semibold opacity-80">{cat}</div>
+                <div key={cat} className="space-y-4 relative z-10">
+                  <div
+                    className="text-lg font-bold text-white group-hover:text-purple-200 transition-colors duration-300 
+                    px-3 py-1 rounded-full bg-white/10 backdrop-blur-sm"
+                  >
+                    {cat}
+                  </div>
                   <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                    {list.map((t) => (
-                      <div
-                        key={t.id}
-                        className="p-4 rounded border bg-background/50 flex flex-col gap-2"
-                      >
-                        <div className="flex items-center justify-between">
-                          <div className="font-medium">{t.name}</div>
-                          <Badge variant={t.isPaid ? 'default' : 'secondary'}>
-                            {t.isPaid ? `Paid${t.price ? ` $${t.price}` : ''}` : 'Free'}
-                          </Badge>
-                        </div>
-                        <div className="text-sm text-muted-foreground">{t.description}</div>
-                        {t.requiresExam && (
-                          <div className="text-xs text-amber-500">
-                            Requires {t.examCategory || 'an'} exam
-                            {t.minPercentage ? ` (>= ${t.minPercentage}%)` : ''}
+                    {list.map((t) => {
+                      // Dynamic color themes based on category
+                      const getThemeByCategory = (category: string) => {
+                        switch (category) {
+                          case 'Career':
+                            return 'from-yellow-500/20 to-amber-600/20 shadow-yellow-500/10 hover:shadow-yellow-500/25 border-yellow-400/20 text-yellow-300 hover:text-yellow-200';
+                          case 'Language':
+                            return 'from-blue-500/20 to-cyan-600/20 shadow-blue-500/10 hover:shadow-blue-500/25 border-blue-400/20 text-blue-300 hover:text-blue-200';
+                          case 'Mathematics':
+                            return 'from-purple-500/20 to-violet-600/20 shadow-purple-500/10 hover:shadow-purple-500/25 border-purple-400/20 text-purple-300 hover:text-purple-200';
+                          case 'Cloud':
+                            return 'from-sky-500/20 to-cyan-600/20 shadow-sky-500/10 hover:shadow-sky-500/25 border-sky-400/20 text-sky-300 hover:text-sky-200';
+                          case 'Security':
+                            return 'from-red-500/20 to-orange-600/20 shadow-red-500/10 hover:shadow-red-500/25 border-red-400/20 text-red-300 hover:text-red-200';
+                          default:
+                            return 'from-green-500/20 to-emerald-600/20 shadow-green-500/10 hover:shadow-green-500/25 border-green-400/20 text-green-300 hover:text-green-200';
+                        }
+                      };
+                      const theme = getThemeByCategory(t.category || 'General');
+                      return (
+                        <div
+                          key={t.id}
+                          className={`group relative p-6 rounded-xl border bg-gradient-to-br backdrop-blur-sm 
+                          hover:scale-105 hover:-translate-y-1 transition-all duration-300 transform-gpu perspective-1000
+                          cursor-pointer ${theme} flex flex-col gap-3`}
+                        >
+                          <div className="flex items-center justify-between">
+                            <div className="font-semibold text-white group-hover:scale-105 transition-transform duration-300">
+                              {t.name}
+                            </div>
+                            <Badge
+                              className={`${
+                                t.isPaid
+                                  ? 'bg-gradient-to-r from-violet-500 to-purple-500 text-white border-violet-400'
+                                  : 'bg-gradient-to-r from-green-500 to-emerald-500 text-white border-green-400'
+                              } transition-all duration-300 hover:scale-110`}
+                            >
+                              {t.isPaid ? `৳${t.price || '4.99'}` : 'Free'}
+                            </Badge>
                           </div>
-                        )}
-                        <div className="flex items-center gap-2 text-xs">
-                          <Award className="h-4 w-4" /> {t.kind}
+                          <div className="text-sm text-white/80 group-hover:text-white transition-colors duration-300">
+                            {t.description}
+                          </div>
+                          {t.requiresExam && (
+                            <div
+                              className="text-xs px-3 py-1 rounded-full bg-amber-500/20 border border-amber-500/30 text-amber-200
+                            flex items-center gap-2 w-fit"
+                            >
+                              <ShieldCheck className="h-3 w-3" />
+                              Requires {t.examCategory || 'an'} exam
+                              {t.minPercentage ? ` (≥ ${t.minPercentage}%)` : ''}
+                            </div>
+                          )}
+                          <div className="flex items-center gap-2 text-xs px-3 py-1 rounded-full bg-white/10 backdrop-blur-sm w-fit">
+                            <Award className="h-4 w-4" />
+                            <span className="capitalize font-medium">{t.kind}</span>
+                          </div>
+                          <div className="mt-4">
+                            <Button
+                              disabled={issuing === t.id}
+                              onClick={() => issue(t.id)}
+                              className="w-full bg-gradient-to-r from-white/10 to-white/20 hover:from-white/20 hover:to-white/30 
+                              text-white border border-white/20 hover:border-white/40 transition-all duration-300 
+                              hover:scale-105 hover:shadow-lg transform-gpu backdrop-blur-sm"
+                              variant="outline"
+                            >
+                              {issuing === t.id ? 'Issuing...' : 'Get Certificate'}
+                            </Button>
+                          </div>
                         </div>
-                        <div className="mt-2">
-                          <Button
-                            disabled={issuing === t.id}
-                            onClick={() => issue(t.id)}
-                            className="w-full"
-                          >
-                            {issuing === t.id ? 'Issuing...' : 'Get certificate'}
-                          </Button>
-                        </div>
-                      </div>
-                    ))}
+                      );
+                    })}
                   </div>
                 </div>
               ))}
             {templates.length === 0 && (
-              <div className="text-sm text-muted-foreground">No templates yet.</div>
+              <div className="text-lg text-white/60 p-8 text-center">
+                No templates available yet.
+              </div>
             )}
           </CardContent>
         </Card>
 
-        {/* Verify */}
-        <Card>
-          <CardHeader>
-            <CardTitle>Verify a certificate</CardTitle>
+        {/* Verification Section - Enhanced with Cyan/Blue Theme */}
+        <Card
+          className="group relative border-0 bg-gradient-to-br from-cyan-500/20 via-blue-600/15 to-sky-600/20 
+          backdrop-blur-xl shadow-xl shadow-cyan-500/20 hover:shadow-2xl hover:shadow-cyan-500/30 
+          transition-all duration-500 hover:scale-105 hover:-translate-y-2 transform-gpu perspective-1000 
+          before:absolute before:inset-0 before:bg-gradient-to-r before:from-cyan-500/10 before:to-blue-500/10 
+          before:rounded-xl before:opacity-0 before:transition-opacity before:duration-300 hover:before:opacity-100"
+        >
+          <div className="absolute inset-0 bg-gradient-to-br from-white/5 to-transparent rounded-xl"></div>
+          <CardHeader className="relative z-10">
+            <CardTitle
+              className="text-xl font-bold text-white group-hover:text-cyan-200 transition-colors duration-300 
+              flex items-center gap-3"
+            >
+              <div className="p-2 rounded-lg bg-cyan-500/20 group-hover:bg-cyan-400/30 transition-all duration-300 group-hover:rotate-6">
+                <ShieldCheck className="h-5 w-5 text-cyan-300 group-hover:text-cyan-200" />
+              </div>
+              Verify Certificate
+            </CardTitle>
           </CardHeader>
-          <CardContent className="space-y-2">
+          <CardContent className="space-y-4 relative z-10">
             <Input
               placeholder="Enter verification code"
               value={verifyCode}
               onChange={(e) => setVerifyCode(e.target.value)}
+              className="w-full px-4 py-3 rounded-lg bg-white/10 border border-cyan-500/30 text-white 
+                placeholder:text-cyan-300/60 focus:border-cyan-400 focus:ring-2 focus:ring-cyan-500/20 
+                transition-all duration-300 backdrop-blur-sm"
             />
-            <Button onClick={verify} disabled={!verifyCode.trim()}>
-              Verify
+            <Button
+              onClick={verify}
+              disabled={!verifyCode.trim()}
+              className="w-full bg-gradient-to-r from-cyan-500 to-blue-500 hover:from-cyan-600 hover:to-blue-600 
+                text-white shadow-lg shadow-cyan-500/25 hover:shadow-cyan-500/40 transition-all duration-300 
+                hover:scale-105 transform-gpu disabled:opacity-50 disabled:cursor-not-allowed"
+            >
+              <ShieldCheck className="h-4 w-4 mr-2" />
+              Verify Certificate
             </Button>
             {verifyResult && (
-              <div className="text-xs break-all p-2 rounded border bg-background/40">
-                <div className="font-medium mb-1">
-                  {verifyResult?.title} — {verifyResult?.user?.email}
+              <div
+                className="p-4 rounded-xl bg-gradient-to-r from-green-500/20 to-emerald-500/20 
+                border border-green-500/30 backdrop-blur-sm"
+              >
+                <div className="font-semibold mb-2 text-white flex items-center gap-2">
+                  <ShieldCheck className="h-4 w-4 text-green-300" />
+                  Certificate Verified ✓
                 </div>
-                <div>Serial: {verifyResult?.serial}</div>
-                <div>Issued: {verifyResult?.issuedAt}</div>
-                <div className="flex items-center gap-1">
-                  <ShieldCheck className="h-3 w-3" /> Valid
+                <div className="text-sm text-green-200 space-y-1">
+                  <div>
+                    <strong>Title:</strong> {verifyResult?.title}
+                  </div>
+                  <div>
+                    <strong>Holder:</strong> {verifyResult?.user?.email}
+                  </div>
+                  <div>
+                    <strong>Serial:</strong> {verifyResult?.serial}
+                  </div>
+                  <div>
+                    <strong>Issued:</strong> {new Date(verifyResult?.issuedAt).toLocaleDateString()}
+                  </div>
                 </div>
               </div>
             )}
@@ -338,38 +457,86 @@ export default function CertificatesPage() {
         </Card>
       </div>
 
-      {/* My certificates */}
-      <Card>
-        <CardHeader>
-          <CardTitle>My Certificates</CardTitle>
+      {/* My Certificates - Enhanced with Gold/Green Achievement Theme */}
+      <Card
+        className="group relative border-0 bg-gradient-to-br from-emerald-500/20 via-green-600/15 to-teal-600/20 
+        backdrop-blur-xl shadow-xl shadow-emerald-500/20 hover:shadow-2xl hover:shadow-emerald-500/30 
+        transition-all duration-500 hover:scale-[1.01] transform-gpu perspective-1000 
+        before:absolute before:inset-0 before:bg-gradient-to-r before:from-emerald-500/10 before:to-green-500/10 
+        before:rounded-xl before:opacity-0 before:transition-opacity before:duration-300 hover:before:opacity-100"
+      >
+        <div className="absolute inset-0 bg-gradient-to-br from-white/5 to-transparent rounded-xl"></div>
+        <CardHeader className="relative z-10">
+          <CardTitle
+            className="text-2xl font-bold text-white group-hover:text-emerald-200 transition-colors duration-300 
+            flex items-center gap-3"
+          >
+            <div className="p-2 rounded-lg bg-emerald-500/20 group-hover:bg-emerald-400/30 transition-all duration-300 group-hover:rotate-6">
+              <Award className="h-6 w-6 text-emerald-300 group-hover:text-emerald-200" />
+            </div>
+            My Earned Certificates
+          </CardTitle>
         </CardHeader>
-        <CardContent className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
-          {mine.map((c) => (
-            <div key={c.id} className="p-4 rounded border bg-background/50">
-              <div className="font-medium mb-1">{c.title}</div>
-              <div className="text-xs text-muted-foreground">
-                Issued {new Date(c.issuedAt).toLocaleDateString()}
+        <CardContent className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 relative z-10">
+          {mine.map((c, index) => {
+            const colors = [
+              'from-yellow-500/20 to-amber-600/20 shadow-yellow-500/15 hover:shadow-yellow-500/25 border-yellow-400/30',
+              'from-green-500/20 to-emerald-600/20 shadow-green-500/15 hover:shadow-green-500/25 border-green-400/30',
+              'from-blue-500/20 to-cyan-600/20 shadow-blue-500/15 hover:shadow-blue-500/25 border-blue-400/30',
+              'from-purple-500/20 to-violet-600/20 shadow-purple-500/15 hover:shadow-purple-500/25 border-purple-400/30',
+              'from-pink-500/20 to-rose-600/20 shadow-pink-500/15 hover:shadow-pink-500/25 border-pink-400/30',
+            ];
+            const color = colors[index % colors.length];
+            return (
+              <div
+                key={c.id}
+                className={`group relative p-6 rounded-xl border bg-gradient-to-br backdrop-blur-sm 
+              hover:scale-105 hover:-translate-y-2 transition-all duration-300 transform-gpu perspective-1000
+              cursor-pointer ${color}`}
+              >
+                <div className="absolute inset-0 bg-gradient-to-br from-white/5 to-transparent rounded-xl"></div>
+                <div className="relative z-10">
+                  <div className="font-bold text-white mb-2 group-hover:scale-105 transition-transform duration-300">
+                    {c.title}
+                  </div>
+                  <div className="text-sm text-white/80 mb-2">
+                    Issued {new Date(c.issuedAt).toLocaleDateString()}
+                  </div>
+                  <div className="text-xs text-white/60 mb-3">Serial: {c.serial}</div>
+                  <div className="flex flex-wrap gap-2 mt-4">
+                    <Badge className="bg-white/20 text-white border-white/30 hover:bg-white/30 transition-all duration-300">
+                      <Award className="h-3 w-3 mr-1" />
+                      {c.template.kind}
+                    </Badge>
+                    <a
+                      className="text-xs inline-flex items-center gap-1 px-2 py-1 rounded-full bg-cyan-500/20 
+                      text-cyan-200 border border-cyan-500/30 hover:bg-cyan-500/30 transition-all duration-300"
+                      href={`/?code=${c.verificationCode}`}
+                    >
+                      <LinkIcon className="h-3 w-3" /> Verify
+                    </a>
+                    <button
+                      className="text-xs inline-flex items-center gap-1 px-2 py-1 rounded-full bg-orange-500/20 
+                      text-orange-200 border border-orange-500/30 hover:bg-orange-500/30 transition-all duration-300"
+                      onClick={() => generatePdf(c.id)}
+                    >
+                      <FileDown className="h-3 w-3" /> PDF
+                    </button>
+                  </div>
+                </div>
               </div>
-              <div className="text-xs">Serial: {c.serial}</div>
-              <div className="flex items-center gap-2 mt-2">
-                <Badge variant="secondary">{c.template.kind}</Badge>
-                <a
-                  className="text-xs inline-flex items-center gap-1 underline"
-                  href={`/?code=${c.verificationCode}`}
-                >
-                  <LinkIcon className="h-3 w-3" /> Verify link
-                </a>
-                <button
-                  className="text-xs inline-flex items-center gap-1 underline"
-                  onClick={() => generatePdf(c.id)}
-                >
-                  <FileDown className="h-3 w-3" /> PDF
-                </button>
+            );
+          })}
+          {mine.length === 0 && (
+            <div className="col-span-full text-center p-12">
+              <div className="text-6xl mb-4">🏆</div>
+              <div className="text-xl font-semibold text-white mb-2">
+                No certificates earned yet
+              </div>
+              <div className="text-white/60">
+                Complete courses and pass exams to earn your first certificate!
               </div>
             </div>
-          ))}
-          {mine.length === 0 && (
-            <div className="text-sm text-muted-foreground">No certificates yet.</div>
           )}
         </CardContent>
       </Card>

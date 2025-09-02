@@ -532,66 +532,150 @@ export default function ExamPage() {
   };
 
   return (
-    <div className="container mx-auto p-6 max-w-7xl">
-      {/* Header */}
-      <div className="mb-8">
-        <h1 className="text-3xl font-bold bg-gradient-to-r from-purple-600 to-blue-600 bg-clip-text text-transparent">
-          {t('pages.examTitle')}
-        </h1>
-        <p className="text-gray-600 mt-2">{t('pages.examDesc')}</p>
+    <div className="container mx-auto p-6 max-w-7xl space-y-8">
+      {/* Enhanced Header with Deep Focus Theme */}
+      <div
+        className="relative group bg-gradient-to-r from-indigo-500/20 via-blue-600/15 to-purple-500/20 
+        rounded-2xl p-8 border border-indigo-500/20 backdrop-blur-xl shadow-2xl shadow-indigo-500/10
+        hover:shadow-3xl hover:shadow-indigo-500/20 transition-all duration-700 transform-gpu
+        before:absolute before:inset-0 before:bg-gradient-to-r before:from-indigo-500/5 before:to-purple-500/5 
+        before:rounded-2xl before:opacity-0 before:transition-opacity before:duration-500 hover:before:opacity-100"
+      >
+        <div className="absolute inset-0 bg-gradient-to-br from-white/5 to-transparent rounded-2xl"></div>
+        <div className="relative z-10 flex items-center gap-4">
+          <div className="p-4 rounded-2xl bg-indigo-500/20 group-hover:bg-indigo-400/30 transition-all duration-300 group-hover:rotate-6 group-hover:scale-110 transform-gpu">
+            <Brain className="h-8 w-8 text-indigo-300 group-hover:text-indigo-200" />
+          </div>
+          <div>
+            <h1 className="text-4xl font-bold mb-2 text-white group-hover:text-indigo-100 transition-colors duration-300">
+              {t('pages.examTitle')}
+            </h1>
+            <p className="text-indigo-300 group-hover:text-indigo-200 transition-colors duration-300 text-lg">
+              {t('pages.examDesc')}
+            </p>
+          </div>
+        </div>
       </div>
 
-      {/* Stats Overview */}
-      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4 mb-8">
-        <Card>
-          <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-            <CardTitle className="text-sm font-medium">Total Attempts</CardTitle>
-            <Target className="h-4 w-4 text-muted-foreground" />
+      {/* Enhanced Stats Overview with Focus Themes */}
+      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+        {/* Total Attempts Card - Blue Focus Theme */}
+        <Card
+          className="group relative border-0 bg-gradient-to-br from-blue-500/20 via-indigo-600/15 to-cyan-600/20 
+          backdrop-blur-xl shadow-xl shadow-blue-500/20 hover:shadow-2xl hover:shadow-blue-500/30 
+          transition-all duration-500 hover:scale-105 hover:-translate-y-2 transform-gpu perspective-1000 
+          before:absolute before:inset-0 before:bg-gradient-to-r before:from-blue-500/10 before:to-indigo-500/10 
+          before:rounded-xl before:opacity-0 before:transition-opacity before:duration-300 hover:before:opacity-100"
+        >
+          <div className="absolute inset-0 bg-gradient-to-br from-white/5 to-transparent rounded-xl"></div>
+          <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2 relative z-10">
+            <CardTitle className="text-sm font-medium text-white group-hover:text-blue-200 transition-colors duration-300">
+              Total Attempts
+            </CardTitle>
+            <div className="p-2 rounded-lg bg-blue-500/20 group-hover:bg-blue-400/30 transition-all duration-300 group-hover:rotate-12 group-hover:scale-110">
+              <Target className="h-4 w-4 text-blue-300 group-hover:text-blue-200" />
+            </div>
           </CardHeader>
-          <CardContent>
-            <div className="text-2xl font-bold">{userStats.totalAttempts}</div>
-            <p className="text-xs text-muted-foreground">
+          <CardContent className="relative z-10">
+            <div
+              className="text-3xl font-bold text-white group-hover:text-blue-100 transition-colors duration-300 
+              group-hover:scale-110 transform origin-left"
+            >
+              {userStats.totalAttempts}
+            </div>
+            <p className="text-xs text-blue-300 group-hover:text-blue-200 transition-colors duration-300">
               {userStats.totalExamsTaken} unique exams
             </p>
           </CardContent>
         </Card>
 
-        <Card>
-          <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-            <CardTitle className="text-sm font-medium">Success Rate</CardTitle>
-            <TrendingUp className="h-4 w-4 text-muted-foreground" />
+        {/* Success Rate Card - Green Achievement Theme */}
+        <Card
+          className="group relative border-0 bg-gradient-to-br from-green-500/20 via-emerald-600/15 to-teal-600/20 
+          backdrop-blur-xl shadow-xl shadow-green-500/20 hover:shadow-2xl hover:shadow-green-500/30 
+          transition-all duration-500 hover:scale-105 hover:-translate-y-2 transform-gpu perspective-1000 
+          before:absolute before:inset-0 before:bg-gradient-to-r before:from-green-500/10 before:to-emerald-500/10 
+          before:rounded-xl before:opacity-0 before:transition-opacity before:duration-300 hover:before:opacity-100"
+        >
+          <div className="absolute inset-0 bg-gradient-to-br from-white/5 to-transparent rounded-xl"></div>
+          <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2 relative z-10">
+            <CardTitle className="text-sm font-medium text-white group-hover:text-green-200 transition-colors duration-300">
+              Success Rate
+            </CardTitle>
+            <div className="p-2 rounded-lg bg-green-500/20 group-hover:bg-green-400/30 transition-all duration-300 group-hover:rotate-12 group-hover:scale-110">
+              <TrendingUp className="h-4 w-4 text-green-300 group-hover:text-green-200" />
+            </div>
           </CardHeader>
-          <CardContent>
-            <div className="text-2xl font-bold text-green-600">
+          <CardContent className="relative z-10">
+            <div
+              className="text-3xl font-bold text-white group-hover:text-green-100 transition-colors duration-300 
+              group-hover:scale-110 transform origin-left"
+            >
               {userStats.successRate.toFixed(1)}%
             </div>
-            <p className="text-xs text-muted-foreground">
+            <p className="text-xs text-green-300 group-hover:text-green-200 transition-colors duration-300">
               {userStats.passedAttempts} passed, {userStats.failedAttempts} failed
             </p>
           </CardContent>
         </Card>
 
-        <Card>
-          <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-            <CardTitle className="text-sm font-medium">Average Score</CardTitle>
-            <Award className="h-4 w-4 text-muted-foreground" />
+        {/* Average Score Card - Purple Intelligence Theme */}
+        <Card
+          className="group relative border-0 bg-gradient-to-br from-purple-500/20 via-violet-600/15 to-fuchsia-600/20 
+          backdrop-blur-xl shadow-xl shadow-purple-500/20 hover:shadow-2xl hover:shadow-purple-500/30 
+          transition-all duration-500 hover:scale-105 hover:-translate-y-2 transform-gpu perspective-1000 
+          before:absolute before:inset-0 before:bg-gradient-to-r before:from-purple-500/10 before:to-violet-500/10 
+          before:rounded-xl before:opacity-0 before:transition-opacity before:duration-300 hover:before:opacity-100"
+        >
+          <div className="absolute inset-0 bg-gradient-to-br from-white/5 to-transparent rounded-xl"></div>
+          <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2 relative z-10">
+            <CardTitle className="text-sm font-medium text-white group-hover:text-purple-200 transition-colors duration-300">
+              Average Score
+            </CardTitle>
+            <div className="p-2 rounded-lg bg-purple-500/20 group-hover:bg-purple-400/30 transition-all duration-300 group-hover:rotate-12 group-hover:scale-110">
+              <Award className="h-4 w-4 text-purple-300 group-hover:text-purple-200" />
+            </div>
           </CardHeader>
-          <CardContent>
-            <div className="text-2xl font-bold text-blue-600">
+          <CardContent className="relative z-10">
+            <div
+              className="text-3xl font-bold text-white group-hover:text-purple-100 transition-colors duration-300 
+              group-hover:scale-110 transform origin-left"
+            >
               {userStats.averageScore.toFixed(1)}%
             </div>
-            <p className="text-xs text-muted-foreground">Across all attempts</p>
+            <p className="text-xs text-purple-300 group-hover:text-purple-200 transition-colors duration-300">
+              Across all attempts
+            </p>
           </CardContent>
         </Card>
 
-        <Card>
-          <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-            <CardTitle className="text-sm font-medium">This Month</CardTitle>
-            <Calendar className="h-4 w-4 text-muted-foreground" />
+        {/* This Month Card - Orange Energy Theme */}
+        <Card
+          className="group relative border-0 bg-gradient-to-br from-orange-500/20 via-amber-600/15 to-yellow-600/20 
+          backdrop-blur-xl shadow-xl shadow-orange-500/20 hover:shadow-2xl hover:shadow-orange-500/30 
+          transition-all duration-500 hover:scale-105 hover:-translate-y-2 transform-gpu perspective-1000 
+          before:absolute before:inset-0 before:bg-gradient-to-r before:from-orange-500/10 before:to-amber-500/10 
+          before:rounded-xl before:opacity-0 before:transition-opacity before:duration-300 hover:before:opacity-100"
+        >
+          <div className="absolute inset-0 bg-gradient-to-br from-white/5 to-transparent rounded-xl"></div>
+          <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2 relative z-10">
+            <CardTitle className="text-sm font-medium text-white group-hover:text-orange-200 transition-colors duration-300">
+              This Month
+            </CardTitle>
+            <div className="p-2 rounded-lg bg-orange-500/20 group-hover:bg-orange-400/30 transition-all duration-300 group-hover:rotate-12 group-hover:scale-110">
+              <Calendar className="h-4 w-4 text-orange-300 group-hover:text-orange-200" />
+            </div>
           </CardHeader>
-          <CardContent>
-            <div className="text-2xl font-bold">8</div>
-            <p className="text-xs text-muted-foreground text-green-600">+3 from last month</p>
+          <CardContent className="relative z-10">
+            <div
+              className="text-3xl font-bold text-white group-hover:text-orange-100 transition-colors duration-300 
+              group-hover:scale-110 transform origin-left"
+            >
+              8
+            </div>
+            <p className="text-xs text-orange-300 group-hover:text-orange-200 transition-colors duration-300">
+              +3 from last month
+            </p>
           </CardContent>
         </Card>
       </div>
@@ -677,78 +761,125 @@ export default function ExamPage() {
             Showing {filteredExams.length} of {exams.length} exams
           </div>
 
-          {/* Exams Grid */}
+          {/* Enhanced Exams Grid with Difficulty-Specific Themes */}
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-            {filteredExams.map((exam) => (
-              <Card key={exam.id} className="hover:shadow-lg transition-shadow duration-200">
-                <CardHeader className="pb-3">
-                  <div className="flex items-start justify-between mb-2">
-                    <Badge className={getDifficultyBadgeColor(exam.difficulty)}>
-                      {exam.difficulty.toUpperCase()}
-                    </Badge>
-                    <div className="text-xs text-gray-500">{exam._count.attempts} attempts</div>
-                  </div>
-                  <CardTitle className="text-lg line-clamp-2">{exam.title}</CardTitle>
-                  <CardDescription className="line-clamp-2">{exam.description}</CardDescription>
-                </CardHeader>
+            {filteredExams.map((exam) => {
+              // Dynamic color themes based on difficulty level
+              const getDifficultyTheme = (difficulty: string) => {
+                switch (difficulty) {
+                  case 'easy':
+                    return 'from-green-500/20 to-emerald-600/20 shadow-green-500/15 hover:shadow-green-500/25 border-green-400/30';
+                  case 'medium':
+                    return 'from-yellow-500/20 to-orange-600/20 shadow-yellow-500/15 hover:shadow-yellow-500/25 border-yellow-400/30';
+                  case 'hard':
+                    return 'from-red-500/20 to-pink-600/20 shadow-red-500/15 hover:shadow-red-500/25 border-red-400/30';
+                  default:
+                    return 'from-gray-500/20 to-slate-600/20 shadow-gray-500/15 hover:shadow-gray-500/25 border-gray-400/30';
+                }
+              };
+              const theme = getDifficultyTheme(exam.difficulty);
+              return (
+                <Card
+                  key={exam.id}
+                  className={`group relative border-0 bg-gradient-to-br backdrop-blur-xl 
+                hover:scale-105 hover:-translate-y-2 transition-all duration-300 transform-gpu perspective-1000 
+                cursor-pointer ${theme}`}
+                >
+                  <div className="absolute inset-0 bg-gradient-to-br from-white/5 to-transparent rounded-xl"></div>
+                  <CardHeader className="pb-3 relative z-10">
+                    <div className="flex items-start justify-between mb-2">
+                      <Badge
+                        className={`${getDifficultyBadgeColor(exam.difficulty)} 
+                      hover:scale-110 transition-all duration-300 border-white/30 backdrop-blur-sm`}
+                      >
+                        {exam.difficulty.toUpperCase()}
+                      </Badge>
+                      <div className="text-xs text-white/70 px-2 py-1 rounded-full bg-white/20 backdrop-blur-sm">
+                        {exam._count.attempts} attempts
+                      </div>
+                    </div>
+                    <CardTitle className="text-lg line-clamp-2 text-white font-bold group-hover:scale-105 transition-transform duration-300">
+                      {exam.title}
+                    </CardTitle>
+                    <CardDescription className="line-clamp-2 text-white/80 group-hover:text-white transition-colors duration-300">
+                      {exam.description}
+                    </CardDescription>
+                  </CardHeader>
 
-                <CardContent className="space-y-4">
-                  {/* Exam Details */}
-                  <div className="grid grid-cols-2 gap-4 text-sm">
-                    <div className="flex items-center gap-2">
-                      <Clock className="h-3 w-3" />
-                      <span>{formatDuration(exam.duration)}</span>
+                  <CardContent className="space-y-4 relative z-10">
+                    {/* Enhanced Exam Details */}
+                    <div className="grid grid-cols-2 gap-3 p-3 rounded-lg bg-white/10 backdrop-blur-sm border border-white/20">
+                      <div className="flex items-center gap-2 text-white/90">
+                        <Clock className="h-4 w-4 text-white/70" />
+                        <span className="font-medium">{formatDuration(exam.duration)}</span>
+                      </div>
+                      <div className="flex items-center gap-2 text-white/90">
+                        <FileText className="h-4 w-4 text-white/70" />
+                        <span className="font-medium">{exam.totalQuestions} questions</span>
+                      </div>
+                      <div className="flex items-center gap-2 text-white/90">
+                        <Target className="h-4 w-4 text-white/70" />
+                        <span className="font-medium">{exam.passingScore}% to pass</span>
+                      </div>
+                      <div className="flex items-center gap-2 text-white/90">
+                        <BookOpen className="h-4 w-4 text-white/70" />
+                        <span className="font-medium">{exam.subject}</span>
+                      </div>
                     </div>
-                    <div className="flex items-center gap-2">
-                      <FileText className="h-3 w-3" />
-                      <span>{exam.totalQuestions} questions</span>
-                    </div>
-                    <div className="flex items-center gap-2">
-                      <Target className="h-3 w-3" />
-                      <span>{exam.passingScore}% to pass</span>
-                    </div>
-                    <div className="flex items-center gap-2">
-                      <BookOpen className="h-3 w-3" />
-                      <span>{exam.subject}</span>
-                    </div>
-                  </div>
 
-                  {/* Creator and Date */}
-                  <div className="text-xs text-gray-500">
-                    Created by {exam.createdByName} •{' '}
-                    {new Date(exam.createdAt).toLocaleDateString()}
-                  </div>
+                    {/* Enhanced Creator and Date */}
+                    <div className="text-xs text-white/60 px-3 py-2 rounded-full bg-white/10 backdrop-blur-sm text-center">
+                      Created by{' '}
+                      <span className="font-medium text-white/80">{exam.createdByName}</span> •{' '}
+                      {new Date(exam.createdAt).toLocaleDateString()}
+                    </div>
 
-                  {/* Action Button */}
-                  <Button
-                    onClick={() => handleStartExam(exam.id)}
-                    className="w-full"
-                    disabled={isLoading}
-                  >
-                    <PlayCircle className="h-4 w-4 mr-2" />
-                    Start Exam
-                  </Button>
-                </CardContent>
-              </Card>
-            ))}
+                    {/* Enhanced Action Button */}
+                    <Button
+                      onClick={() => handleStartExam(exam.id)}
+                      className="w-full bg-gradient-to-r from-white/20 to-white/30 hover:from-white/30 hover:to-white/40 
+                      text-white border border-white/30 hover:border-white/50 transition-all duration-300 
+                      hover:scale-105 transform-gpu backdrop-blur-sm font-semibold"
+                      disabled={isLoading}
+                      variant="outline"
+                    >
+                      <PlayCircle className="h-4 w-4 mr-2" />
+                      Start Exam
+                    </Button>
+                  </CardContent>
+                </Card>
+              );
+            })}
           </div>
 
-          {/* No results */}
+          {/* Enhanced No Results */}
           {filteredExams.length === 0 && (
-            <div className="text-center py-12">
-              <Brain className="h-12 w-12 text-gray-400 mx-auto mb-4" />
-              <h3 className="text-lg font-semibold mb-2">No exams found</h3>
-              <p className="text-gray-600 mb-4">Try adjusting your search criteria or filters</p>
-              <Button
-                onClick={() => {
-                  setSearchQuery('');
-                  setSelectedCategory('all');
-                  setSelectedDifficulty('all');
-                }}
-              >
-                Clear Filters
-              </Button>
-            </div>
+            <Card
+              className="group relative border-0 bg-gradient-to-br from-gray-500/10 to-slate-600/10 
+              backdrop-blur-xl shadow-xl"
+            >
+              <CardContent className="p-16 text-center">
+                <div className="text-6xl mb-6">🧠</div>
+                <Brain className="h-20 w-20 mx-auto mb-6 text-white/60 group-hover:text-white/80 transition-colors duration-300" />
+                <h3 className="text-2xl font-bold mb-4 text-white">No exams found</h3>
+                <p className="text-white/70 mb-8 max-w-md mx-auto text-lg">
+                  Try adjusting your search criteria or filters to discover challenging exams
+                </p>
+                <Button
+                  className="bg-gradient-to-r from-indigo-500 to-purple-500 hover:from-indigo-600 hover:to-purple-600 
+                    text-white shadow-lg shadow-indigo-500/25 hover:shadow-indigo-500/40 transition-all duration-300 
+                    hover:scale-105 transform-gpu"
+                  onClick={() => {
+                    setSearchQuery('');
+                    setSelectedCategory('all');
+                    setSelectedDifficulty('all');
+                  }}
+                >
+                  <Filter className="h-4 w-4 mr-2" />
+                  Clear Filters
+                </Button>
+              </CardContent>
+            </Card>
           )}
         </TabsContent>
 
