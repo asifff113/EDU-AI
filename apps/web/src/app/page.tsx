@@ -7,6 +7,7 @@ import { StatsSection } from '@/components/StatsSection';
 import { PricingSection } from '@/components/PricingSection';
 import { AboutSection } from '@/components/AboutSection';
 import { CoursesPreview } from '@/components/CoursesPreview';
+import ContactFormSection from '@/components/ContactFormSection';
 
 export default async function Home() {
   // Always show landing page - users can navigate to dashboard via menu
@@ -21,6 +22,7 @@ export default async function Home() {
         <PricingSection />
         <Testimonials />
         <CTA />
+        <ContactFormSection />
         <Footer />
       </main>
     </div>

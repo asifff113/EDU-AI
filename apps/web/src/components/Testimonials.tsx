@@ -22,7 +22,7 @@ const testimonials = [
 
 export function Testimonials() {
   return (
-    <section className="max-w-6xl mx-auto px-4 py-20">
+    <section id="testimonials" className="max-w-6xl mx-auto px-4 py-20">
       <h2 className="text-center text-3xl sm:text-4xl font-bold bg-gradient-to-r from-fuchsia-400 to-cyan-400 bg-clip-text text-transparent">
         Loved by educators
       </h2>
