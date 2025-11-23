@@ -21,12 +21,52 @@ export class AIController {
   @Get('providers')
   async getProviders(): Promise<AIProvider[]> {
     try {
-      return await this.aiService.getProviders();
+      const providers = await this.aiService.getProviders();
+      console.log(
+        '[AI Controller] Providers loaded:',
+        providers.map((p) => ({ name: p.name, models: p.models.length })),
+      );
+      return providers;
     } catch (error) {
       throw new HttpException(
         'Failed to get providers',
         HttpStatus.INTERNAL_SERVER_ERROR,
       );
+    }
+  }
+
+  @Get('test-key')
+  async testGoogleKey() {
+    const apiKey = process.env.GOOGLE_AI_API_KEY;
+    console.log('[AI Controller] Testing Google AI key...');
+    console.log('[AI Controller] Key present:', !!apiKey);
+    console.log('[AI Controller] Key length:', apiKey?.length || 0);
+
+    if (!apiKey) {
+      return { success: false, message: 'No API key found in environment' };
+    }
+
+    try {
+      const response = await fetch(
+        `https://generativelanguage.googleapis.com/v1/models?key=${apiKey}`,
+      );
+
+      if (response.ok) {
+        const data = (await response.json()) as { models?: any[] };
+        return {
+          success: true,
+          message: 'API key is valid!',
+          modelCount: data.models?.length || 0,
+        };
+      } else {
+        const error = await response.json();
+        return { success: false, message: error };
+      }
+    } catch (error) {
+      return {
+        success: false,
+        message: error instanceof Error ? error.message : 'Unknown error',
+      };
     }
   }
 

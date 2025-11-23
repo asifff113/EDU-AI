@@ -874,18 +874,27 @@ export default function TutorPage() {
                   }}
                 >
                   <SelectTrigger className="w-48 h-12 bg-black/30 border-purple-500/30 text-white rounded-2xl">
-                    <SelectValue placeholder="Model" />
+                    <SelectValue placeholder="Select Model" />
                   </SelectTrigger>
-                  <SelectContent className="bg-black/90 border-purple-500/30">
-                    {allowedTextModelOptions.map((opt) => (
-                      <SelectItem
-                        key={opt.key}
-                        value={opt.key}
-                        className="text-white hover:bg-purple-500/20"
-                      >
-                        {opt.displayName}
-                      </SelectItem>
-                    ))}
+                  <SelectContent
+                    side="top"
+                    sideOffset={10}
+                    position="popper"
+                    className="bg-black/95 border-purple-500/30 z-[9999] max-h-[300px] overflow-y-auto"
+                  >
+                    {allowedTextModelOptions.length === 0 ? (
+                      <div className="text-white p-4 text-sm">Loading models...</div>
+                    ) : (
+                      allowedTextModelOptions.map((opt) => (
+                        <SelectItem
+                          key={opt.key}
+                          value={opt.key}
+                          className="text-white hover:bg-purple-500/20 cursor-pointer"
+                        >
+                          {opt.displayName}
+                        </SelectItem>
+                      ))
+                    )}
                   </SelectContent>
                 </Select>
                 {/* Chat Input */}

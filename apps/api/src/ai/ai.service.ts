@@ -83,42 +83,61 @@ export class AIService {
 
     switch (provider) {
       case 'local':
-        models.push(
-          {
-            id: 'llama3.1:8b',
-            name: 'llama3.1:8b',
-            displayName: 'Llama 3.1 8B',
-            provider: 'local',
-          },
-          {
-            id: 'qwen3-coder:30b',
-            name: 'qwen3-coder:30b',
-            displayName: 'Qwen 3 Coder 30B',
-            provider: 'local',
-          },
-          {
-            id: 'gpt-oss:20b',
-            name: 'gpt-oss:20b',
-            displayName: 'GPT-OSS 20B',
-            provider: 'local',
-          },
-          {
-            id: 'deepseek-coder-v2:latest',
-            name: 'deepseek-coder-v2:latest',
-            displayName: 'DeepSeek Coder V2',
-            provider: 'local',
-          },
-        );
+        models.push({
+          id: 'llama3.1:8b',
+          name: 'llama3.1:8b',
+          displayName: 'Llama 3.1 8B',
+          provider: 'local',
+        });
         break;
 
       case 'google':
+        // First, let's check what models are actually available
+        try {
+          const apiKey = process.env.GOOGLE_AI_API_KEY || '';
+          if (apiKey) {
+            const response = await fetch(
+              `https://generativelanguage.googleapis.com/v1/models?key=${apiKey}`,
+            );
+            if (response.ok) {
+              const data = (await response.json()) as {
+                models?: Array<{
+                  name: string;
+                  displayName?: string;
+                  supportedGenerationMethods?: string[];
+                }>;
+              };
+              const geminiModels = data.models?.filter(
+                (m) =>
+                  m.name.includes('gemini') &&
+                  m.supportedGenerationMethods?.includes('generateContent'),
+              );
+              console.log(
+                '[Google AI] Available models:',
+                geminiModels?.map((m) => m.name),
+              );
+
+              // Use the first two available Gemini models
+              if (geminiModels && geminiModels.length > 0) {
+                geminiModels.slice(0, 2).forEach((m) => {
+                  const modelId = m.name.replace('models/', '');
+                  models.push({
+                    id: modelId,
+                    name: modelId,
+                    displayName: m.displayName || modelId,
+                    provider: 'google',
+                  });
+                });
+                break;
+              }
+            }
+          }
+        } catch (error) {
+          console.error('[Google AI] Failed to fetch models:', error);
+        }
+
+        // Fallback to hardcoded models if API call fails
         models.push(
-          {
-            id: 'gemini-1.5-pro',
-            name: 'gemini-1.5-pro',
-            displayName: 'Gemini 1.5 Pro',
-            provider: 'google',
-          },
           {
             id: 'gemini-1.5-flash',
             name: 'gemini-1.5-flash',
@@ -126,9 +145,9 @@ export class AIService {
             provider: 'google',
           },
           {
-            id: 'gemini-pro',
-            name: 'gemini-pro',
-            displayName: 'Gemini Pro',
+            id: 'gemini-1.5-pro',
+            name: 'gemini-1.5-pro',
+            displayName: 'Gemini 1.5 Pro',
             provider: 'google',
           },
         );
@@ -191,10 +210,18 @@ export class AIService {
     if (provider === 'google') {
       try {
         // Use Google AI Studio API for Gemini models
-        const apiKey =
-          process.env.GOOGLE_AI_API_KEY ||
-          'AIzaSyBmffnjO0VAkPSDyZk0WRj8iFFxHtq7BAE';
-        const modelName = model || 'gemini-1.5-flash';
+        const apiKey = process.env.GOOGLE_AI_API_KEY || '';
+
+        if (!apiKey) {
+          throw new Error(
+            'Google AI API key not configured. Please set GOOGLE_AI_API_KEY in your .env file',
+          );
+        }
+
+        const modelName = model || 'gemini-2.5-flash';
+
+        console.log('[Google AI] Making request with model:', modelName);
+        console.log('[Google AI] API Key present:', !!apiKey);
 
         // Convert messages to Google AI format
         const contents = messages.map((msg) => ({
@@ -203,7 +230,7 @@ export class AIService {
         }));
 
         const response = await fetch(
-          `https://generativelanguage.googleapis.com/v1beta/models/${modelName}:generateContent?key=${apiKey}`,
+          `https://generativelanguage.googleapis.com/v1/models/${modelName}:generateContent?key=${apiKey}`,
           {
             method: 'POST',
             headers: {
@@ -219,8 +246,14 @@ export class AIService {
           },
         );
 
+        console.log('[Google AI] Response status:', response.status);
+
         if (!response.ok) {
-          throw new Error(`Google AI API error: ${response.statusText}`);
+          const errorText = await response.text();
+          console.error('[Google AI] Error response:', errorText);
+          throw new Error(
+            `Google AI API error: ${response.status} - ${errorText}`,
+          );
         }
 
         const data = (await response.json()) as {
@@ -233,16 +266,21 @@ export class AIService {
           data.candidates?.[0]?.content?.parts?.[0]?.text ||
           'No response from Gemini';
 
+        console.log(
+          '[Google AI] Success! Response length:',
+          responseText.length,
+        );
+
         return {
           message: responseText,
           provider,
           model: modelName,
         };
       } catch (error) {
-        console.error('Google AI API error:', error);
+        console.error('[Google AI] Error:', error);
         // Fallback to mock response if Google AI is not available
         return {
-          message: `Mock response from ${provider} using model ${model}. You said: "${messages[messages.length - 1].content}"`,
+          message: `Error from Google AI: ${error instanceof Error ? error.message : 'Unknown error'}. Please check your API key and try again.`,
           provider,
           model: model || 'gemini-1.5-flash',
         };

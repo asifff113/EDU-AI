@@ -160,10 +160,20 @@ export default function ChatPage() {
   };
 
   const refreshConversations = async () => {
-    const base = getApiBaseUrl();
-    const res = await fetch(`${base}/chat/conversations`, { credentials: 'include' });
-    const data = await res.json();
-    setConversations(Array.isArray(data) ? data : []);
+    try {
+      const base = getApiBaseUrl();
+      const res = await fetch(`${base}/chat/conversations`, { credentials: 'include' });
+      if (!res.ok) {
+        console.error('[Chat] Failed to load conversations:', res.status);
+        setConversations([]);
+        return;
+      }
+      const data = await res.json();
+      setConversations(Array.isArray(data) ? data : []);
+    } catch (error) {
+      console.error('[Chat] Error fetching conversations:', error);
+      setConversations([]);
+    }
   };
 
   const search = async () => {

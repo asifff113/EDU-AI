@@ -44,7 +44,7 @@ type Course = {
   duration: string;
   students: number;
   rating: number;
-  price: number; // 0 for free
+  price: number;
   instructor: string;
   image: string;
   progress?: number;

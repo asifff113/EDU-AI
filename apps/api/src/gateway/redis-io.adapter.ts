@@ -14,8 +14,8 @@ export class RedisIoAdapter extends IoAdapter {
   }
 
   override createIOServer(port: number, options?: ServerOptions): Server {
-    const pubClient = new Redis(this.redisUrl);
-    const subClient = new Redis(this.redisUrl);
+    const pubClient = new Redis(this.redisUrl, { keyPrefix: 'eduai:' });
+    const subClient = new Redis(this.redisUrl, { keyPrefix: 'eduai:' });
     const adapter = createAdapter(pubClient, subClient);
     const server = super.createIOServer(port, options) as unknown as Server;
     if (adapter) {

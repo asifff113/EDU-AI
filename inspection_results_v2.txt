@@ -1,0 +1,173 @@
+﻿--- RUNNING CONTAINERS ---
+NAMES              STATUS
+eduai-postgres-1   Up 6 minutes
+
+Starting Postgres container...
+Waiting for Postgres to be ready...
+/var/run/postgresql:5432 - accepting connections
+
+--- DATABASES ---
+                                                      List of databases
+   Name    |  Owner   | Encoding | Locale Provider |  Collate   |   Ctype    | ICU Locale | ICU Rules |   Access privileges   
+-----------+----------+----------+-----------------+------------+------------+------------+-----------+-----------------------
+ edu_ai    | postgres | UTF8     | libc            | en_US.utf8 | en_US.utf8 |            |           | 
+ postgres  | postgres | UTF8     | libc            | en_US.utf8 | en_US.utf8 |            |           | 
+ template0 | postgres | UTF8     | libc            | en_US.utf8 | en_US.utf8 |            |           | =c/postgres          +
+           |          |          |                 |            |            |            |           | postgres=CTc/postgres
+ template1 | postgres | UTF8     | libc            | en_US.utf8 | en_US.utf8 |            |           | =c/postgres          +
+           |          |          |                 |            |            |            |           | postgres=CTc/postgres
+(4 rows)
+
+
+--- TABLES IN edu_ai ---
+                List of relations
+ Schema |         Name         | Type  |  Owner   
+--------+----------------------+-------+----------
+ public | Achievement          | table | postgres
+ public | Application          | table | postgres
+ public | BreakoutParticipant  | table | postgres
+ public | BreakoutRoom         | table | postgres
+ public | Certificate          | table | postgres
+ public | CertificateTemplate  | table | postgres
+ public | Classroom            | table | postgres
+ public | ClassroomParticipant | table | postgres
+ public | Company              | table | postgres
+ public | CounselorSlot        | table | postgres
+ public | Course               | table | postgres
+ public | CourseContent        | table | postgres
+ public | DirectConversation   | table | postgres
+ public | DirectMessage        | table | postgres
+ public | DirectParticipant    | table | postgres
+ public | EarnEvent            | table | postgres
+ public | Enrollment           | table | postgres
+ public | Exam                 | table | postgres
+ public | ExamAnswer           | table | postgres
+ public | ExamAttempt          | table | postgres
+ public | ExamQuestion         | table | postgres
+ public | ForumBoard           | table | postgres
+ public | ForumModerator       | table | postgres
+ public | ForumNotification    | table | postgres
+ public | ForumPost            | table | postgres
+ public | ForumSubscription    | table | postgres
+ public | ForumTopic           | table | postgres
+ public | GamificationProfile  | table | postgres
+ public | GlobalSetting        | table | postgres
+ public | GroupMember          | table | postgres
+ public | GroupMessage         | table | postgres
+ public | Job                  | table | postgres
+ public | Lead                 | table | postgres
+ public | MentorProfile        | table | postgres
+ public | MentorshipRequest    | table | postgres
+ public | MindfulnessContent   | table | postgres
+ public | Notification         | table | postgres
+ public | Plan                 | table | postgres
+ public | Purchase             | table | postgres
+ public | Rank                 | table | postgres
+ public | Resource             | table | postgres
+ public | ResourceFavorite     | table | postgres
+ public | ResourceReview       | table | postgres
+ public | Resume               | table | postgres
+ public | Scholarship          | table | postgres
+ public | StudyGroup           | table | postgres
+ public | StudyLog             | table | postgres
+ public | Subscription         | table | postgres
+ public | User                 | table | postgres
+ public | UserAchievement      | table | postgres
+ public | UserSettings         | table | postgres
+ public | _prisma_migrations   | table | postgres
+(52 rows)
+
+
+--- ROW COUNTS ---
+_prisma_migrations :     13  rows
+Lead :      0  rows
+Enrollment :      1  rows
+UserSettings :      1  rows
+User :      9  rows
+Resource :      3  rows
+ResourceReview :      0  rows
+ResourceFavorite :      0  rows
+Exam :      0  rows
+ExamQuestion :      0  rows
+ExamAttempt :      0  rows
+ExamAnswer :      0  rows
+Course :      1  rows
+CourseContent :      0  rows
+StudyGroup :      5  rows
+GroupMember :     12  rows
+GroupMessage :      2  rows
+DirectConversation :      2  rows
+DirectParticipant :      4  rows
+DirectMessage :      3  rows
+GlobalSetting :      0  rows
+Classroom :      0  rows
+ClassroomParticipant :      0  rows
+BreakoutRoom :      0  rows
+BreakoutParticipant :      0  rows
+ForumSubscription :      0  rows
+ForumPost :      0  rows
+ForumBoard :      0  rows
+ForumModerator :      0  rows
+ForumTopic :      0  rows
+MindfulnessContent :      3  rows
+Rank :      5  rows
+Purchase :      0  rows
+StudyLog :      0  rows
+CounselorSlot :      0  rows
+Subscription :      0  rows
+Plan :      3  rows
+Scholarship :      0  rows
+EarnEvent :      0  rows
+GamificationProfile :      0  rows
+UserAchievement :      0  rows
+Achievement :      4  rows
+Certificate :      5  rows
+CertificateTemplate :     17  rows
+MentorProfile :      0  rows
+MentorshipRequest :      0  rows
+ForumNotification :      0  rows
+Notification :      0  rows
+Company :      3  rows
+Job :      4  rows
+Application :      0  rows
+Resume :      1  rows
+
+--- DOCKER VOLUMES ---
+DRIVER    VOLUME NAME
+local     0fd2ffc7e74171727affb4d77389d4df6d9d5fb7e76b7d2816ffa400946d0308
+local     2dc9eb1c2b84b4085fb58e99533feade779791528624b0f074719f14bdaa215e
+local     3cb05a72c0c7e4334ff154272c160258a9e0f545680f3919c639942506f6aa58
+local     6ef3227b7624e844e7e26a2b586aac71964fbf9dba3dc69c639a33d0d0c1b6da
+local     7ac71a2e13830224ec2128538ee6082a4291c5f3395d02b77ab40669cb231228
+local     9d73afedc19e193ae7d206e8c3fd3d1669a6c51b70ef8f5be012cf84651fde4f
+local     24c9f5771a179bc3056cbc19865f6f863be6031cc20418482df7eafe7dfbe16c
+local     51ebc8fe33de58c9699b1598b904f3bf9e025b4999c42de1d7f822a93af2744b
+local     54cd93692d5fa29133d1b69708d59b46dc7b63c5f58d3cb83eb8639cec18afa9
+local     56cffc62133c830ac5637758aeebc916c15b2e9ebbc7a33dd5f88270c8a634d0
+local     76a00ea9c18338bf2e88829bdf6924d2529f14d2a836e8d755a5e73f192ddaae
+local     79fa0e3d19f5cc13d3c8d24af57a594ad1fc733af6345a1001e75344120659b5
+local     86b45fe763fe233bb45f9371e2c0b989e8015f139ac218f3a8a3bbe44f8b0980
+local     96f7b91f1e9e840d68c3ede08a33a633cc98a08408498d72a9402a5f80d4785c
+local     390f46de74b151e123751817f0868c54431e0fe1c6dcdb3532445e7835544e1f
+local     889ed05476452ed911175dd0240862a6b75316292993d425bb2a672f8c600871
+local     4073f7060b0cdd087ad69d11a90c1f3c0eeb542add09aee30b7f449d80ad5470
+local     7116b6a009aa2d27ad3d13a0c4567808302ee6fa9fcfe61eeef7bb96f8b3fcb3
+local     10631c3cd2d2d469df5d61b3789404b8d0f4bd48b6d31a101a6fe730aac8013e
+local     53371de15800d08080f59b9e896be922f5814c6f0018876ec18631172715d1cf
+local     59066fa7c46e1d24f27b2bb3f0a2f3f079ac113de4ca38ed30e447314e19125a
+local     818888dcfab43b30702db2c0585ec7bffe06562c01128295d9fa5980cf9cd5c7
+local     2889928d58172922c561cb8fa5a63459be93f14af698266117d91824a408ee9c
+local     29316633a904b5031a5d759dfbc39b27a17827347453a7dcfd9c82c3f747e9f6
+local     c49beedca76e07f5de4e1524ce21aacbf00ed4bbe2a9edccc7ed3dc64ac51797
+local     compose_pgdata
+local     e7bf715eca2f4087af9a89022649123c6694cf47b11faf3d019eac1ebeb1e1cc
+local     edu_ai_pgdata
+local     eduai_api_node_modules
+local     eduai_db_data
+local     eduai_mongodb_data
+local     eduai_pgdata
+local     eduai_pnpm_store
+local     eduai_web_node_modules
+local     eduai_workspace_node_modules
+local     ee88a221bb861668c61a50b8294518ee8d0b4ec3ea850f243a2bf9100229eed9
+local     vscode

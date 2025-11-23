@@ -1,37 +1,21 @@
 'use client';
 
 import { useState } from 'react';
-import { getApiBaseUrl } from '@/lib/env';
+import { useAuth } from '@/contexts/AuthContext';
 
 export default function LoginPage() {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
-  const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
+  const { login, isLoading } = useAuth();
 
   async function handleSubmit(e: React.FormEvent) {
     e.preventDefault();
-    setLoading(true);
     setError(null);
 
     try {
-      // Call backend login which will set an httpOnly cookie on success
-      const base = getApiBaseUrl();
-      const res = await fetch(`${base}/auth/login`, {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        credentials: 'include',
-        body: JSON.stringify({ email, password }),
-      });
-      if (!res.ok) {
-        const text = await res.text();
-        throw new Error(text || 'Invalid credentials');
-      }
-
-      // Redirect to dashboard or from query param
-      const params = new URLSearchParams(window.location.search);
-      const from = params.get('from') || '/dashboard';
-      window.location.href = from;
+      await login(email, password);
+      // Router.push is handled inside the login function
     } catch (err: unknown) {
       let msg = 'Login failed';
       if (err && typeof err === 'object' && 'message' in err) {
@@ -40,8 +24,6 @@ export default function LoginPage() {
         msg = err;
       }
       setError(msg);
-    } finally {
-      setLoading(false);
     }
   }
 
@@ -69,10 +51,10 @@ export default function LoginPage() {
         />
         <button
           type="submit"
-          disabled={loading}
+          disabled={isLoading}
           className="w-full rounded-md px-4 py-3 bg-gradient-to-r from-fuchsia-500 via-violet-400 to-cyan-400 text-white text-lg font-semibold"
         >
-          {loading ? 'Signing in...' : 'Sign in'}
+          {isLoading ? 'Signing in...' : 'Sign in'}
         </button>
         {error && <div className="text-red-400 mt-2">{error}</div>}
         <div className="text-center mt-4">

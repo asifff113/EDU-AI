@@ -24,11 +24,13 @@ import {
   DialogTitle,
   DialogTrigger,
 } from '@/components/ui/dialog';
-import { useAppContext } from '@/contexts/AppContext';
+
+import ExamTaking, { ExamResults, Question } from '@/components/ExamTaking';
+import ExamResultsPage from '@/components/ExamResults';
+import { examQuestionsData } from '@/data/examQuestions';
 import {
   Brain,
   Clock,
-  Users,
   Trophy,
   Target,
   BookOpen,
@@ -37,7 +39,6 @@ import {
   Zap,
   CheckCircle,
   XCircle,
-  Timer,
   Award,
   TrendingUp,
   Plus,
@@ -106,18 +107,6 @@ const examCategories = [
   { id: 'medical', name: 'Medical' },
   { id: 'engineering', name: 'Engineering' },
 ];
-
-const difficultyColors = {
-  easy: 'bg-green-500',
-  medium: 'bg-yellow-500',
-  hard: 'bg-red-500',
-};
-
-const difficultyTextColors = {
-  easy: 'text-green-600',
-  medium: 'text-yellow-600',
-  hard: 'text-red-600',
-};
 
 // Demo data for development
 const demoExams: Exam[] = [
@@ -199,7 +188,7 @@ function AIQuestionForm({
   onGenerate: (data: { topic: string; difficulty: string; count: string; type: string }) => void;
   isLoading: boolean;
   onClose: () => void;
-  generatedQuestions: any[];
+  generatedQuestions: { question: string; options?: string[] }[];
 }) {
   const [formData, setFormData] = useState({
     topic: '',
@@ -353,7 +342,6 @@ const demoRecentAttempts: ExamAttempt[] = [
 
 export default function ExamPage() {
   const { t } = useTranslation('common');
-  const { user } = useAppContext();
   const [exams, setExams] = useState<Exam[]>(demoExams);
   const [filteredExams, setFilteredExams] = useState<Exam[]>(demoExams);
   const [userStats, setUserStats] = useState<UserStats>(demoUserStats);
@@ -362,10 +350,27 @@ export default function ExamPage() {
   const [selectedDifficulty, setSelectedDifficulty] = useState('all');
   const [searchQuery, setSearchQuery] = useState('');
   const [isLoading, setIsLoading] = useState(false);
-  const [showCreateDialog, setShowCreateDialog] = useState(false);
   const [showAIDialog, setShowAIDialog] = useState(false);
   const [aiGenerationLoading, setAiGenerationLoading] = useState(false);
-  const [generatedQuestions, setGeneratedQuestions] = useState<any[]>([]);
+  const [generatedQuestions, setGeneratedQuestions] = useState<
+    { question: string; options?: string[] }[]
+  >([]);
+
+  // New state for exam taking functionality
+  const [currentView, setCurrentView] = useState<'browse' | 'taking' | 'results'>('browse');
+  const [currentExam, setCurrentExam] = useState<{
+    id: string;
+    title: string;
+    description: string;
+    duration: number;
+    totalQuestions: number;
+    passingScore: number;
+    questions: Question[];
+    category?: string;
+    subject?: string;
+    difficulty?: string;
+  } | null>(null);
+  const [examResults, setExamResults] = useState<ExamResults | null>(null);
 
   // Filter exams based on search and filters
   useEffect(() => {
@@ -391,30 +396,108 @@ export default function ExamPage() {
     setFilteredExams(filtered);
   }, [exams, selectedCategory, selectedDifficulty, searchQuery]);
 
-  const handleStartExam = useCallback(async (examId: string) => {
-    try {
-      setIsLoading(true);
-      const response = await fetch(`/api/exam/${examId}/start`, {
-        method: 'POST',
-        credentials: 'include',
-      });
+  const handleStartExam = useCallback(
+    async (examId: string) => {
+      try {
+        setIsLoading(true);
 
-      if (response.ok) {
-        const attempt = await response.json();
-        // For now, just show success message since we haven't built the exam taking page yet
-        alert(`Exam started successfully! Attempt ID: ${attempt.id}`);
-        console.log('Exam attempt started:', attempt);
-      } else {
-        const errorData = await response.json();
-        alert(`Failed to start exam: ${errorData.error || 'Unknown error'}`);
+        // Find the exam from our demo data
+        const selectedExam = exams.find((exam) => exam.id === examId);
+        if (!selectedExam) {
+          alert('Exam not found!');
+          return;
+        }
+
+        // Get questions for this exam
+        const questions = examQuestionsData[examId as keyof typeof examQuestionsData];
+        if (!questions) {
+          alert('Questions not available for this exam!');
+          return;
+        }
+
+        // Create exam data structure for the ExamTaking component
+        const examData = {
+          id: selectedExam.id,
+          title: selectedExam.title,
+          description: selectedExam.description,
+          duration: selectedExam.duration,
+          totalQuestions: selectedExam.totalQuestions,
+          passingScore: selectedExam.passingScore,
+          questions: questions,
+        };
+
+        setCurrentExam(examData);
+        setCurrentView('taking');
+      } catch (error) {
+        console.error('Error starting exam:', error);
+        alert('Failed to start exam. Please try again.');
+      } finally {
+        setIsLoading(false);
       }
-    } catch (error) {
-      console.error('Error starting exam:', error);
-      alert('Failed to start exam. Please try again.');
-    } finally {
-      setIsLoading(false);
-    }
+    },
+    [exams],
+  );
+
+  const handleExamComplete = useCallback(
+    (results: ExamResults) => {
+      setExamResults(results);
+      setCurrentView('results');
+
+      // Update user stats (in a real app, this would sync with backend)
+      setUserStats((prev) => ({
+        ...prev,
+        totalAttempts: prev.totalAttempts + 1,
+        passedAttempts: results.passed ? prev.passedAttempts + 1 : prev.passedAttempts,
+        failedAttempts: results.passed ? prev.failedAttempts : prev.failedAttempts + 1,
+        successRate:
+          ((results.passed ? prev.passedAttempts + 1 : prev.passedAttempts) /
+            (prev.totalAttempts + 1)) *
+          100,
+        averageScore:
+          (prev.averageScore * prev.totalAttempts + results.percentage) / (prev.totalAttempts + 1),
+      }));
+
+      // Add to recent attempts
+      const newAttempt: ExamAttempt = {
+        id: `attempt_${Date.now()}`,
+        startTime: new Date(Date.now() - results.timeSpent).toISOString(),
+        endTime: new Date().toISOString(),
+        score: results.score,
+        totalScore: results.totalQuestions,
+        percentage: results.percentage,
+        passed: results.passed,
+        status: 'completed',
+        exam: {
+          title: results.examTitle,
+          category: currentExam?.category || 'general',
+          subject: currentExam?.subject || 'General',
+          difficulty: currentExam?.difficulty || 'medium',
+          duration: currentExam?.duration || 60,
+          passingScore: currentExam?.passingScore || 70,
+        },
+      };
+      setRecentAttempts((prev) => [newAttempt, ...prev]);
+    },
+    [currentExam],
+  );
+
+  const handleExitExam = useCallback(() => {
+    setCurrentView('browse');
+    setCurrentExam(null);
   }, []);
+
+  const handleBackToHome = useCallback(() => {
+    setCurrentView('browse');
+    setCurrentExam(null);
+    setExamResults(null);
+  }, []);
+
+  const handleRetakeExam = useCallback(() => {
+    if (currentExam) {
+      setCurrentView('taking');
+      setExamResults(null);
+    }
+  }, [currentExam]);
 
   const handleGenerateQuestions = useCallback(
     async (formData: { topic: string; difficulty: string; count: string; type: string }) => {
@@ -530,6 +613,23 @@ export default function ExamPage() {
     const remainingMinutes = minutes % 60;
     return remainingMinutes > 0 ? `${hours}h ${remainingMinutes}m` : `${hours}h`;
   };
+
+  // Conditional rendering based on current view
+  if (currentView === 'taking' && currentExam) {
+    return (
+      <ExamTaking exam={currentExam} onExit={handleExitExam} onComplete={handleExamComplete} />
+    );
+  }
+
+  if (currentView === 'results' && examResults) {
+    return (
+      <ExamResultsPage
+        results={examResults}
+        onRetakeExam={handleRetakeExam}
+        onBackToHome={handleBackToHome}
+      />
+    );
+  }
 
   return (
     <div className="container mx-auto p-6 max-w-7xl space-y-8">

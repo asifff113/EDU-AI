@@ -28,7 +28,8 @@ export function StudentDashboard({ userName }: StudentDashboardProps) {
   const [isLive, setIsLive] = useState(false);
   useEffect(() => {
     // Fetch recent certificates for the logged in user and inject simple cards
-    fetch('/api/certificates?action=mine', { credentials: 'include' })
+    const base = getApiBaseUrl();
+    fetch(`${base}/certificates?action=mine`, { credentials: 'include' })
       .then((r) => r.json())
       .then((list) => {
         const container = document.getElementById('dashboard-certificates');
@@ -67,7 +68,8 @@ export function StudentDashboard({ userName }: StudentDashboardProps) {
   useEffect(() => {
     // Scholarships widget
     const load = () => {
-      fetch('/api/scholarships', { credentials: 'include' })
+      const base = getApiBaseUrl();
+      fetch(`${base}/scholarships`, { credentials: 'include' })
         .then((r) => r.json())
         .then((data) => {
           const container = document.getElementById('dashboard-scholarships');
@@ -126,7 +128,8 @@ export function StudentDashboard({ userName }: StudentDashboardProps) {
   useEffect(() => {
     // Daily Goals: load and realtime
     const loadGoals = async () => {
-      const list = await fetch('/api/goals', { credentials: 'include' })
+      const base = getApiBaseUrl();
+      const list = await fetch(`${base}/goals`, { credentials: 'include' })
         .then((r) => r.json())
         .catch(() => []);
       const container = document.getElementById('dashboard-goals');
@@ -158,7 +161,7 @@ export function StudentDashboard({ userName }: StudentDashboardProps) {
     // Skills: minimal progress visualization & realtime
     const loadSkills = async () => {
       const base = getApiBaseUrl();
-      const data = await fetch('/api/skills', { credentials: 'include' })
+      const data = await fetch(`${base}/skills/tree`, { credentials: 'include' })
         .then((r) => r.json())
         .catch(() => ({ nodes: [], progress: [] }));
       const container = document.getElementById('dashboard-skills');

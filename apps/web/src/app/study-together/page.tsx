@@ -70,10 +70,23 @@ export default function StudyTogetherPage() {
 
   useEffect(() => {
     const load = async () => {
-      const base = getApiBaseUrl();
-      const res = await fetch(`${base}/groups`, { credentials: 'include' });
-      const data = await res.json();
-      setGroups(Array.isArray(data) ? data : []);
+      try {
+        const base = getApiBaseUrl();
+        console.log('[Study Groups] Fetching from:', `${base}/groups`);
+        const res = await fetch(`${base}/groups`, { credentials: 'include' });
+        console.log('[Study Groups] Response status:', res.status);
+        if (!res.ok) {
+          console.error('[Study Groups] HTTP error:', res.status, res.statusText);
+          setGroups([]);
+          return;
+        }
+        const data = await res.json();
+        console.log('[Study Groups] Loaded groups:', data);
+        setGroups(Array.isArray(data) ? data : []);
+      } catch (error) {
+        console.error('[Study Groups] Failed to fetch groups:', error);
+        setGroups([]);
+      }
     };
     load();
     // init socket
